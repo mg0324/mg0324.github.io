@@ -10,5 +10,5 @@ Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
 
-Sitemap: http://www.meigang.win/sitemap.xml
-Sitemap: http://www.meigang.win/baidusitemap.xml
+Sitemap: http://mg0324.github.io/sitemap.xml
+Sitemap: http://mg0324.github.io/baidusitemap.xml
