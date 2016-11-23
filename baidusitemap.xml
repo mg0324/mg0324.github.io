@@ -4,6 +4,7 @@
 
     
     
+    
   <url>
     <loc>http://mg0324.github.io/2020/11/03/%E5%85%B3%E9%94%AE%E5%AD%97%E4%B9%8B%E6%97%85/</loc>
     <lastmod>2016-11-23T08:44:58.000Z</lastmod>
@@ -130,9 +131,9 @@
         <title>mysql读写分离,中间件用mycat</title>
         <pubTime>2016-11-04T08:01:17.000Z</pubTime>
         
-        <tag>性能</tag>
-         
         <tag>mysql</tag>
+         
+        <tag>性能</tag>
          
         <tag>mycat</tag>
          
