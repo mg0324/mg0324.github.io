@@ -130,9 +130,9 @@
         <title>mysql读写分离,中间件用mycat</title>
         <pubTime>2016-11-04T08:01:17.000Z</pubTime>
         
-        <tag>mysql</tag>
-         
         <tag>性能</tag>
+         
+        <tag>mysql</tag>
          
         <tag>mycat</tag>
          
