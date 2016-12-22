@@ -100,7 +100,7 @@
 2.主从只负责各自的写和读，极大程度的缓解X锁和">
 <meta property="og:image" content="http://mg0324.github.io/images/mycat-floder.png">
 <meta property="og:image" content="http://mg0324.github.io/images/jpress-on-master-slave.png">
-<meta property="og:updated_time" content="2016-11-04T08:03:43.000Z">
+<meta property="og:updated_time" content="2016-12-22T03:36:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql读写分离,中间件用mycat">
 <meta name="twitter:description" content="首先，数据库的读写分离，能让应用对数据库的访问压力下降，较之一台数据库服务器来读写的时候。
@@ -134,6 +134,7 @@
 
   <title> mysql读写分离,中间件用mycat | 梦网一世界 </title>
 </head>
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=17602137391485389424' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
 
@@ -383,7 +384,7 @@
 </li>
 <li>1.1.配置master</li>
 </ul>
-<p>在mysql的配置文件中my.ini的[mysqld]节点下加上如下配置。</p>
+<p>在mysql的配置文件中my.ini的[mysqld]节点下加上如下配置：</p>
 <pre><code>log-bin=mysql-bin #slave会基于此log-bin来做replication
 server-id = 1 #master的标示
 binlog-do-db = jpress #用于master-slave的具体数据库
@@ -399,8 +400,14 @@ mysql&gt; GRANT REPLICATION SLAVE ON *.* TO xiaogang@192.168.1.113 IDENTIFIED BY
 +------------------+----------+--------------+------------------+
 1 row in set (0.00 sec)
 </code></pre><ul>
-<li>1.2.配置slave<br>如果有配置主从，要先关闭<code>stop slave;</code>，然后再执行如下命令，来配置主从设置：</li>
+<li>1.2.配置slave</li>
 </ul>
+<p><font style="color:red;">补上遗漏的部分：2016-12-22</font><br>slave上的my.ini的[mysqld]节点下加上如下配置：</p>
+<pre><code>server-id = 2 #slave的标示,推荐使用IP的第4部分
+#其他配置可以百度mysql主从复制详细配置
+#relay-log-index=slave-relay-bin.index
+#relay-log=slave-relay-bin
+</code></pre><p>如果有配置主从，要先关闭<code>stop slave;</code>，然后再执行如下命令，来配置主从设置：</p>
 <pre><code>CHANGE MASTER TO   
 MASTER_HOST=&apos;192.168.1.109&apos;,   
 MASTER_USER=&apos;xiaogang&apos;,   
