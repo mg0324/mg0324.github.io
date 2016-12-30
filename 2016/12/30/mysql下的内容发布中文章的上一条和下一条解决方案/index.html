@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="mg0324,meigang,梦网,hexo,next" />
+  <meta name="keywords" content="mysql,上一条,下一条," />
 
 
 
@@ -84,12 +84,25 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="梦网一世界">
-<meta property="og:url" content="http://mg0324.github.io/tags/配置/index.html">
+<meta name="description" content="1.问题场景在内容发布系统中，都会有类似下图的需求。
+&amp;lt;img src=&amp;quot;https://mg0324.github.io/images/lastnext.png&amp;quot; style=&amp;quot;height:50px;&amp;quot;/&amp;gt;
+2.遇到的问题其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
+通过当前记录，查询到所在排序中的上一条记录，和下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql下的内容发布中文章的上一条和下一条解决方案">
+<meta property="og:url" content="http://mg0324.github.io/2016/12/30/mysql下的内容发布中文章的上一条和下一条解决方案/index.html">
 <meta property="og:site_name" content="梦网一世界">
+<meta property="og:description" content="1.问题场景在内容发布系统中，都会有类似下图的需求。
+&amp;lt;img src=&amp;quot;https://mg0324.github.io/images/lastnext.png&amp;quot; style=&amp;quot;height:50px;&amp;quot;/&amp;gt;
+2.遇到的问题其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
+通过当前记录，查询到所在排序中的上一条记录，和下">
+<meta property="og:updated_time" content="2016-12-30T10:48:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="梦网一世界">
+<meta name="twitter:title" content="mysql下的内容发布中文章的上一条和下一条解决方案">
+<meta name="twitter:description" content="1.问题场景在内容发布系统中，都会有类似下图的需求。
+&amp;lt;img src=&amp;quot;https://mg0324.github.io/images/lastnext.png&amp;quot; style=&amp;quot;height:50px;&amp;quot;/&amp;gt;
+2.遇到的问题其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
+通过当前记录，查询到所在排序中的上一条记录，和下">
 
 
 
@@ -110,10 +123,10 @@
 
 
 
-  <link rel="canonical" href="http://mg0324.github.io/tags/配置/"/>
+  <link rel="canonical" href="http://mg0324.github.io/2016/12/30/mysql下的内容发布中文章的上一条和下一条解决方案/"/>
 
 
-  <title> 标签: 配置 | 梦网一世界 </title>
+  <title> mysql下的内容发布中文章的上一条和下一条解决方案 | 梦网一世界 </title>
 </head>
 <script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=17602137391485389424' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
 
@@ -154,7 +167,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
@@ -250,53 +263,210 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        配置
-        <small>标签</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                mysql下的内容发布中文章的上一条和下一条解决方案
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-12-30T17:37:50+08:00" content="2016-12-30">
+              2016-12-30
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/30/mysql下的内容发布中文章的上一条和下一条解决方案/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/30/mysql下的内容发布中文章的上一条和下一条解决方案/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/12/30/mysql下的内容发布中文章的上一条和下一条解决方案/" class="leancloud_visitors" data-flag-title="mysql下的内容发布中文章的上一条和下一条解决方案">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
+      
+        <h1 id="1-问题场景"><a href="#1-问题场景" class="headerlink" title="1.问题场景"></a>1.问题场景</h1><pre><code>在内容发布系统中，都会有类似下图的需求。
+&lt;img src=&quot;https://mg0324.github.io/images/lastnext.png&quot; style=&quot;height:50px;&quot;/&gt;
+</code></pre><h1 id="2-遇到的问题"><a href="#2-遇到的问题" class="headerlink" title="2.遇到的问题"></a>2.遇到的问题</h1><pre><code>其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
+通过当前记录，查询到所在排序中的上一条记录，和下一条记录。
+在oracle中有rownum来实现，在mysql中要怎么实现呢？
+</code></pre>
+      
+    </div>
 
-      <h1 class="post-title">
+    <div>
+      
         
-            <a class="post-title-link" href="/2016/11/04/alisql的my-cnf/" itemprop="url">
-              
-                <span itemprop="name">alisql的my.cnf</span>
-              
-            </a>
+
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-11-04T16:42:24+08:00"
-              content="2016-11-04" >
-          11-04
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag">#mysql</a>
+          
+            <a href="/tags/上一条/" rel="tag">#上一条</a>
+          
+            <a href="/tags/下一条/" rel="tag">#下一条</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/09/基于solr的全文检索解决方案/" rel="next" title="基于solr的全文检索解决方案">
+                <i class="fa fa-chevron-left"></i> 基于solr的全文检索解决方案
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/11/03/关键字之旅/" rel="prev" title="关键字之旅">
+                关键字之旅 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
 
 
           </div>
           
 
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/30/mysql下的内容发布中文章的上一条和下一条解决方案/"
+           data-title="mysql下的内容发布中文章的上一条和下一条解决方案" data-url="http://mg0324.github.io/2016/12/30/mysql下的内容发布中文章的上一条和下一条解决方案/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -316,8 +486,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/ahead.jpg"
@@ -405,6 +584,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-问题场景"><span class="nav-number">1.</span> <span class="nav-text">1.问题场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-遇到的问题"><span class="nav-number">2.</span> <span class="nav-text">2.遇到的问题</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -524,6 +714,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
 
   
 
