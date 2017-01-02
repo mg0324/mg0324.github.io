@@ -84,29 +84,33 @@
 
 
 
-<meta name="description" content="1.问题场景在内容发布系统中，都会有类似下图的需求。
+<meta name="description" content="问题场景在内容发布系统中，都会有类似下图的需求。
 
-2.遇到的问题其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
+遇到的问题其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
 通过当前记录，查询到所在排序中的上一条记录，和下一条记录。
-在oracle中有rownum来实现，在mysql中要怎么实现呢？">
+在oracle中有rownum来实现，在mysql中要怎么实现呢？
+mysql中的rownum实现参考博客：http://www.cnblogs.com/advocate/archive/2012/03/">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql下的内容发布中文章的上一条和下一条解决方案">
 <meta property="og:url" content="http://mg0324.github.io/2016/12/30/mysql下的内容发布中文章的上一条和下一条解决方案/index.html">
 <meta property="og:site_name" content="梦网一世界">
-<meta property="og:description" content="1.问题场景在内容发布系统中，都会有类似下图的需求。
+<meta property="og:description" content="问题场景在内容发布系统中，都会有类似下图的需求。
 
-2.遇到的问题其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
+遇到的问题其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
 通过当前记录，查询到所在排序中的上一条记录，和下一条记录。
-在oracle中有rownum来实现，在mysql中要怎么实现呢？">
+在oracle中有rownum来实现，在mysql中要怎么实现呢？
+mysql中的rownum实现参考博客：http://www.cnblogs.com/advocate/archive/2012/03/">
 <meta property="og:image" content="https://mg0324.github.io/images/lastnext.png">
-<meta property="og:updated_time" content="2016-12-30T10:52:17.000Z">
+<meta property="og:image" content="https://mg0324.github.io/images/mysql-rownum.png">
+<meta property="og:updated_time" content="2017-01-02T11:33:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql下的内容发布中文章的上一条和下一条解决方案">
-<meta name="twitter:description" content="1.问题场景在内容发布系统中，都会有类似下图的需求。
+<meta name="twitter:description" content="问题场景在内容发布系统中，都会有类似下图的需求。
 
-2.遇到的问题其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
+遇到的问题其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
 通过当前记录，查询到所在排序中的上一条记录，和下一条记录。
-在oracle中有rownum来实现，在mysql中要怎么实现呢？">
+在oracle中有rownum来实现，在mysql中要怎么实现呢？
+mysql中的rownum实现参考博客：http://www.cnblogs.com/advocate/archive/2012/03/">
 <meta name="twitter:image" content="https://mg0324.github.io/images/lastnext.png">
 
 
@@ -364,12 +368,17 @@
       
 
       
-        <h1 id="1-问题场景"><a href="#1-问题场景" class="headerlink" title="1.问题场景"></a>1.问题场景</h1><pre><code>在内容发布系统中，都会有类似下图的需求。
+        <h1 id="问题场景"><a href="#问题场景" class="headerlink" title="问题场景"></a>问题场景</h1><pre><code>在内容发布系统中，都会有类似下图的需求。
 </code></pre><p><img src="https://mg0324.github.io/images/lastnext.png" style="height:50px;"></p>
-<h1 id="2-遇到的问题"><a href="#2-遇到的问题" class="headerlink" title="2.遇到的问题"></a>2.遇到的问题</h1><pre><code>其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
+<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><pre><code>其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
 通过当前记录，查询到所在排序中的上一条记录，和下一条记录。
 在oracle中有rownum来实现，在mysql中要怎么实现呢？
-</code></pre>
+</code></pre><h1 id="mysql中的rownum实现"><a href="#mysql中的rownum实现" class="headerlink" title="mysql中的rownum实现"></a>mysql中的rownum实现</h1><p>参考博客：<a href="http://www.cnblogs.com/advocate/archive/2012/03/02/2376900.html" target="_blank" rel="external">http://www.cnblogs.com/advocate/archive/2012/03/02/2376900.html</a></p>
+<pre><code>SELECT @rownum:=@rownum+1 rownum,t.id,t.title,t.weight,t.create_date From
+(SELECT @rownum:=0,a.id,a.title,a.weight,a.create_date FROM cms_article a WHERE del_flag=0 
+ORDER BY weight desc,create_date desc limit 10) t
+</code></pre><p> 截图查询如下：<br><img src="https://mg0324.github.io/images/mysql-rownum.png"></p>
+
       
     </div>
 
@@ -596,7 +605,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-问题场景"><span class="nav-number">1.</span> <span class="nav-text">1.问题场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-遇到的问题"><span class="nav-number">2.</span> <span class="nav-text">2.遇到的问题</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题场景"><span class="nav-number">1.</span> <span class="nav-text">问题场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遇到的问题"><span class="nav-number">2.</span> <span class="nav-text">遇到的问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mysql中的rownum实现"><span class="nav-number">3.</span> <span class="nav-text">mysql中的rownum实现</span></a></li></ol></div>
             
           </div>
         </section>
@@ -615,7 +624,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
