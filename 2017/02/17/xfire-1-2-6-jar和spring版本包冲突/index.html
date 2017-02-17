@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="apache,httpd," />
+  <meta name="keywords" content="异常,包冲突," />
 
 
 
@@ -84,47 +84,21 @@
 
 
 
-<meta name="description" content="安装Apache服务器对于mac osx的系统，一般会预装好apache的httpd服务器的。
-
-所以只需要使用启动和停止命令来操作。
-
-如果没有安装httpd服务器，可以使用
-yum install httpd来安装（在centos下），
-apt-get install httpd（ubuntu下），
-brew install httpd（mac osx下先安装brew的包管理工具）
-
-sudo">
+<meta name="description" content="问题场景描述
+最近遇到一个异常，狠狠地坑了我连续10小时。该问题描述：    （环境）    1.maven的jeesite（spring+mybatis+shiro）环境下。    2.jetty:run能够正常启动。    3.放到tomcat上，运行报错。eclipse中的server的tomcat也一样报错。    4.之前该项目部分多是内容发布部分，tomcat能正常启动。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mac上使用apache,http服务器">
-<meta property="og:url" content="http://mg0324.github.io/2016/11/04/mac上使用apache-http服务器/index.html">
+<meta property="og:title" content="xfire-1.2.6.jar和spring版本包冲突">
+<meta property="og:url" content="http://mg0324.github.io/2017/02/17/xfire-1-2-6-jar和spring版本包冲突/index.html">
 <meta property="og:site_name" content="梦网一世界">
-<meta property="og:description" content="安装Apache服务器对于mac osx的系统，一般会预装好apache的httpd服务器的。
-
-所以只需要使用启动和停止命令来操作。
-
-如果没有安装httpd服务器，可以使用
-yum install httpd来安装（在centos下），
-apt-get install httpd（ubuntu下），
-brew install httpd（mac osx下先安装brew的包管理工具）
-
-sudo">
-<meta property="og:image" content="https://mg0324.github.io/images/apache2-folder.png">
-<meta property="og:image" content="https://mg0324.github.io/images/httpd-conf.png">
-<meta property="og:image" content="https://mg0324.github.io/images/apache-mgwiki.png">
-<meta property="og:updated_time" content="2016-11-04T09:08:05.000Z">
+<meta property="og:description" content="问题场景描述
+最近遇到一个异常，狠狠地坑了我连续10小时。该问题描述：    （环境）    1.maven的jeesite（spring+mybatis+shiro）环境下。    2.jetty:run能够正常启动。    3.放到tomcat上，运行报错。eclipse中的server的tomcat也一样报错。    4.之前该项目部分多是内容发布部分，tomcat能正常启动。">
+<meta property="og:image" content="http://mg0324.github.io/images/xfire-spring-ct.png">
+<meta property="og:updated_time" content="2017-02-17T09:22:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mac上使用apache,http服务器">
-<meta name="twitter:description" content="安装Apache服务器对于mac osx的系统，一般会预装好apache的httpd服务器的。
-
-所以只需要使用启动和停止命令来操作。
-
-如果没有安装httpd服务器，可以使用
-yum install httpd来安装（在centos下），
-apt-get install httpd（ubuntu下），
-brew install httpd（mac osx下先安装brew的包管理工具）
-
-sudo">
-<meta name="twitter:image" content="https://mg0324.github.io/images/apache2-folder.png">
+<meta name="twitter:title" content="xfire-1.2.6.jar和spring版本包冲突">
+<meta name="twitter:description" content="问题场景描述
+最近遇到一个异常，狠狠地坑了我连续10小时。该问题描述：    （环境）    1.maven的jeesite（spring+mybatis+shiro）环境下。    2.jetty:run能够正常启动。    3.放到tomcat上，运行报错。eclipse中的server的tomcat也一样报错。    4.之前该项目部分多是内容发布部分，tomcat能正常启动。">
+<meta name="twitter:image" content="http://mg0324.github.io/images/xfire-spring-ct.png">
 
 
 
@@ -145,10 +119,10 @@ sudo">
 
 
 
-  <link rel="canonical" href="http://mg0324.github.io/2016/11/04/mac上使用apache-http服务器/"/>
+  <link rel="canonical" href="http://mg0324.github.io/2017/02/17/xfire-1-2-6-jar和spring版本包冲突/"/>
 
 
-  <title> mac上使用apache,http服务器 | 梦网一世界 </title>
+  <title> xfire-1.2.6.jar和spring版本包冲突 | 梦网一世界 </title>
 </head>
 <script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=17602137391485389424' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
 
@@ -306,7 +280,7 @@ sudo">
             
             
               
-                mac上使用apache,http服务器
+                xfire-1.2.6.jar和spring版本包冲突
               
             
           </h1>
@@ -318,8 +292,8 @@ sudo">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-11-04T17:04:02+08:00" content="2016-11-04">
-              2016-11-04
+            <time itemprop="dateCreated" datetime="2017-02-17T13:56:27+08:00" content="2017-02-17">
+              2017-02-17
             </time>
           </span>
 
@@ -332,8 +306,8 @@ sudo">
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/http服务器/" itemprop="url" rel="index">
-                    <span itemprop="name">http服务器</span>
+                  <a href="/categories/异常处理/" itemprop="url" rel="index">
+                    <span itemprop="name">异常处理</span>
                   </a>
                 </span>
 
@@ -348,8 +322,8 @@ sudo">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/11/04/mac上使用apache-http服务器/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/04/mac上使用apache-http服务器/" itemprop="commentsCount"></span>
+                <a href="/2017/02/17/xfire-1-2-6-jar和spring版本包冲突/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/17/xfire-1-2-6-jar和spring版本包冲突/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -359,7 +333,7 @@ sudo">
 
           
           
-             <span id="/2016/11/04/mac上使用apache-http服务器/" class="leancloud_visitors" data-flag-title="mac上使用apache,http服务器">
+             <span id="/2017/02/17/xfire-1-2-6-jar和spring版本包冲突/" class="leancloud_visitors" data-flag-title="xfire-1.2.6.jar和spring版本包冲突">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -381,35 +355,71 @@ sudo">
       
 
       
-        <h2 id="安装Apache服务器"><a href="#安装Apache服务器" class="headerlink" title="安装Apache服务器"></a>安装Apache服务器</h2><pre><code>对于mac osx的系统，一般会预装好apache的httpd服务器的。
-
-所以只需要使用启动和停止命令来操作。
-
-如果没有安装httpd服务器，可以使用
-yum install httpd来安装（在centos下），
-apt-get install httpd（ubuntu下），
-brew install httpd（mac osx下先安装brew的包管理工具）
-
-sudo apachectl start - 启动httpd服务器
-sudo apachectl stop - 停止httpd服务器
-</code></pre><h2 id="修改配置为mgwiki"><a href="#修改配置为mgwiki" class="headerlink" title="修改配置为mgwiki"></a>修改配置为mgwiki</h2><pre><code>apache是一个基金会的名字，而这款服务器叫做httpd的服务器，用来提供http的服务。还可以扩展php的一些插件，来支持php等环境。
-不过这里，我就是把她当做一个http文件服务器，用来搭一个轻文档服务amwiki。
-
-如果不配置虚拟主机，那么直接访问 http://localhost:80的话，是可以看到it works！的字样的，这个说明httpd启动成功。
-
-apache httpd的配置在/etc/apache2这个目录下，如下图：
-</code></pre><p><img src="https://mg0324.github.io/images/apache2-folder.png" alt=""></p>
-<pre><code>只需要修改httpd.conf中的文档目录，就可以全局更换文档路径了。
-</code></pre><p><img src="https://mg0324.github.io/images/httpd-conf.png" alt=""></p>
-<pre><code>然后重启，访问http://localhost就可以看到文档界面了。因为该产品一切都是在浏览器端完成，也就是前端，
-所以本地选用apache服务器，其实也可以选tomcat，但是感觉tomcat多是服务java的，而且要去目录里启动，
-少许麻烦，故选择了apache httpd。
-
-/Users/meigang/git/mgwiki 路径下是来自github上的一个开源产品amwiki。
-</code></pre><p><img src="https://mg0324.github.io/images/apache-mgwiki.png" alt=""></p>
-<h2 id="鸣谢"><a href="#鸣谢" class="headerlink" title="鸣谢"></a>鸣谢</h2><p>感谢：<a href="https://github.com/TevinLi/amWiki" target="_blank" rel="external">https://github.com/TevinLi/amWiki</a></p>
-<p>部署自己的轻文档：<a href="https://mg0324.github.io/mgwiki/">https://mg0324.github.io/mgwiki/</a></p>
-<p>迁移到hexo博客，地址：<a href="https://mg0324.github.io/">https://mg0324.github.io/</a></p>
+        <h2 id="问题场景描述"><a href="#问题场景描述" class="headerlink" title="问题场景描述"></a>问题场景描述</h2><blockquote>
+<p>最近遇到一个异常，狠狠地坑了我连续10小时。<br>该问题描述：<br>    （环境）<br>    1.maven的jeesite（spring+mybatis+shiro）环境下。<br>    2.jetty:run能够正常启动。<br>    3.放到tomcat上，运行报错。eclipse中的server的tomcat也一样报错。<br>    4.之前该项目部分多是内容发布部分，tomcat能正常启动。<br>        后续的业务有对接医院的业务，而且还使用了阿里大于的短信服务。<br>    （报错）</p>
+</blockquote>
+<pre><code>如下便贴上错误日志：
+二月 17, 2017 11:41:11 上午 org.apache.catalina.core.ApplicationContext log
+信息: Loading Spring root WebApplicationContext
+二月 17, 2017 11:41:11 上午 org.apache.catalina.core.StandardContext listenerStart
+严重: Exception sending context initialized event to listener instance of class com.thinkgem.jeesite.modules.sys.listener.WebContextListener
+java.lang.NullPointerException
+    at org.springframework.core.io.support.PathMatchingResourcePatternResolver.doFindPathMatchingJarResources(PathMatchingResourcePatternResolver.java:331)
+    at org.springframework.core.io.support.PathMatchingResourcePatternResolver.findPathMatchingResources(PathMatchingResourcePatternResolver.java:262)
+    at org.springframework.core.io.support.PathMatchingResourcePatternResolver.getResources(PathMatchingResourcePatternResolver.java:202)
+    at org.springframework.context.support.AbstractApplicationContext.getResources(AbstractApplicationContext.java:681)
+    at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:141)
+    at org.springframework.web.context.support.XmlWebApplicationContext.loadBeanDefinitions(XmlWebApplicationContext.java:126)
+    at org.springframework.web.context.support.XmlWebApplicationContext.loadBeanDefinitions(XmlWebApplicationContext.java:94)
+    at org.springframework.context.support.AbstractRefreshableApplicationContext.refreshBeanFactory(AbstractRefreshableApplicationContext.java:89)
+    at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:269)
+    at org.springframework.web.context.support.AbstractRefreshableWebApplicationContext.refresh(AbstractRefreshableWebApplicationContext.java:134)
+    at org.springframework.web.context.ContextLoader.createWebApplicationContext(ContextLoader.java:246)
+    at org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:184)
+    at org.springframework.web.context.ContextLoaderListener.contextInitialized(ContextLoaderListener.java:49)
+    at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4729)
+    at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:5167)
+    at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:150)
+    at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1408)
+    at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1398)
+    at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+    at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+    at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+    at java.lang.Thread.run(Thread.java:745)
+</code></pre><h2 id="卡住的原因"><a href="#卡住的原因" class="headerlink" title="卡住的原因"></a>卡住的原因</h2><blockquote>
+<p>一般的，maven项目都会集成jetty,tomcat等容器插件来运行项目，只有等到部署到服务器上才会使用独立的tomcat来运行。<br>但是，在开发环境下jetty,tomcat等容器都是能够正常运行的，刚好昨天给客户部署发现突然报上面的错误，整个人都不好了。</p>
+</blockquote>
+<p>为什么卡主连续10小时，是因为不好找原因。只有独立tomcat下是跑不起来的。<br>jetty能跑，肯定代码是没有问题的。（不过没找到原因之前，我是没有这样排除的。）<br>当时是到处找原因，不过也是排除法来的。至少排除了不是代码的问题引起的，只知道是环境问题。<br>至于是操作系统，Java环境，tomcat环境，还是项目jar包环境，不清楚。就一直尝试，一直启动。<br>活活卡我10小时。</p>
+<h2 id="解决的大体思路"><a href="#解决的大体思路" class="headerlink" title="解决的大体思路"></a>解决的大体思路</h2><blockquote>
+<p>看异常，是报null指针，而且是在spring的底层加载包中。这说明spring加载失败了，于是我就修改web.xml中的配置。<br>1.先只是加载一个spring的配置文件，spring-content.xml。（修改web.xml的加载配置文件配置）<br>接着报了一个这个错，我就去百度。</p>
+</blockquote>
+<pre><code>信息: Loading Spring root WebApplicationContext
+2017-02-17 17:10:29,843 ERROR [org.springframework.web.context.ContextLoader] - Context initialization failed
+org.springframework.beans.factory.BeanDefinitionStoreException: Line 15 in XML document from URL [file:/D:/apache-tomcat-8.0.26-eclipse/wtpwebapps/zhongliu/WEB-INF/classes/spring-context.xml] is invalid; nested exception is org.xml.sax.SAXParseException: Document root element &quot;beans&quot;, must match DOCTYPE root &quot;null&quot;.
+org.xml.sax.SAXParseException; lineNumber: 15; columnNumber: 27; Document root element &quot;beans&quot;, must match DOCTYPE root &quot;null&quot;.
+    at org.apache.xerces.util.ErrorHandlerWrapper.createSAXParseException(Unknown Source)
+</code></pre><blockquote>
+<p>然后就搜到了这篇blog,<a href="http://www.iteye.com/problems/51892" target="_blank" rel="external">http://www.iteye.com/problems/51892</a> 终于看到了问题的所在。</p>
+</blockquote>
+<p><img src="http://mg0324.github.io/images/xfire-spring-ct.png" style="width:450px;"></p>
+<blockquote>
+<p>终于意识到我也是在调一个webservice的时候加入了xfire的包，于是就去找解决xfire包的冲突问题。</p>
+</blockquote>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.codehaus.xfire&lt;/groupId&gt;
+    &lt;artifactId&gt;xfire-all&lt;/artifactId&gt;
+    &lt;version&gt;1.2.6&lt;ersion&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring&lt;/artifactId&gt;
+            &lt;version&gt;1.2.6&lt;ersion&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+&lt;/dependency&gt;
+</code></pre><blockquote>
+<p>最后问题解决，当时我很高兴，从未如此的放松。<br>写此博客，谨记。</p>
+</blockquote>
 
       
     </div>
@@ -432,9 +442,9 @@ apache httpd的配置在/etc/apache2这个目录下，如下图：
       
         <div class="post-tags">
           
-            <a href="/tags/apache/" rel="tag">#apache</a>
+            <a href="/tags/异常/" rel="tag">#异常</a>
           
-            <a href="/tags/httpd/" rel="tag">#httpd</a>
+            <a href="/tags/包冲突/" rel="tag">#包冲突</a>
           
         </div>
       
@@ -443,16 +453,16 @@ apache httpd的配置在/etc/apache2这个目录下，如下图：
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/04/alisql的my-cnf/" rel="next" title="alisql的my.cnf">
-                <i class="fa fa-chevron-left"></i> alisql的my.cnf
+              <a href="/2016/12/30/mysql下的内容发布中文章的上一条和下一条解决方案/" rel="next" title="mysql下的内容发布中文章的上一条和下一条解决方案">
+                <i class="fa fa-chevron-left"></i> mysql下的内容发布中文章的上一条和下一条解决方案
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/11/09/基于solr的全文检索解决方案/" rel="prev" title="基于solr的全文检索解决方案">
-                基于solr的全文检索解决方案 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/11/03/关键字之旅/" rel="prev" title="关键字之旅">
+                关键字之旅 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -468,10 +478,10 @@ apache httpd的配置在/etc/apache2这个目录下，如下图：
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/11/04/mac上使用apache-http服务器/"
-     data-title="mac上使用apache,http服务器"
+        <div class="ds-share flat" data-thread-key="2017/02/17/xfire-1-2-6-jar和spring版本包冲突/"
+     data-title="xfire-1.2.6.jar和spring版本包冲突"
      data-content=""
-     data-url="http://mg0324.github.io/2016/11/04/mac上使用apache-http服务器/">
+     data-url="http://mg0324.github.io/2017/02/17/xfire-1-2-6-jar和spring版本包冲突/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -501,8 +511,8 @@ apache httpd的配置在/etc/apache2这个目录下，如下图：
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/11/04/mac上使用apache-http服务器/"
-           data-title="mac上使用apache,http服务器" data-url="http://mg0324.github.io/2016/11/04/mac上使用apache-http服务器/">
+      <div class="ds-thread" data-thread-key="2017/02/17/xfire-1-2-6-jar和spring版本包冲突/"
+           data-title="xfire-1.2.6.jar和spring版本包冲突" data-url="http://mg0324.github.io/2017/02/17/xfire-1-2-6-jar和spring版本包冲突/">
       </div>
     
   </div>
@@ -631,7 +641,7 @@ apache httpd的配置在/etc/apache2这个目录下，如下图：
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Apache服务器"><span class="nav-number">1.</span> <span class="nav-text">安装Apache服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改配置为mgwiki"><span class="nav-number">2.</span> <span class="nav-text">修改配置为mgwiki</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#鸣谢"><span class="nav-number">3.</span> <span class="nav-text">鸣谢</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题场景描述"><span class="nav-number">1.</span> <span class="nav-text">问题场景描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#卡住的原因"><span class="nav-number">2.</span> <span class="nav-text">卡住的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决的大体思路"><span class="nav-number">3.</span> <span class="nav-text">解决的大体思路</span></a></li></ol></div>
             
           </div>
         </section>
