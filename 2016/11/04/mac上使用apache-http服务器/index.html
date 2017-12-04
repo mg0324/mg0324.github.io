@@ -16,14 +16,14 @@
 <meta property="og:site_name" content="我的专属轻博客">
 <meta property="og:description" content="安装Apache服务器对于mac osx的系统，一般会预装好apache的httpd服务器的。  所以只需要使用启动和停止命令来操作。  如果没有安装httpd服务器，可以使用 yum install httpd来安装（在centos下）， apt-get install httpd（ubuntu下）， brew install httpd（mac osx下先安装brew的包管理工具）  sudo">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://blog.meiflower.top/images/apache2-folder.png">
-<meta property="og:image" content="http://blog.meiflower.top/images/httpd-conf.png">
-<meta property="og:image" content="http://blog.meiflower.top/images/apache-mgwiki.png">
-<meta property="og:updated_time" content="2017-12-04T06:47:09.000Z">
+<meta property="og:image" content="http://blog.meiflower.top/mb/images/apache2-folder.png">
+<meta property="og:image" content="http://blog.meiflower.top/mb/images/httpd-conf.png">
+<meta property="og:image" content="http://blog.meiflower.top/mb/images/apache-mgwiki.png">
+<meta property="og:updated_time" content="2017-12-04T07:11:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mac上使用apache,http服务器">
 <meta name="twitter:description" content="安装Apache服务器对于mac osx的系统，一般会预装好apache的httpd服务器的。  所以只需要使用启动和停止命令来操作。  如果没有安装httpd服务器，可以使用 yum install httpd来安装（在centos下）， apt-get install httpd（ubuntu下）， brew install httpd（mac osx下先安装brew的包管理工具）  sudo">
-<meta name="twitter:image" content="http://blog.meiflower.top/images/apache2-folder.png">
+<meta name="twitter:image" content="http://blog.meiflower.top/mb/images/apache2-folder.png">
   
     <link rel="alternative" href="/atom.xml" title="我的专属轻博客" type="application/atom+xml">
   
@@ -208,18 +208,18 @@ sudo apachectl stop - 停止httpd服务器
 如果不配置虚拟主机，那么直接访问 http://localhost:80的话，是可以看到it works！的字样的，这个说明httpd启动成功。
 
 apache httpd的配置在/etc/apache2这个目录下，如下图：
-</code></pre><p><img src="http://blog.meiflower.top/images/apache2-folder.png" alt=""></p>
+</code></pre><p><img src="/mb/images/apache2-folder.png" alt=""></p>
 <pre><code>只需要修改httpd.conf中的文档目录，就可以全局更换文档路径了。
-</code></pre><p><img src="http://blog.meiflower.top/images/httpd-conf.png" alt=""></p>
+</code></pre><p><img src="/mb/images/httpd-conf.png" alt=""></p>
 <pre><code>然后重启，访问http://localhost就可以看到文档界面了。因为该产品一切都是在浏览器端完成，也就是前端，
 所以本地选用apache服务器，其实也可以选tomcat，但是感觉tomcat多是服务java的，而且要去目录里启动，
 少许麻烦，故选择了apache httpd。
 
 /Users/meigang/git/mgwiki 路径下是来自github上的一个开源产品amwiki。
-</code></pre><p><img src="http://blog.meiflower.top/images/apache-mgwiki.png" alt=""></p>
+</code></pre><p><img src="/mb/images/apache-mgwiki.png" alt=""></p>
 <h2 id="鸣谢"><a href="#鸣谢" class="headerlink" title="鸣谢"></a>鸣谢</h2><p>感谢：<a href="https://github.com/TevinLi/amWiki" target="_blank" rel="noopener">https://github.com/TevinLi/amWiki</a></p>
 <p>部署自己的轻文档：<a href="https://mg0324.github.io/mgwiki/" target="_blank" rel="noopener">https://mg0324.github.io/mgwiki/</a></p>
-<p>迁移到hexo博客，地址：<a href="http://blog.meiflower.top/">https://mg0324.github.io/</a></p>
+<p>迁移到hexo博客，地址：<a href="http://blog.meiflower.top/">http://blog.meiflower.top/</a></p>
 
       
 
@@ -476,19 +476,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随感</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">总结</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">性能</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -516,19 +516,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">github</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">github pages</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">apache</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">httpd</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">github</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">github pages</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -548,10 +548,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">mgwiki</a>
               </li>
              
@@ -561,14 +557,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">workline</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">包冲突</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -593,6 +581,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">es6</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">包冲突</a>
               </li>
             
             <div class="clearfix"></div>

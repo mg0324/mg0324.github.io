@@ -17,9 +17,9 @@
 <meta property="og:description" content="思路在一堆数据中，给其建立全文索引，然后通过查询关键字，获取匹配的数据显示到界面条目。 基于solr的全文检索搭建solr所处位置Apache提供了全文检索引擎lucene，现已发展到6.2.X的版本。如果想自己建立搜索引擎，可以使用lucene来加入自己的项目，作为一个全文检索模块。但是，此方法，学习成本比较大，需要了解很多lucene的api，重点在索引建立，索引更新上。 那么如何快速拥有一个">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://blog.meiflower.top/mb/images/solr-mind.png">
-<meta property="og:image" content="http://blog.meiflower.top/images/solr-asyc.png">
-<meta property="og:image" content="http://blog.meiflower.top/images/solr-block.png">
-<meta property="og:updated_time" content="2017-12-04T07:07:21.000Z">
+<meta property="og:image" content="http://blog.meiflower.top/mb/images/solr-asyc.png">
+<meta property="og:image" content="http://blog.meiflower.top/mb/images/solr-block.png">
+<meta property="og:updated_time" content="2017-12-04T07:08:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于solr的全文检索解决方案">
 <meta name="twitter:description" content="思路在一堆数据中，给其建立全文索引，然后通过查询关键字，获取匹配的数据显示到界面条目。 基于solr的全文检索搭建solr所处位置Apache提供了全文检索引擎lucene，现已发展到6.2.X的版本。如果想自己建立搜索引擎，可以使用lucene来加入自己的项目，作为一个全文检索模块。但是，此方法，学习成本比较大，需要了解很多lucene的api，重点在索引建立，索引更新上。 那么如何快速拥有一个">
@@ -199,11 +199,11 @@
 <h3 id="要解决的点"><a href="#要解决的点" class="headerlink" title="要解决的点"></a>要解决的点</h3><ul>
 <li>数据更新后，索引如何同步更新？<br>解决方式：<br>  配置定时器，周期性的更新索引。使用apache-solr-datascheduler-1.0.jar，参考 <a href="https://code.google.com/archive/p/solr-dataimport-scheduler/" target="_blank" rel="noopener">https://code.google.com/archive/p/solr-dataimport-scheduler/</a></li>
 </ul>
-<p><img src="http://blog.meiflower.top/images/solr-asyc.png" style="width:600px;"></p>
+<p><img src="/mb/images/solr-asyc.png" style="width:600px;"></p>
 <ul>
 <li>如何知道数据是来自哪个表的？<br>解决方式：<br>  通过solr的cores来区分。</li>
 </ul>
-<p><img src="http://blog.meiflower.top/images/solr-block.png" style="width:100px;"></p>
+<p><img src="/mb/images/solr-block.png" style="width:100px;"></p>
 <ul>
 <li>solr 查询语法：<br>参考<a href="http://www.cnblogs.com/rainbowzc/p/4354224.html" target="_blank" rel="noopener">http://www.cnblogs.com/rainbowzc/p/4354224.html</a></li>
 </ul>
@@ -474,19 +474,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随感</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">总结</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">性能</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -514,19 +514,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">github</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">github pages</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">apache</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">httpd</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">github</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">github pages</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -546,10 +546,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">mgwiki</a>
               </li>
              
@@ -559,14 +555,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">workline</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">包冲突</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -591,6 +579,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">es6</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">包冲突</a>
               </li>
             
             <div class="clearfix"></div>

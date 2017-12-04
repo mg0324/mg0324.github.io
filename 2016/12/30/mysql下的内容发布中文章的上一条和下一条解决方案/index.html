@@ -16,13 +16,13 @@
 <meta property="og:site_name" content="我的专属轻博客">
 <meta property="og:description" content="问题场景在内容发布系统中，都会有类似下图的需求。  遇到的问题其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。 通过当前记录，查询到所在排序中的上一条记录，和下一条记录。 在oracle中有rownum来实现，在mysql中要怎么实现呢？  在网上查过一些资料，很多都是用 &amp;gt; 或者 &amp;lt; 来比较id（需要将排序的字段转成整数） 来实现，虽然也可以。但是只能支持按一">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://blog.meiflower.top/images/lastnext.png">
-<meta property="og:image" content="http://blog.meiflower.top/images/mysql-rownum.png">
-<meta property="og:updated_time" content="2017-12-04T06:47:20.000Z">
+<meta property="og:image" content="http://blog.meiflower.top/mb/images/lastnext.png">
+<meta property="og:image" content="http://blog.meiflower.top/mb/images/mysql-rownum.png">
+<meta property="og:updated_time" content="2017-12-04T07:11:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql下的内容发布中文章的上一条和下一条解决方案">
 <meta name="twitter:description" content="问题场景在内容发布系统中，都会有类似下图的需求。  遇到的问题其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。 通过当前记录，查询到所在排序中的上一条记录，和下一条记录。 在oracle中有rownum来实现，在mysql中要怎么实现呢？  在网上查过一些资料，很多都是用 &amp;gt; 或者 &amp;lt; 来比较id（需要将排序的字段转成整数） 来实现，虽然也可以。但是只能支持按一">
-<meta name="twitter:image" content="http://blog.meiflower.top/images/lastnext.png">
+<meta name="twitter:image" content="http://blog.meiflower.top/mb/images/lastnext.png">
   
     <link rel="alternative" href="/atom.xml" title="我的专属轻博客" type="application/atom+xml">
   
@@ -191,7 +191,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="问题场景"><a href="#问题场景" class="headerlink" title="问题场景"></a>问题场景</h1><pre><code>在内容发布系统中，都会有类似下图的需求。
-</code></pre><p><img src="http://blog.meiflower.top/images/lastnext.png" style="height:50px;"></p>
+</code></pre><p><img src="/mb/images/lastnext.png" style="height:50px;"></p>
 <h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><pre><code>其实“上一条，下一条”的需求，转化到实现其实就是数据库的sql查询上了。
 通过当前记录，查询到所在排序中的上一条记录，和下一条记录。
 在oracle中有rownum来实现，在mysql中要怎么实现呢？
@@ -203,7 +203,7 @@
 <pre><code>SELECT @rownum:=@rownum+1 rownum,t.id,t.title,t.weight,t.create_date From
 (SELECT @rownum:=0,a.id,a.title,a.weight,a.create_date FROM cms_article a 
 WHERE del_flag=0 ORDER BY weight desc,create_date desc limit 10) t
-</code></pre><p> 截图查询如下：<br><img src="http://blog.meiflower.top/images/mysql-rownum.png"></p>
+</code></pre><p> 截图查询如下：<br><img src="/mb/images/mysql-rownum.png"></p>
 <h1 id="基于mysql的rownum解决方案"><a href="#基于mysql的rownum解决方案" class="headerlink" title="基于mysql的rownum解决方案"></a>基于mysql的rownum解决方案</h1><pre><code>在有了rownum后，我们可以给select结果集的记录编号，可以知道编号的rownum和记录的id的
 对应关系。这样比如当前是第2条，我们传入编号2，上一条就是2-1，下一条就是2+1，很简单的
 实现了。而且，本人在参与的一个网站中，就按此解决了这种问题。特此博客分享。
@@ -467,19 +467,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随感</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">总结</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">性能</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -507,19 +507,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">github</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">github pages</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">apache</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">httpd</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">github</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">github pages</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -539,10 +539,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">mgwiki</a>
               </li>
              
@@ -552,14 +548,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">workline</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">包冲突</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -584,6 +572,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">es6</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">包冲突</a>
               </li>
             
             <div class="clearfix"></div>

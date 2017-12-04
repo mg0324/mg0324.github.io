@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="我的专属轻博客">
 <meta property="og:description" content="问题场景描述 最近遇到一个异常，狠狠地坑了我连续10小时。该问题描述：    （环境）    1.maven的jeesite（spring+mybatis+shiro）环境下。    2.jetty:run能够正常启动。    3.放到tomcat上，运行报错。eclipse中的server的tomcat也一样报错。    4.之前该项目部分多是内容发布部分，tomcat能正常启动。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://blog.meiflower.top/images/xfire-spring-ct.png">
-<meta property="og:updated_time" content="2017-12-04T06:48:04.000Z">
+<meta property="og:image" content="http://blog.meiflower.top/mb/images/xfire-spring-ct.png">
+<meta property="og:updated_time" content="2017-12-04T07:12:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="xfire-1.2.6.jar和spring版本包冲突">
 <meta name="twitter:description" content="问题场景描述 最近遇到一个异常，狠狠地坑了我连续10小时。该问题描述：    （环境）    1.maven的jeesite（spring+mybatis+shiro）环境下。    2.jetty:run能够正常启动。    3.放到tomcat上，运行报错。eclipse中的server的tomcat也一样报错。    4.之前该项目部分多是内容发布部分，tomcat能正常启动。">
-<meta name="twitter:image" content="http://blog.meiflower.top/images/xfire-spring-ct.png">
+<meta name="twitter:image" content="http://blog.meiflower.top/mb/images/xfire-spring-ct.png">
   
     <link rel="alternative" href="/atom.xml" title="我的专属轻博客" type="application/atom+xml">
   
@@ -235,7 +235,7 @@ org.xml.sax.SAXParseException; lineNumber: 15; columnNumber: 27; Document root e
 </code></pre><blockquote>
 <p>然后就搜到了这篇blog,<a href="http://www.iteye.com/problems/51892" target="_blank" rel="noopener">http://www.iteye.com/problems/51892</a> 终于看到了问题的所在。</p>
 </blockquote>
-<p><img src="http://blog.meiflower.top/images/xfire-spring-ct.png" style="width:450px;"></p>
+<p><img src="/mb/images/xfire-spring-ct.png" style="width:450px;"></p>
 <blockquote>
 <p>终于意识到我也是在调一个webservice的时候加入了xfire的包，于是就去找解决xfire包的冲突问题。</p>
 </blockquote>
@@ -510,19 +510,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随感</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">总结</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">性能</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -550,19 +550,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">github</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">github pages</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">apache</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">httpd</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">github</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">github pages</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -582,10 +582,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">mgwiki</a>
               </li>
              
@@ -595,14 +591,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">workline</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异常</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">包冲突</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -627,6 +615,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">es6</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异常</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">包冲突</a>
               </li>
             
             <div class="clearfix"></div>
