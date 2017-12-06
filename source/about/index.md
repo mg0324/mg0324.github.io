@@ -3,7 +3,8 @@ title: 关于我
 date: 2016-11-11 17:06:21
 ---
 
-## 关于我
+## two face
+
 * （不）活泼（不）开朗，（不）可爱（不）聪明，
 * （不）积极（不）向上，（不）疯魔（不）成活。
 
@@ -15,5 +16,8 @@ date: 2016-11-11 17:06:21
 * 5.看书是一天，上班是一天，睡觉是一天，时间对人都是一样，自己的时间请自己做主，莫要纠结。
 
 
+## 喜欢gem的音乐
+
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=400 height=450 src="//music.163.com/outchain/player?type=0&id=981296904&auto=0&height=430"></iframe>
 	
 
