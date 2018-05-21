@@ -8,3 +8,6 @@ date: 2016-12-22 14:55:27
 
 * 2.mgang.small2big - 2013
 > 大二写的jquery的特效插件，演示地址：https://mg0324.github.io/mgang.Small2Big/
+
+* 3.github 个人简历 - 2017
+> https://mg0324.github.io/about-me/
