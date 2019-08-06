@@ -17,3 +17,5 @@ date: 2018-01-30 17:59:27
 > `docker export 容器名 > temp.tar` -- 将容器允许的镜像保存到temp.tar文件中
   `docker import temp.tar mango/temp:1.0` --从temp.tar中导入镜像，取名mango/temp,tag为1.0
 
+* 5.给运行中的docker容器添加端口映射
+> `iptables -t nat -A DOCKER -p tcp --dport 4900 -j DNAT --to-destination 	172.19.0.6:4900` 

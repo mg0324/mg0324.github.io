@@ -5,22 +5,23 @@
 # Site
 title: 我的专属轻博客
 subtitle: 记录点滴，回头思过往
-description:
+description: mango mei 的个人博客，用来记录工作，生活，技术中的点点滴滴
+keywords: mango,mango mei,梦来梦网,芒果笔记
 author: Mango Mei
 language: zh-CN
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://blog.meiflower.top
+url: https://www.meiflower.top
 root: /mb
-permalink: :year/:month/:day/:title/
+permalink: :title.html
 permalink_defaults:
 
 # Directory
 source_dir: source
 public_dir: public
-tag_dir: tags
+tag_dir: tag
 archive_dir: archives
 category_dir: categories
 code_dir: downloads/code
@@ -74,6 +75,12 @@ pagination_dir: page
 ## Themes: https://hexo.io/themes/
 theme: yilia
 
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
 jsonContent:
     meta: false
     pages: false
@@ -90,7 +97,7 @@ jsonContent:
       link: false
       permalink: false
       excerpt: false
-      categories: false
+      categories: true
       tags: true
 
 # Deployment
