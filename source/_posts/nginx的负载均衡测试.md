@@ -30,7 +30,7 @@ location /web/ {
 # 测试
 如下图gif所示
 
-![](/mb/images/gif/nginx+http-server+upstream+test.gif)
+![](https://mangomei.oss-cn-shenzhen.aliyuncs.com/gif/nginx%2Bhttp-server%2Bupstream%2Btest.gif)
 
 # 结论
 1. 2个服务都在跑的时候，能`负载均衡`到`web1`或者`web2`;
