@@ -13,7 +13,7 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://www.meiflower.top
+url: http://mg.meiflower.top
 root: /mb
 permalink: :title.html
 permalink_defaults:
