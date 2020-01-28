@@ -423,7 +423,7 @@ Java中的对象都链接在一个个根节点上，所以内存中会有许多�
 
 ## 3.4.分代收集算法
 
-<img src="/mb/images/jvm/gc-generation.png" width="600px">
+<img src="/mb/images/jvm/gc-generation.png" width="800px">
 
 分代收集算法其实是一种理论，不是实际的算法。是将堆按年龄分代分区域，主要分为年轻代和老年代；年轻代分为Eden区和Surivior区，Surivior区分为Form和To2个区域。
 
