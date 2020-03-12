@@ -12,9 +12,10 @@ tags:
 ## 1.1.java发展历史
 ![](/mb/images/jvm/java-develop-time.png)
 * 1995年5月23 Oak语言更名为Java
+<!--more-->
 * 1996年1月23 JDK 1.0发布
 * 1997年2月19日JDK 1.1发布
-  
+
     > 技术代表：JDBC，JAR文件格式，JavaBeans，RMI。
 * 1998年12月4日里程碑版本 JDK1.2
   

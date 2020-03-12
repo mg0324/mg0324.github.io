@@ -20,7 +20,7 @@ tags:
 
 	sudo apachectl start - 启动httpd服务器
 	sudo apachectl stop - 停止httpd服务器
-
+<!--more-->
 ## 修改配置为mgwiki
 
 	apache是一个基金会的名字，而这款服务器叫做httpd的服务器，用来提供http的服务。还可以扩展php的一些插件，来支持php等环境。

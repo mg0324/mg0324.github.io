@@ -20,7 +20,7 @@ upstream web{
     server 172.18.0.2:8002;
 }
 ```
-
+<!--more-->
 ``` nginx
 location /web/ {
         proxy_pass http://web/;

@@ -16,6 +16,7 @@ tags:
 	tmpdir = /tmp
 	port = 3030
 	back_log = 3000
+<!--more-->
 	character_set_server = utf8
 	max_connect_errors = 100
 	max_connections = 650

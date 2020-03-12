@@ -17,7 +17,7 @@ tags:
 > The Simple Logging Facade for Java (SLF4J) serves as a simple facade or abstraction for various logging frameworks (e.g. java.util.logging, logback, log4j) allowing the end user to plug in the desired logging framework at *deployment* time.
 
 理解为是java应用程序里的日志门面或者是各种日志框架的抽象，其中常用的实现有`java.util.logging`,`logback`,`log4j`，目前主流的是`logback`。
-
+<!--more-->
 <img src="/mb/images/slf4j/slf4j_framework.png" width="50%">
 
 # 2.示例slf4j+logback

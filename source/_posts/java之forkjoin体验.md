@@ -8,7 +8,7 @@ tags:
 ---
 
 > 废话不多说，直接上代码！
-
+<!--more-->
 ```java
 package org.mango.forkjoin;
 
@@ -24,6 +24,7 @@ public class ServiceTask extends RecursiveTask<String> {
     public ServiceTask(String url){
         this.url = url;
     }
+
     @Override
     protected String compute() {
         String result = HttpUtil.get(this.url);

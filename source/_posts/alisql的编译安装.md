@@ -15,7 +15,7 @@ tags:
 	2016年阿里的云栖大会上，开源了alisql，称双11就是alisql的成功案例。而且还说vs mysql 5.7 ,性能有70%的提升。
 	不管真的假的，我都有写按捺不住了，所以就跌跌撞撞有了这编译安装的点点经验，在此分享。
 	声明，我使用的机器是mac os x.
-
+<!--more-->
 ## 下载alisql源码
 	alisql源码地址：https://github.com/alibaba/AliSQL
 	得到解压目录，结构如下：

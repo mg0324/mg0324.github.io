@@ -10,7 +10,7 @@ tags:
 
 ## 时机
 > 在代码之路上快快慢慢几个春秋之后，多多少少都会经历一些框架的更迭。多数都是好用替代繁琐，新技术替换老技术。此刻，正是刚刚好的时机，来深入maven模块合理感谢华哥，受益匪浅的一课。
-
+<!--more-->
 ## 技术框架时间线
 ![技术时间线](http://osidurg5s.bkt.clouddn.com/skillTimeLine.png)
 * jsp+servlet > 最原始无框架时期，会用一些dbutil,bootstartp等。

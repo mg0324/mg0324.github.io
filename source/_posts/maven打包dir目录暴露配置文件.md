@@ -12,7 +12,7 @@ tags:
 > 在springboot框架下，打包项目发布最开始打包为整包，然后使用`java -jar xxx.jar --spring.profiles.active=w2n`的命令来启动。
 但是之后更新项目时，都是以全量更新的方式，这样做如果只是修改了一点点代码需要更新的话，也得发一个全量包。如是做法，是不优雅的。所以
 特此寻找到`maven的打包插件assembly`。
-
+<!--more-->
 ## 主要内容
 > 1.在打包的maven模块`pom.xml`中，添加如下配置
 

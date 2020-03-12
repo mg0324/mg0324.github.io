@@ -25,7 +25,7 @@ tags:
 		<artifactId>pagehelper-spring-boot-starter</artifactId>
 		<version>1.2.1</version>
 	</dependency>
-
+<!--more-->
 ## springboot集成mybatis多数据源
 ### 先建立数据源配置文件`DataSourceConfig.java`,其中一个数据源是`@Primary`为默认使用数据源。
 

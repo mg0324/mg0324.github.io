@@ -15,7 +15,7 @@ tags:
 		<artifactId>spring-boot-starter-dubbo</artifactId>
 		<version>1.0.0</version>
 	</dependency>
-
+<!--more-->
 ## 加入dubbo的依赖接口jar包或者java文件
 > 可以以jar包的方式引入，也可以用java文件来引入该`dubbo`的`interface`文件。
 

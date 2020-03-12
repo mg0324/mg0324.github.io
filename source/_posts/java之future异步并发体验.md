@@ -9,7 +9,7 @@ tags:
 ---
 
 > 废话不多说，直接上代码
-
+<!--more-->
 ```java
 package org.mango.demo;
 
