@@ -13,21 +13,23 @@ date: 2018-05-21 20:49:02
 
 > cache释放：说明，释放前最好`sync`一下，防止丢数据。
 
-	
+
 	sync
 	#去释放页内存:
 	echo 1 > /proc/sys/vm/drop_caches
-
+	
 	#释放dentries and inodes内存:
 	echo 2 > /proc/sys/vm/drop_caches
-
+	
 	#释放所有内存:
 	echo 3 > /proc/sys/vm/drop_caches
+	#释放之后记得free以下
+	free
 
 ## 二.`unbuntu`防火墙问题，卡住`docker 9998`端口
 > 首先`unbuntu`下的防火墙是`ufw`,`centos`下的是`service iptables`
 
-	
+
 	#unbuntu下开启防火墙
 	ufw enable
 	#unbuntu下关闭防火墙
