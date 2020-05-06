@@ -47,6 +47,25 @@ mango@mangodeMacBook-Pro mb % du -sh
 309M
 ```
 
+## oracle创建表空间
+``` sql
+#查询表空间位置
+select file_name,tablespace_name,bytes from dba_data_files;
+#创建表空间
+create tablespace DV_DB_AR 
+datafile 'T:\ORACLE\DV_DB_AR.DBF' 
+size 2G  
+autoextend on next 500M 
+maxsize unlimited;
+#创建临时表空间
+create temporary tablespace DV_DB_AR_TEMP 
+tempfile 'T:\ORACLE\DV_DB_AR_TEMP.DBF' 
+size 2G 
+autoextend on 
+next 500M maxsize unlimited
+extent management local;
+```
+
 
 
 
