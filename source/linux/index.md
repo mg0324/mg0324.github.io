@@ -66,6 +66,19 @@ next 500M maxsize unlimited
 extent management local;
 ```
 
+## centos7安装ssh-copy-id命令，用于免密登陆
+``` 
+yum -y install openssh-clients
+ssh-keygen
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@tw-master
+```
+
+## ss命令安装
+``` 
+yum install iproute -y // ss命令
+```
+
+
 
 
 

@@ -23,7 +23,7 @@ date: 2018-01-30 17:59:27
 * 5.给运行中的docker容器添加端口映射
 
   ```shell
-  iptables -t nat -A DOCKER -p tcp --dport 4900 -j DNAT --to-destination 	172.19.0.6:4900` 
+  iptables -t nat -A DOCKER -p tcp --dport 4900 -j DNAT --to-destination 	172.19.0.6:4900 
   ```
 
 * 6.发布本地的镜像到docker hub上
@@ -37,7 +37,17 @@ date: 2018-01-30 17:59:27
   #推送tag到docker hub
   #docker push ${tag}
   docker push mangomei/java:1.0
-  
+ 
   ```
+* 7.docker设置镜像加速器
+``` 
+sudo sed -i "s|EXTRA_ARGS='|EXTRA_ARGS='--registry-mirror=https://mr6czlt0.mirror.aliyuncs.com |g" /var/lib/boot2docker/profile
+```
+
+* 8.docker安装portainer图像管理界面容器
+``` 
+docker run -d -p 9000:9000 --restart=always -v /var/run/docker.sock:/var/run/docker.sock --name prtainer  portainer/portainer
+```
+    
 
   
