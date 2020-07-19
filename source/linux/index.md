@@ -78,6 +78,20 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub root@tw-master
 yum install iproute -y // ss命令
 ```
 
+## cpu和内存信息查看
+``` shell
+# 查看cpu型号
+cat /proc/cpuinfo | grep name | cut -f2 -d: |uniq -c
+
+# 查看有几个物理cpu
+grep 'physical id' /proc/cpuinfo | sort | uniq | wc -l
+
+# 查看一个物理cpu有几个逻辑核心
+cat /proc/cpuinfo |grep "cores"|uniq
+
+# 查看机器总内存大小
+cat /proc/meminfo | grep MemTotal
+```
 
 
 
