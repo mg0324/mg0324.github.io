@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4cd572b5-8890-4094-a2a2-a91b55cc2463" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/linux/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/source/linux/index.md" afterDir="false" />
-    </list>
+    <list default="true" id="4cd572b5-8890-4094-a2a2-a91b55cc2463" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,8 +29,8 @@
         <entry file="file://$PROJECT_DIR$/source/linux/index.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="414">
-                <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
+              <first_editor relative-caret-position="262">
+                <caret line="19" column="33" selection-start-line="19" selection-start-column="33" selection-end-line="19" selection-end-column="33" />
               </first_editor>
               <second_editor />
             </state>
@@ -61,7 +58,7 @@
     <option name="jreName" value="1.8" />
     <option name="vmOptions" value="-DarchetypeCatalog=internal" />
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="826" />
@@ -279,15 +276,15 @@
       <workItem from="1596098516769" duration="266000" />
       <workItem from="1596251361613" duration="10000" />
       <workItem from="1599203760825" duration="23000" />
-      <workItem from="1599204100823" duration="70000" />
+      <workItem from="1599204100823" duration="529000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9794000" />
+    <option name="totallyTimeSpent" value="10253000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="826" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="826" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21316166" />
@@ -363,8 +360,8 @@
     <entry file="file://$PROJECT_DIR$/source/linux/index.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="414">
-            <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
+          <first_editor relative-caret-position="262">
+            <caret line="19" column="33" selection-start-line="19" selection-start-column="33" selection-end-line="19" selection-end-column="33" />
           </first_editor>
           <second_editor />
         </state>
