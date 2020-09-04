@@ -93,6 +93,11 @@ cat /proc/cpuinfo |grep "cores"|uniq
 cat /proc/meminfo | grep MemTotal
 ```
 
+## 检测机器之前网络端口联通性
+``` shell
+nc -w 10 -vz 203.175.130.170 9341
+Connection to 203.175.130.170 9341 port [tcp/*] succeeded!
+```
 
 
 
