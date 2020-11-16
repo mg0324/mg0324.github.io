@@ -10,7 +10,7 @@ tags:
 
 # 前提
 
-> logback和log4j都能实现如下功能，下方给出logback配置。测试是否更新。
+> logback和log4j都能实现如下功能，下方给出logback配置。（测试是否更新。）
 
 * 日志按天切割，并且设置最大容量。
 
