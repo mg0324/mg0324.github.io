@@ -288,7 +288,7 @@ app:
   # 容器端口
   targetPort: 9001
   # svc端口
-  servicePort: 32901
+  nodePort: 32091
   # 每天中午12点备份，容器内时间 +8 小时
   emailBackCron: "0 4 * * *"
 ```
