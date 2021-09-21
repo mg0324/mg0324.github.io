@@ -4,12 +4,13 @@ menu:
   首页: /
   分类: /categories
   归档: /archives
-  关于: /about
+  关于: http://mg.meiflower.top
   作品: /zp
   我的简历: http://mg.meiflower.top/mr
   docker: /docker
   linux: /linux
   nginx: /nginx
+  觉醒: /awaken
 
 # SubNav
 subnav:
