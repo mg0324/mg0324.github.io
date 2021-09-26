@@ -122,8 +122,8 @@ share_jia: true
 # 具体请参考wiki：https://github.com/JoeyBling/hexo-theme-yilia-plus/wiki
 
 # 1、畅言
-changyan_appid: false
-changyan_conf: false
+changyan_appid: cytlDmr5m
+changyan_conf: prod_012f46a7c75f94c231bdc9df5b59d62d
 
 # 2、Disqus 在hexo根目录的config里也有disqus_shortname字段，优先使用yilia-plus的
 disqus: false
@@ -142,7 +142,7 @@ gitment_oauth:
 # 关于如何集成:https://www.jianshu.com/p/f5c4633524c7
 # 基于码云的评论系统(https://gitee.com/zhousiwei/giteement)
 giteement:
-  enable: true  # 是否启用码云评论系统
+  enable: false  # 是否启用码云评论系统
   # 是否使用官方js(false可以提升访问速度)
   remote: false
   redirect_uri: 'http://mgang.gitee.io/mb'   # 应用回调地址(请和配置的第三方应用保持一致)
