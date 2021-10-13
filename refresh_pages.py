@@ -34,4 +34,4 @@ data = {'branch': 'master', 'build_directory': '','force_https': 'false','auto_u
 r = requests.post("https://gitee.com/mgang/mb/pages/rebuild",data,headers=header)
 #print(r.text)
 if r.status_code == 200:
-    print("刷新成功")
+    print("refresh success!!!")

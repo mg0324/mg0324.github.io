@@ -2,21 +2,20 @@
 menu:
   首页: /
   分类: /categories
-  归档: /archives
   关于: http://www.meiflower.top
   事记: /pr
   简历: http://mg.meiflower.top/mr
   觉醒: /awaken
 
 # SubNav
-subnav:
-  github: "https://github.com/mg0324"
+subNav:
+  - github: "https://github.com/mg0324"
   #weibo: "#"
   #rss: "#"
   #zhihu: "#"
-  qzone: "https://user.qzone.qq.com/1092017732"
-  gitee: "http://git.oschina.net/mgang"
-  csdn: "http://blog.csdn.net/mg0324"
+  - qzone: "https://user.qzone.qq.com/1092017732"
+  - gitee: "http://git.oschina.net/mgang"
+  - csdn: "http://blog.csdn.net/mg0324"
   #weixin: "#"
   #jianshu: "#"
   #douban: "#"
@@ -102,7 +101,7 @@ top: true
 
 # Miscellaneous
 # 百度统计
-baidu_analytics: ''
+baidu_analytics: '1c6be1a77fcc5d50aa6b26e3418ec88e'
 google_analytics: ''
 
 # 网站图标
@@ -211,7 +210,7 @@ apple_touch_icon: '/apple-touch-icon-180x180.png'
 
 # Tab Title Change | 标签页标题切换
 tab_title_change:
-  enable: true
+  enable: 
   left_tab_title: '(つェ⊂) 我藏好了哦~ '
   return_tab_title: '(*´∇｀*) 被你发现啦~ '
 
