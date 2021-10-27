@@ -11,7 +11,9 @@ tags:
 ## 缘起
 最近在看《Java NIO》这本书，书中详细讲解了`jdk1.4`内提供的关于实现`nio`的`API`。因为阅读后，发现对于NIO还是学习的不够深入，之前也仅仅是学习了Java的文件IO和Socket编程，再者也是用`Netty`框架编写NIO代码，并未用Java提供的NIO实践。借此机会，把Java关于网络IO的发展给整理清楚，并编写Java代码示例，加深理解！！！
 IO其实分为文件IO和流IO，这里讨论的是流IO，也就是Socket的IO。
+
 <!--more-->
+
 ## 图解Java网络IO发展历程
 
 <img src="/mb/images/javanio/history.png">
