@@ -1,28 +1,14 @@
 ---
-title: k8s初识及kubeadm方式安装
-date: 2021-11-18 18:02:29
+title: kubeadm安装k8s集群
+date: 2021-11-21 22:08:33
 categories: 运维
 tags: 
 - k8s
 - 云原生
+- kubeadm
 ---
+
 2021-11-18 周4
-## kubernetes是什么
-kubernetes是一个google开源的容器编排平台，从创建应用，应用的部署，应用提供服务，扩容缩容应用，应用更新，都非常的方便，而且可以做到故障自愈，例如一个服务器挂了，可以自动将这个服务器上的服务调度到另外一个主机上进行运行，无需进行人工干涉。
-
-<!-- more -->
-
-### 架构图
-
-<img src="/mb/images/k8s/struct.png">
-
-### 特性（好处）
-* 自动化容器的部署和复制
-* 随时扩展或收缩容器规模
-* 将容器组织成组（pod)，提供容器间的负载均衡
-* 很容易地升级应用程序容器的新版本
-* 提供容器弹性，如果容器失效就替换它
-
 ## 安装前环境准备及说明
 1. 服务器资源
 
@@ -120,7 +106,6 @@ systemctl enable kubelet
 kubeadm init --apiserver-advertise-address=172.31.1.100 --image-repository=registry.aliyuncs.com/google\_containers --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.21.0
 ```
 当出现如下输出，说明初始化成功！
-
 <img src="/mb/images/k8s/kubeadm_init_1.png">
 
 按要求执行第一个红框中的3条命令后，执行`kubectl get nodes`
@@ -171,5 +156,3 @@ NAME     STATUS   ROLES                  AGE   VERSION
 master   Ready    control-plane,master   13d   v1.21.1
 node1    Ready    <none>                 13d   v1.21.1
 ```
-
-
