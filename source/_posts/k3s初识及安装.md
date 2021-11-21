@@ -11,8 +11,13 @@ tags:
 ## 介绍
 [k3s](https://k3s.io/) 是轻量级 Kubernetes，专为物联网和边缘计算构建的经过认证的 Kubernetes 发行版。
 
+<!-- more -->
+
 架构图：
+
 <img src="/mb/images/k8s/k3s.png">
+
+
 
 ## 优点
 * 适合边缘计算
