@@ -1,11 +1,12 @@
 ---
 title: rancher的安装及使用
-date: 2021-11-21 22:21:49
 categories: 运维
-tags: 
-- rancher
-- k3s
-- 云原生
+tags:
+  - rancher
+  - k3s
+  - 云原生
+abbrlink: 3f5e6faf
+date: 2021-11-21 22:21:49
 ---
 
 2021-11-20 周6

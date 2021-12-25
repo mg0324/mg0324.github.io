@@ -1,11 +1,12 @@
 ---
 title: mysql下的内容发布中文章的上一条和下一条解决方案
-date: 2016-12-30 17:37:50
 categories: mysql
 tags:
-- mysql
-- 上一条
-- 下一条
+  - mysql
+  - 上一条
+  - 下一条
+abbrlink: ef466a95
+date: 2016-12-30 17:37:50
 ---
 
 # 问题场景

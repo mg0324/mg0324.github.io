@@ -1,12 +1,13 @@
 ---
 title: 基于solr的全文检索解决方案
-date: 2016-11-09 11:35:59
 categories: 解决方案
 tags:
-- solr
-- apache
-- 全文检索
-- 解决方案
+  - solr
+  - apache
+  - 全文检索
+  - 解决方案
+abbrlink: cf2e994f
+date: 2016-11-09 11:35:59
 ---
 
 ## 思路

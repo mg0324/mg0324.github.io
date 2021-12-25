@@ -1,11 +1,12 @@
 ---
 title: '新技术重点-commonjs,es6,react'
-date: 2017-02-20 16:45:53
 categories: react
 tags:
-- react
-- commonjs
-- es6
+  - react
+  - commonjs
+  - es6
+abbrlink: cd0384ce
+date: 2017-02-20 16:45:53
 ---
 
 ## commonjs

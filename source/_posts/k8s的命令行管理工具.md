@@ -1,13 +1,14 @@
 ---
 title: k8s的命令行管理工具
-date: 2021-11-21 22:12:26
 categories: 运维
-tags: 
-- k8s
-- 云原生
-- kubectl
-- helm
-- k9s
+tags:
+  - k8s
+  - 云原生
+  - kubectl
+  - helm
+  - k9s
+abbrlink: 3933f721
+date: 2021-11-21 22:12:26
 ---
 
 2021-11-19 周5

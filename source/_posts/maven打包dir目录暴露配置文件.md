@@ -1,11 +1,12 @@
 ---
 title: maven打包dir目录暴露配置文件
-date: 2017-12-13 16:58:29
 categories: maven打包
 tags:
-- maven
-- springboot
-- package
+  - maven
+  - springboot
+  - package
+abbrlink: 2d127f5d
+date: 2017-12-13 16:58:29
 ---
 
 ## 起因

@@ -1,11 +1,12 @@
 ---
 title: docker-machine的使用和总结
-date: 2021-11-14 22:41:23
 categories: 运维
-tags: 
-- docker
-- docker-machine
-- multipass
+tags:
+  - docker
+  - docker-machine
+  - multipass
+abbrlink: '4293e759'
+date: 2021-11-14 22:41:23
 ---
 
 ## 因子

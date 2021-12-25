@@ -1,11 +1,12 @@
 ---
 title: dubbo分布式服务框架剖析
-date: 2017-04-27 17:15:25
 categories: dubbo
 tags:
-- dubbo
-- zookeeper
-- redis
+  - dubbo
+  - zookeeper
+  - redis
+abbrlink: 5d9f4005
+date: 2017-04-27 17:15:25
 ---
 
 ## Dubbo定位图

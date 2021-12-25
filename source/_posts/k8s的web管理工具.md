@@ -1,11 +1,12 @@
 ---
 title: k8s的web管理工具
-date: 2021-11-21 22:15:03
 categories: 运维
-tags: 
-- k8s
-- 云原生
-- webui
+tags:
+  - k8s
+  - 云原生
+  - webui
+abbrlink: e5090d6c
+date: 2021-11-21 22:15:03
 ---
 
 2021-11-19 周5

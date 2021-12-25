@@ -1,10 +1,11 @@
 ---
 title: Java性能注意点
-date: 2016-11-04 15:56:32
 categories: 性能进阶
 tags:
-- java
-- 性能
+  - java
+  - 性能
+abbrlink: ed152e54
+date: 2016-11-04 15:56:32
 ---
 
 参考：[http://www.importnew.com/16181.html](http://www.importnew.com/16181.html "")

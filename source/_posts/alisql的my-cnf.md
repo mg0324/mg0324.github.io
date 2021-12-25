@@ -1,11 +1,12 @@
 ---
 title: alisql的my.cnf
-date: 2016-11-04 16:42:24
 categories: mysql
 tags:
-- mysql
-- alisql
-- 配置
+  - mysql
+  - alisql
+  - 配置
+abbrlink: 2dce5267
+date: 2016-11-04 16:42:24
 ---
 
 	

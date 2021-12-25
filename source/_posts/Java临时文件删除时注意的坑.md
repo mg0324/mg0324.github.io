@@ -1,10 +1,11 @@
 ---
 title: Java临时文件删除时注意的坑
-date: 2021-01-05 18:56:13
 categories: java
 tags:
-- java
-- 文件删除
+  - java
+  - 文件删除
+abbrlink: e3e7655a
+date: 2021-01-05 18:56:13
 ---
 
 # 前言

@@ -1,10 +1,11 @@
 ---
 title: xfire-1.2.6.jar和spring版本包冲突
-date: 2017-02-17 13:56:27
 categories: 异常处理
 tags:
-- 异常
-- 包冲突
+  - 异常
+  - 包冲突
+abbrlink: b335e7fe
+date: 2017-02-17 13:56:27
 ---
 
 ## 问题场景描述

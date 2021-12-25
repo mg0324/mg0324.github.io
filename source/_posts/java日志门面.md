@@ -1,11 +1,12 @@
 ---
-title: 'java日志门面'
-date: 2019-12-14 13:44:06
+title: java日志门面
 categories: java
 tags:
-- java
-- slf4j
-- logging
+  - java
+  - slf4j
+  - logging
+abbrlink: d61f8f96
+date: 2019-12-14 13:44:06
 ---
 
 

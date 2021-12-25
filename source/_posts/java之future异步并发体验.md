@@ -1,11 +1,12 @@
 ---
 title: java之future异步并发体验
-date: 2020-03-06 11:36:48
 categories: java
 tags:
-- future
-- 异步
-- 并发编程
+  - future
+  - 异步
+  - 并发编程
+abbrlink: a573d14a
+date: 2020-03-06 11:36:48
 ---
 
 > 废话不多说，直接上代码

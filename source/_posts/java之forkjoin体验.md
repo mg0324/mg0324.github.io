@@ -1,10 +1,11 @@
 ---
 title: java之forkjoin体验
-date: 2020-03-06 10:52:37
 categories: java
 tags:
-- forkjoin
-- 并发编程
+  - forkjoin
+  - 并发编程
+abbrlink: 75f7c9f8
+date: 2020-03-06 10:52:37
 ---
 
 > 废话不多说，直接上代码！

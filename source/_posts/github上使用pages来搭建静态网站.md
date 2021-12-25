@@ -1,10 +1,11 @@
 ---
 title: github上使用pages来搭建静态网站
-date: 2016-11-04 15:44:08
 categories: github
 tags:
-- github
-- github pages
+  - github
+  - github pages
+abbrlink: edde3c54
+date: 2016-11-04 15:44:08
 ---
 
 ### 1.起因 & 原理剖析

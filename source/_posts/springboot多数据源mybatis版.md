@@ -1,10 +1,11 @@
 ---
 title: springboot多数据源mybatis版
-date: 2017-11-06 15:12:34
 categories: springboot
 tags:
-- springboot
-- mybatis
+  - springboot
+  - mybatis
+abbrlink: 1c809e8a
+date: 2017-11-06 15:12:34
 ---
 
 ## springboot多数据源

@@ -1,11 +1,12 @@
 ---
 title: kubeadm安装k8s集群
-date: 2021-11-21 22:08:33
 categories: 运维
-tags: 
-- k8s
-- 云原生
-- kubeadm
+tags:
+  - k8s
+  - 云原生
+  - kubeadm
+abbrlink: f198a138
+date: 2021-11-21 22:08:33
 ---
 
 2021-11-18 周4

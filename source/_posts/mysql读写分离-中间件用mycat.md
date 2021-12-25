@@ -1,11 +1,12 @@
 ---
 title: 'mysql读写分离,中间件用mycat'
-date: 2016-11-04 16:01:17
 categories: mysql
 tags:
-- mysql
-- mycat
-- 性能
+  - mysql
+  - mycat
+  - 性能
+abbrlink: 7964f68f
+date: 2016-11-04 16:01:17
 ---
 
 

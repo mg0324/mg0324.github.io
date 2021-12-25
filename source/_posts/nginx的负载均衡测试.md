@@ -1,11 +1,12 @@
 ---
 title: nginx的负载均衡测试
-date: 2019-12-07 21:55:40
 categories: nginx
 tags:
-- nginx
-- test
-- 负载均衡
+  - nginx
+  - test
+  - 负载均衡
+abbrlink: 254d4ef5
+date: 2019-12-07 21:55:40
 ---
 
 # 疑问

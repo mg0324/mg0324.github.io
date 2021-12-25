@@ -1,10 +1,11 @@
 ---
 title: 'mac上使用apache,http服务器'
-date: 2016-11-04 17:04:02
 categories: http服务器
 tags:
-- apache
-- httpd
+  - apache
+  - httpd
+abbrlink: ce111ea6
+date: 2016-11-04 17:04:02
 ---
 
 ## 安装Apache服务器

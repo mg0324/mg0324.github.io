@@ -1,10 +1,11 @@
 ---
 title: apache-tomcat-8.0.43源码编译
-date: 2020-11-15 17:07:13
 categories: 源码
 tags:
-- tomcat
-- 源码编译
+  - tomcat
+  - 源码编译
+abbrlink: 10b625fd
+date: 2020-11-15 17:07:13
 ---
 
 # 源码下载

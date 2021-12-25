@@ -1,11 +1,12 @@
 ---
 title: minikube安装k8s集群
-date: 2021-11-21 22:10:55
 categories: 运维
-tags: 
-- k8s
-- 云原生
-- minikube
+tags:
+  - k8s
+  - 云原生
+  - minikube
+abbrlink: dbd3571b
+date: 2021-11-21 22:10:55
 ---
 
 2021-11-19 周5

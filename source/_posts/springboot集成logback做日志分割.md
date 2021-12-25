@@ -1,11 +1,12 @@
 ---
 title: springboot集成logback做日志分割
-date: 2020-11-15 21:00:21
 categories: springboot
 tags:
-- springboot
-- logback
-- 日志处理
+  - springboot
+  - logback
+  - 日志处理
+abbrlink: 9b4e51d
+date: 2020-11-15 21:00:21
 ---
 
 # 前提

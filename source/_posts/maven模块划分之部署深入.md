@@ -1,11 +1,12 @@
 ---
 title: maven模块划分之部署深入
-date: 2017-12-06 17:24:20
 categories: maven
 tags:
-- maven
-- 部署方式
-- 架构
+  - maven
+  - 部署方式
+  - 架构
+abbrlink: '54e65301'
+date: 2017-12-06 17:24:20
 ---
 
 ## 时机

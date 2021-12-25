@@ -1,10 +1,11 @@
 ---
 title: k8s初识
-date: 2021-11-18 18:02:29
 categories: 运维
-tags: 
-- k8s
-- 云原生
+tags:
+  - k8s
+  - 云原生
+abbrlink: b117c699
+date: 2021-11-18 18:02:29
 ---
 2021-11-18 周4
 ## kubernetes是什么

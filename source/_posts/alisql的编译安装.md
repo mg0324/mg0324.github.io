@@ -1,10 +1,11 @@
 ---
 title: alisql的编译安装
-date: 2016-11-04 16:18:28
 categories: mysql
 tags:
-- mysql
-- alisql
+  - mysql
+  - alisql
+abbrlink: d2db1494
+date: 2016-11-04 16:18:28
 ---
 
 ## 专业阿里编译

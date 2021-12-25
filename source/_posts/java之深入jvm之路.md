@@ -1,12 +1,13 @@
 ---
 title: java之深入jvm之路
-date: 2019-12-14 14:45:07
 categories: java
 tags:
-- jdk
-- jvm
-- gc
-- 垃圾回收
+  - jdk
+  - jvm
+  - gc
+  - 垃圾回收
+abbrlink: f97be59a
+date: 2019-12-14 14:45:07
 ---
 # 1.仔细看一看java
 ## 1.1.java发展历史

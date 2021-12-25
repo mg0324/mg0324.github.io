@@ -1,10 +1,11 @@
 ---
 title: springboot集成dubbo
-date: 2017-11-06 15:31:34
 categories: springboot
 tags:
-- springboot
-- dubbo
+  - springboot
+  - dubbo
+abbrlink: 647a5380
+date: 2017-11-06 15:31:34
 ---
 
 ## pom.xml中加入springboot的dubbo启动依赖

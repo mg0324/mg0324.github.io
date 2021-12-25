@@ -1,14 +1,15 @@
 ---
 title: 发布Jar包到公共Maven仓库
-date: 2021-12-12 16:48:01
-categories: java
-tags: 
-- java
-- maven
-- jar发布
+categories:
+  - java
+tags:
+  - java
+  - maven
+  - jar发布
+abbrlink: 66be94d7
+date: 2021-12-12 16:48:00
 ---
 
-2021-12-12 周天
 # 起因
 自己写了个简单的框架，想要发布到公共的maven仓库上，方便自己引用，也给其他开发者创造一个轮子。
 
