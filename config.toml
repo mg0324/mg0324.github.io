@@ -12,7 +12,7 @@ disablePathToLower = true
 hasCJKLanguage = true
 summaryLength = 50
 
-disqusShortname = "meigang"  ## 是否开启disqus评论，不要和utteranc同时开启
+disqusShortname = "mango-mb"  ## 是否开启disqus评论，不要和utteranc同时开启
 
 [author]
   name = "程序猫大刚"
