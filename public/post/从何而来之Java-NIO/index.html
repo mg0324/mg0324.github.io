@@ -1,0 +1,664 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><title>从何而来之Java NIO | 程序猫大刚</title><meta property="og:title" content="从何而来之Java NIO - 程序猫大刚"><meta property="og:type" content="article"><meta property="article:published_time" content="2021-10-13T22:29:37+08:00"><meta property="article:modified_time" content="2021-10-13T22:29:37+08:00"><meta name=Keywords content="mango,mango mei,梦来梦网,芒果笔记,程序猫,猫大刚"><meta name=description content="从何而来之Java NIO"><meta name=author content="程序猫大刚"><meta property="og:url" content="http://mg.meiflower.top/mb/post/%E4%BB%8E%E4%BD%95%E8%80%8C%E6%9D%A5%E4%B9%8BJava-NIO/"><link rel="shortcut icon" href=/mb/favicon.ico type=image/x-icon><link rel=stylesheet href=/mb/css/normalize.css><link rel=stylesheet href=/mb/css/style.css><script type=text/javascript src=//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js></script><link href=https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css rel=stylesheet><link rel=stylesheet href=/mb/css/douban.css><link rel=stylesheet href=/mb/css/other.css></head><body><header id=header class=clearfix><div class=container><div class=col-group><div class=site-name><a id=logo href=http://mg.meiflower.top/mb>程序猫大刚</a><p class=description>记录点滴，回头思过往</p></div><div><nav id=nav-menu class=clearfix><a class=current href=http://mg.meiflower.top/mb>首页</a>
+<a href=http://mg.meiflower.top/mb/archives/ title=归档>归档</a>
+<a href=http://mg.meiflower.top/mb/pr/ title=发布日记>发布日记</a>
+<a href=http://mg.meiflower.top title=关于>关于</a></nav></div></div></div></header><div id=body><div class=container><div class=col-group><div class=col-8 id=main><div class=res-cons><style type=text/css>.post-toc{position:fixed;width:200px;margin-left:-210px;padding:5px 10px;font-family:Athelas,STHeiti,Microsoft Yahei,serif;font-size:12px;border:1px solid rgba(0,0,0,7%);border-radius:5px;background-color:rgba(255,255,255,.98);background-clip:padding-box;-webkit-box-shadow:1px 1px 2px rgba(0,0,0,.125);box-shadow:1px 1px 2px rgba(0,0,0,.125);word-wrap:break-word;white-space:nowrap;-webkit-box-sizing:border-box;box-sizing:border-box;z-index:999;cursor:pointer;max-height:70%;overflow-y:auto;overflow-x:hidden}.post-toc .post-toc-title{width:100%;margin:0 auto;font-size:20px;font-weight:400;text-transform:uppercase;text-align:center}.post-toc .post-toc-content{font-size:15px}.post-toc .post-toc-content>nav>ul{margin:10px 0}.post-toc .post-toc-content ul{padding-left:20px;list-style:square;margin:.5em;line-height:1.8em}.post-toc .post-toc-content ul ul{padding-left:15px;display:none}@media print,screen and (max-width:1057px){.post-toc{display:none}}</style><div class=post-toc style=position:absolute;top:188px><h2 class=post-toc-title>文章目录</h2><div class=post-toc-content><nav id=TableOfContents><ul><li><a href=#缘起>缘起</a></li><li><a href=#图解java网络io发展历程>图解Java网络IO发展历程</a></li><li><a href=#java实现bio阻塞>Java实现BIO（阻塞）</a><ul><li><a href=#socketserverdemo-服务端>SocketServerDemo 服务端</a></li><li><a href=#socketclientdemo-客户端>SocketClientDemo 客户端</a></li></ul></li><li><a href=#java实现nio>Java实现NIO</a><ul><li><a href=#单线程版本>单线程版本</a></li><li><a href=#多线程版本>多线程版本</a></li><li><a href=#多路复用器版本>多路复用器版本</a></li></ul></li></ul></nav></div></div><script type=text/javascript>$(document).ready(function(){var a=$(".post-toc"),b,c,d;a.length&&(b=$("#main").offset().left,b<220&&a.css({width:b-10,"margin-left":0-b}),c=a.offset().top-20,d={start:{position:"absolute",top:c},process:{position:"fixed",top:20}},$(window).scroll(function(){var b=$(window).scrollTop();b<c?a.css(d.start):a.css(d.process)}))})</script><article class=post><header><h1 class=post-title>从何而来之Java NIO</h1></header><date class="post-meta meta-date">2021年10月13日</date><div class=post-meta><span>|</span>
+<span class=meta-category><a href=/mb/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0>技术文章</a></span></div><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
+阅读</span></span></div><div class=post-content><h2 id=缘起>缘起</h2><p>最近在看《Java NIO》这本书，书中详细讲解了<code>jdk1.4</code>内提供的关于实现<code>nio</code>的<code>API</code>。因为阅读后，发现对于NIO还是学习的不够深入，之前也仅仅是学习了Java的文件IO和Socket编程，再者也是用<code>Netty</code>框架编写NIO代码，并未用Java提供的NIO实践。借此机会，把Java关于网络IO的发展给整理清楚，并编写Java代码示例，加深理解！！！
+IO其实分为文件IO和流IO，这里讨论的是流IO，也就是Socket的IO。</p><h2 id=图解java网络io发展历程>图解Java网络IO发展历程</h2><ul><li>1996年1月发布<code>jdk1.0</code>版本，支持Java BIO的<code>Socket</code>编程。</li><li><em>2001年1月<code>Linux</code>内核发布2.4版本，支持NIO，非阻塞IO。</em></li><li>2002年2月发布<code>jdk1.4</code>版本，支持Java NIO的<code>SocketChannel</code>编程，支持非阻塞。</li><li>2011年7月发布<code>jdk1.7</code>版本，支持Java AIO的<code>AsynchronousServerSocketChannel</code>编程。</li></ul><h2 id=java实现bio阻塞>Java实现BIO（阻塞）</h2><h3 id=socketserverdemo-服务端>SocketServerDemo 服务端</h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#f92672>package</span> org.mango.demo.bio<span style=color:#f92672>;</span>
+
+<span style=color:#f92672>import</span> java.io.DataInputStream<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.io.DataOutputStream<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.io.IOException<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.net.InetSocketAddress<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.net.ServerSocket<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.net.Socket<span style=color:#f92672>;</span>
+
+<span style=color:#75715e>/**
+</span><span style=color:#75715e> * 1连接1线程模型（线程资源有限，不适用）
+</span><span style=color:#75715e> * 将连进来的连接交给新的线程处理，这样主线程负责处理客户端连接，工作线程处理连接数据读取和写入
+</span><span style=color:#75715e> * 支持客户端多连接
+</span><span style=color:#75715e> * @Description socket server 编写的bio服务端 jdk1.0
+</span><span style=color:#75715e> * @Date 2021-10-02 15:19
+</span><span style=color:#75715e> * @Created by mango
+</span><span style=color:#75715e> */</span>
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>SocketServerDemo</span> <span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>main</span><span style=color:#f92672>(</span>String<span style=color:#f92672>[]</span> args<span style=color:#f92672>)</span> <span style=color:#66d9ef>throws</span> IOException <span style=color:#f92672>{</span>
+        <span style=color:#75715e>// jdk1.0 版本，基于ServerSocket
+</span><span style=color:#75715e></span>        ServerSocket serverSocket <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> ServerSocket<span style=color:#f92672>();</span>
+        <span style=color:#66d9ef>int</span> port <span style=color:#f92672>=</span> 9000<span style=color:#f92672>;</span>
+        serverSocket<span style=color:#f92672>.</span><span style=color:#a6e22e>bind</span><span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> InetSocketAddress<span style=color:#f92672>(</span>port<span style=color:#f92672>));</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;server listen on port &#34;</span> <span style=color:#f92672>+</span> port<span style=color:#f92672>);</span>
+        <span style=color:#66d9ef>while</span> <span style=color:#f92672>(</span><span style=color:#66d9ef>true</span><span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+            <span style=color:#75715e>// 调用accept()方法，会阻塞
+</span><span style=color:#75715e></span>            Socket socket <span style=color:#f92672>=</span> serverSocket<span style=color:#f92672>.</span><span style=color:#a6e22e>accept</span><span style=color:#f92672>();</span>
+            System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>socket <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; connect success!!&#34;</span><span style=color:#f92672>);</span>
+            <span style=color:#75715e>// 将连进来的连接交给新的线程处理，这样主线程负责处理客户端连接，工作线程处理连接数据读取和写入
+</span><span style=color:#75715e></span>            <span style=color:#75715e>// 支持客户端多连接
+</span><span style=color:#75715e></span>            <span style=color:#66d9ef>new</span> WorkThread<span style=color:#f92672>(</span>socket<span style=color:#f92672>).</span><span style=color:#a6e22e>start</span><span style=color:#f92672>();</span>
+        <span style=color:#f92672>}</span>
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+
+<span style=color:#75715e>/**
+</span><span style=color:#75715e> * 工作线程
+</span><span style=color:#75715e> */</span>
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>WorkThread</span> <span style=color:#66d9ef>extends</span> Thread<span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>private</span> Socket socket<span style=color:#f92672>;</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>WorkThread</span><span style=color:#f92672>(</span>Socket socket<span style=color:#f92672>){</span>
+        <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>socket</span> <span style=color:#f92672>=</span> socket<span style=color:#f92672>;</span>
+    <span style=color:#f92672>}</span>
+    <span style=color:#a6e22e>@Override</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>run</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+        String tn <span style=color:#f92672>=</span> Thread<span style=color:#f92672>.</span><span style=color:#a6e22e>currentThread</span><span style=color:#f92672>().</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>();</span>
+        String sn <span style=color:#f92672>=</span> socket<span style=color:#f92672>.</span><span style=color:#a6e22e>toString</span><span style=color:#f92672>();</span>
+        <span style=color:#75715e>// 将接收到的数据后跟 处理线程名称 发送给客户端
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>boolean</span> loop <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span><span style=color:#f92672>;</span>
+        <span style=color:#66d9ef>while</span><span style=color:#f92672>(</span>loop<span style=color:#f92672>){</span>
+            <span style=color:#66d9ef>try</span> <span style=color:#f92672>{</span>
+                DataInputStream dis <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> DataInputStream<span style=color:#f92672>(</span>socket<span style=color:#f92672>.</span><span style=color:#a6e22e>getInputStream</span><span style=color:#f92672>());</span>
+                DataOutputStream dos <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> DataOutputStream<span style=color:#f92672>(</span>socket<span style=color:#f92672>.</span><span style=color:#a6e22e>getOutputStream</span><span style=color:#f92672>());</span>
+                <span style=color:#75715e>// 从inputStream流读取数据，会阻塞
+</span><span style=color:#75715e></span>                String data <span style=color:#f92672>=</span> dis<span style=color:#f92672>.</span><span style=color:#a6e22e>readUTF</span><span style=color:#f92672>();</span>
+                System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>tn <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;:&#34;</span> <span style=color:#f92672>+</span> sn <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; receive data:&#34;</span> <span style=color:#f92672>+</span> data<span style=color:#f92672>);</span>
+                String rData <span style=color:#f92672>=</span> data <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;:&#34;</span> <span style=color:#f92672>+</span>tn<span style=color:#f92672>;</span>
+                dos<span style=color:#f92672>.</span><span style=color:#a6e22e>writeUTF</span><span style=color:#f92672>(</span>rData<span style=color:#f92672>);</span>
+            <span style=color:#f92672>}</span> <span style=color:#66d9ef>catch</span> <span style=color:#f92672>(</span>IOException e<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+                <span style=color:#75715e>// 连接异常关闭，线程结束
+</span><span style=color:#75715e></span>                <span style=color:#66d9ef>try</span> <span style=color:#f92672>{</span>
+                    socket<span style=color:#f92672>.</span><span style=color:#a6e22e>close</span><span style=color:#f92672>();</span>
+                    loop <span style=color:#f92672>=</span> <span style=color:#66d9ef>false</span><span style=color:#f92672>;</span>
+                    System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>tn <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;:&#34;</span> <span style=color:#f92672>+</span> sn <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; exception close!&#34;</span><span style=color:#f92672>);</span>
+                <span style=color:#f92672>}</span> <span style=color:#66d9ef>catch</span> <span style=color:#f92672>(</span>IOException e1<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+                    e1<span style=color:#f92672>.</span><span style=color:#a6e22e>printStackTrace</span><span style=color:#f92672>();</span>
+                <span style=color:#f92672>}</span>
+            <span style=color:#f92672>}</span>
+        <span style=color:#f92672>}</span>
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+
+<span style=color:#75715e>/**
+</span><span style=color:#75715e> * 执行结果：
+</span><span style=color:#75715e> * server listen on port 9000
+</span><span style=color:#75715e> * Socket[addr=/127.0.0.1,port=60357,localport=9000] connect success!!
+</span><span style=color:#75715e> * Socket[addr=/127.0.0.1,port=60387,localport=9000] connect success!!
+</span><span style=color:#75715e> * Thread-0:Socket[addr=/127.0.0.1,port=60357,localport=9000] receive data:你好
+</span><span style=color:#75715e> * Thread-1:Socket[addr=/127.0.0.1,port=60387,localport=9000] receive data:中国
+</span><span style=color:#75715e> * Thread-0:Socket[addr=/127.0.0.1,port=60357,localport=9000] exception close!
+</span><span style=color:#75715e> * Thread-1:Socket[addr=/127.0.0.1,port=60387,localport=9000] exception close!
+</span><span style=color:#75715e> */</span>
+</code></pre></div><p>执行结果打印：</p><pre><code> server listen on port 9000
+ Socket[addr=/127.0.0.1,port=60357,localport=9000] connect success!!
+ Socket[addr=/127.0.0.1,port=60387,localport=9000] connect success!!
+ Thread-0:Socket[addr=/127.0.0.1,port=60357,localport=9000] receive data:你好
+ Thread-1:Socket[addr=/127.0.0.1,port=60387,localport=9000] receive data:中国
+ Thread-0:Socket[addr=/127.0.0.1,port=60357,localport=9000] exception close!
+ Thread-1:Socket[addr=/127.0.0.1,port=60387,localport=9000] exception close!
+</code></pre><h3 id=socketclientdemo-客户端>SocketClientDemo 客户端</h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#f92672>package</span> org.mango.demo.bio<span style=color:#f92672>;</span>
+
+<span style=color:#f92672>import</span> java.io.DataInputStream<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.io.DataOutputStream<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.io.IOException<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.net.InetSocketAddress<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.net.Socket<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.util.Scanner<span style=color:#f92672>;</span>
+
+<span style=color:#75715e>/**
+</span><span style=color:#75715e> * @Description TODO
+</span><span style=color:#75715e> * @Date 2021-10-02 23:15
+</span><span style=color:#75715e> * @Created by mango
+</span><span style=color:#75715e> */</span>
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>SocketClientDemo</span> <span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>main</span><span style=color:#f92672>(</span>String<span style=color:#f92672>[]</span> args<span style=color:#f92672>)</span> <span style=color:#66d9ef>throws</span> IOException <span style=color:#f92672>{</span>
+        Socket socket <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Socket<span style=color:#f92672>();</span>
+        <span style=color:#75715e>// 连接服务端
+</span><span style=color:#75715e></span>        String host <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;127.0.0.1&#34;</span><span style=color:#f92672>;</span>
+        <span style=color:#66d9ef>int</span> port <span style=color:#f92672>=</span> 9000<span style=color:#f92672>;</span>
+        socket<span style=color:#f92672>.</span><span style=color:#a6e22e>connect</span><span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> InetSocketAddress<span style=color:#f92672>(</span>host<span style=color:#f92672>,</span>port<span style=color:#f92672>));</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;connect server &#34;</span> <span style=color:#f92672>+</span> host <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;:&#34;</span> <span style=color:#f92672>+</span> port <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; success!&#34;</span><span style=color:#f92672>);</span>
+
+        <span style=color:#75715e>// 接收命令
+</span><span style=color:#75715e></span>        Scanner scanner <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Scanner<span style=color:#f92672>(</span>System<span style=color:#f92672>.</span><span style=color:#a6e22e>in</span><span style=color:#f92672>);</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;输入exit:客户端退出；其他为发送数据!&#34;</span><span style=color:#f92672>);</span>
+        <span style=color:#75715e>// 发送数据
+</span><span style=color:#75715e></span>        DataOutputStream dos <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> DataOutputStream<span style=color:#f92672>(</span>socket<span style=color:#f92672>.</span><span style=color:#a6e22e>getOutputStream</span><span style=color:#f92672>());</span>
+        DataInputStream dis <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> DataInputStream<span style=color:#f92672>(</span>socket<span style=color:#f92672>.</span><span style=color:#a6e22e>getInputStream</span><span style=color:#f92672>());</span>
+        <span style=color:#66d9ef>boolean</span> loop <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span><span style=color:#f92672>;</span>
+        <span style=color:#66d9ef>while</span><span style=color:#f92672>(</span>loop<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+            System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>print</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;请输入：&#34;</span><span style=color:#f92672>);</span>
+            String input <span style=color:#f92672>=</span> scanner<span style=color:#f92672>.</span><span style=color:#a6e22e>next</span><span style=color:#f92672>();</span>
+            <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;exit&#34;</span><span style=color:#f92672>.</span><span style=color:#a6e22e>equals</span><span style=color:#f92672>(</span>input<span style=color:#f92672>)){</span>
+                socket<span style=color:#f92672>.</span><span style=color:#a6e22e>close</span><span style=color:#f92672>();</span>
+                loop <span style=color:#f92672>=</span> <span style=color:#66d9ef>false</span><span style=color:#f92672>;</span>
+            <span style=color:#f92672>}</span><span style=color:#66d9ef>else</span><span style=color:#f92672>{</span>
+                dos<span style=color:#f92672>.</span><span style=color:#a6e22e>writeUTF</span><span style=color:#f92672>(</span>input<span style=color:#f92672>);</span>
+                System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;send success,data:&#34;</span> <span style=color:#f92672>+</span> input<span style=color:#f92672>);</span>
+                <span style=color:#75715e>// 等待服务端发送数据,readUTF 方法会阻塞
+</span><span style=color:#75715e></span>                String sData <span style=color:#f92672>=</span> dis<span style=color:#f92672>.</span><span style=color:#a6e22e>readUTF</span><span style=color:#f92672>();</span>
+                System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;receive data:&#34;</span> <span style=color:#f92672>+</span> sData<span style=color:#f92672>);</span>
+            <span style=color:#f92672>}</span>
+        <span style=color:#f92672>}</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;client exit!&#34;</span><span style=color:#f92672>);</span>
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><p>执行结果打印：</p><pre><code> 执行结果1:
+ connect server 127.0.0.1:9000 success!
+ 输入exit:客户端退出；其他为发送数据!
+ 请输入：你好
+ send success,data:你好
+ receive data:你好:Thread-0
+ 请输入：exit
+ client exit!
+</code></pre><pre><code> 执行结果2:
+ connect server 127.0.0.1:9000 success!
+ 输入exit:客户端退出；其他为发送数据!
+ 请输入：中国
+ send success,data:中国
+ receive data:中国:Thread-1
+ 请输入：exit
+ client exit!
+</code></pre><p><em><strong>总结：</strong></em></p><p><em><strong>1. Socket默认就是阻塞的，并不支持设置非阻塞。</strong></em></p><p><em><strong>2. accept() 和 从流读取数据的read() 都是阻塞的。</strong></em></p><h2 id=java实现nio>Java实现NIO</h2><h3 id=单线程版本>单线程版本</h3><p><code>NonBlockServerDemo</code> - 服务端</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#f92672>package</span> org.mango.demo.nio<span style=color:#f92672>;</span>
+
+<span style=color:#f92672>import</span> java.io.IOException<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.net.InetSocketAddress<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.ByteBuffer<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.ServerSocketChannel<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.SocketChannel<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.charset.StandardCharsets<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.util.ArrayList<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.util.List<span style=color:#f92672>;</span>
+
+<span style=color:#75715e>/**
+</span><span style=color:#75715e> * @Description （服务端非阻塞）主动遍历 一个线程处理客服端连接，数据读取
+</span><span style=color:#75715e> * @Date 2021-10-01 15:26
+</span><span style=color:#75715e> * @Created by mango
+</span><span style=color:#75715e> */</span>
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>NonBlockServerDemo</span> <span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>main</span><span style=color:#f92672>(</span>String<span style=color:#f92672>[]</span> args<span style=color:#f92672>)</span> <span style=color:#66d9ef>throws</span> IOException<span style=color:#f92672>,</span> InterruptedException <span style=color:#f92672>{</span>
+        <span style=color:#75715e>// 存放连接进来的SocketChannel
+</span><span style=color:#75715e></span>        List<span style=color:#f92672>&lt;</span>SocketChannel<span style=color:#f92672>&gt;</span> scList <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> ArrayList<span style=color:#f92672>&lt;&gt;();</span>
+        <span style=color:#75715e>// 服务端，使用ServerSocketChannel
+</span><span style=color:#75715e></span>        ServerSocketChannel serverSocketChannel <span style=color:#f92672>=</span> ServerSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>open</span><span style=color:#f92672>();</span>
+        <span style=color:#66d9ef>int</span> port <span style=color:#f92672>=</span> 9000<span style=color:#f92672>;</span>
+        <span style=color:#75715e>// 绑定本地端口
+</span><span style=color:#75715e></span>        serverSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>bind</span><span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> InetSocketAddress<span style=color:#f92672>(</span>port<span style=color:#f92672>));</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;server listen on &#34;</span> <span style=color:#f92672>+</span> port<span style=color:#f92672>);</span>
+        <span style=color:#75715e>// 设置服务端通道非阻塞
+</span><span style=color:#75715e></span>        serverSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>configureBlocking</span><span style=color:#f92672>(</span><span style=color:#66d9ef>false</span><span style=color:#f92672>);</span>
+
+        <span style=color:#66d9ef>while</span> <span style=color:#f92672>(</span><span style=color:#66d9ef>true</span><span style=color:#f92672>){</span>
+            <span style=color:#75715e>// accept方法非阻塞，立即返回，null表示没有client连接进来
+</span><span style=color:#75715e></span>            SocketChannel sc <span style=color:#f92672>=</span> serverSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>accept</span><span style=color:#f92672>();</span>
+            <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span><span style=color:#66d9ef>null</span> <span style=color:#f92672>==</span> sc<span style=color:#f92672>){</span>
+                Thread<span style=color:#f92672>.</span><span style=color:#a6e22e>sleep</span><span style=color:#f92672>(</span>200<span style=color:#f92672>);</span>
+            <span style=color:#f92672>}</span><span style=color:#66d9ef>else</span><span style=color:#f92672>{</span>
+                System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>Thread<span style=color:#f92672>.</span><span style=color:#a6e22e>currentThread</span><span style=color:#f92672>().</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>()</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; client enter &#34;</span> <span style=color:#f92672>+</span> sc<span style=color:#f92672>.</span><span style=color:#a6e22e>toString</span><span style=color:#f92672>());</span>
+                <span style=color:#75715e>// 设置连接非阻塞
+</span><span style=color:#75715e></span>                sc<span style=color:#f92672>.</span><span style=color:#a6e22e>configureBlocking</span><span style=color:#f92672>(</span><span style=color:#66d9ef>false</span><span style=color:#f92672>);</span>
+                <span style=color:#75715e>// 维护到集合中
+</span><span style=color:#75715e></span>                scList<span style=color:#f92672>.</span><span style=color:#a6e22e>add</span><span style=color:#f92672>(</span>sc<span style=color:#f92672>);</span>
+            <span style=color:#f92672>}</span>
+            <span style=color:#75715e>// 遍历连接，读取数据
+</span><span style=color:#75715e></span>            <span style=color:#66d9ef>for</span><span style=color:#f92672>(</span>SocketChannel temp <span style=color:#f92672>:</span> scList<span style=color:#f92672>){</span>
+                <span style=color:#75715e>// 创建一个缓存区
+</span><span style=color:#75715e></span>                ByteBuffer buffer <span style=color:#f92672>=</span> ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>allocate</span><span style=color:#f92672>(</span>1 <span style=color:#f92672>*</span> 1024<span style=color:#f92672>);</span>
+                <span style=color:#75715e>// read方法非阻塞，返回值为数据长度
+</span><span style=color:#75715e></span>                <span style=color:#66d9ef>int</span> len <span style=color:#f92672>=</span> temp<span style=color:#f92672>.</span><span style=color:#a6e22e>read</span><span style=color:#f92672>(</span>buffer<span style=color:#f92672>);</span>
+                String socketName <span style=color:#f92672>=</span> temp<span style=color:#f92672>.</span><span style=color:#a6e22e>toString</span><span style=color:#f92672>();</span>
+                <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span>len <span style=color:#f92672>&gt;</span> 0<span style=color:#f92672>){</span>
+                    System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>Thread<span style=color:#f92672>.</span><span style=color:#a6e22e>currentThread</span><span style=color:#f92672>().</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>()</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; &#34;</span> <span style=color:#f92672>+</span> socketName <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; receive data size is &#34;</span> <span style=color:#f92672>+</span> len<span style=color:#f92672>);</span>
+                    ByteBuffer data <span style=color:#f92672>=</span> ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>allocate</span><span style=color:#f92672>(</span>len<span style=color:#f92672>);</span>
+                    <span style=color:#75715e>// 翻转缓冲区，使得能被put
+</span><span style=color:#75715e></span>                    buffer<span style=color:#f92672>.</span><span style=color:#a6e22e>flip</span><span style=color:#f92672>();</span>
+                    data<span style=color:#f92672>.</span><span style=color:#a6e22e>put</span><span style=color:#f92672>(</span>buffer<span style=color:#f92672>);</span>
+                    System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>Thread<span style=color:#f92672>.</span><span style=color:#a6e22e>currentThread</span><span style=color:#f92672>().</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>()</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; &#34;</span> <span style=color:#f92672>+</span> socketName <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; receive data is &#34;</span> <span style=color:#f92672>+</span> <span style=color:#66d9ef>new</span> String<span style=color:#f92672>(</span>data<span style=color:#f92672>.</span><span style=color:#a6e22e>array</span><span style=color:#f92672>(),</span> StandardCharsets<span style=color:#f92672>.</span><span style=color:#a6e22e>UTF_8</span><span style=color:#f92672>));</span>
+                <span style=color:#f92672>}</span>
+            <span style=color:#f92672>}</span>
+        <span style=color:#f92672>}</span>
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><p>执行结果：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java> <span style=color:#75715e>/**
+</span><span style=color:#75715e> * 执行结果：
+</span><span style=color:#75715e> * server listen on 9000
+</span><span style=color:#75715e> * main client enter java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50039]
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50039] receive data size is 3
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50039] receive data is 123
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50039] receive data size is 6
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50039] receive data is 你好
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50039] receive data size is 6
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50039] receive data is 中国
+</span><span style=color:#75715e> * main client enter java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50308]
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50308] receive data size is 3
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50308] receive data is 123
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50308] receive data size is 3
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50308] receive data is xxx
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50039] receive data size is 4
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50039] receive data is exit
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50308] receive data size is 4
+</span><span style=color:#75715e> * main java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:50308] receive data is exit
+</span><span style=color:#75715e> */</span>
+</code></pre></div><p><code>NonBlockClientDemo</code> - 客户端</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#f92672>package</span> org.mango.demo.nio<span style=color:#f92672>;</span>
+
+<span style=color:#f92672>import</span> java.io.IOException<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.net.InetSocketAddress<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.ByteBuffer<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.SocketChannel<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.charset.StandardCharsets<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.util.Scanner<span style=color:#f92672>;</span>
+
+<span style=color:#75715e>/**
+</span><span style=color:#75715e> * @Description 非阻塞测试 客户端
+</span><span style=color:#75715e> * @Date 2021-10-01 15:48
+</span><span style=color:#75715e> * @Created by mango
+</span><span style=color:#75715e> */</span>
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>NonBlockClientDemo</span> <span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>main</span><span style=color:#f92672>(</span>String<span style=color:#f92672>[]</span> args<span style=color:#f92672>)</span> <span style=color:#66d9ef>throws</span> IOException <span style=color:#f92672>{</span>
+        SocketChannel sc <span style=color:#f92672>=</span> SocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>open</span><span style=color:#f92672>();</span>
+        String host <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;127.0.0.1&#34;</span><span style=color:#f92672>;</span>
+        <span style=color:#66d9ef>int</span> port <span style=color:#f92672>=</span> 9000<span style=color:#f92672>;</span>
+        <span style=color:#66d9ef>boolean</span> isConnect <span style=color:#f92672>=</span> sc<span style=color:#f92672>.</span><span style=color:#a6e22e>connect</span><span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> InetSocketAddress<span style=color:#f92672>(</span>host<span style=color:#f92672>,</span>port<span style=color:#f92672>));</span>
+        <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span>isConnect<span style=color:#f92672>){</span>
+            System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;connect server &#34;</span> <span style=color:#f92672>+</span> host <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;:&#34;</span> <span style=color:#f92672>+</span> port <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; success!&#34;</span><span style=color:#f92672>);</span>
+            <span style=color:#75715e>// 从输入流中读取数据
+</span><span style=color:#75715e></span>            Scanner scanner <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Scanner<span style=color:#f92672>(</span>System<span style=color:#f92672>.</span><span style=color:#a6e22e>in</span><span style=color:#f92672>);</span>
+            System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;输入exit:客户端退出；其他为发送数据!&#34;</span><span style=color:#f92672>);</span>
+            <span style=color:#66d9ef>boolean</span> loop <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span><span style=color:#f92672>;</span>
+            <span style=color:#66d9ef>while</span> <span style=color:#f92672>(</span>loop<span style=color:#f92672>){</span>
+                System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>print</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;请输入:&#34;</span><span style=color:#f92672>);</span>
+                String input <span style=color:#f92672>=</span> scanner<span style=color:#f92672>.</span><span style=color:#a6e22e>next</span><span style=color:#f92672>();</span>
+                ByteBuffer data <span style=color:#f92672>=</span> ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>wrap</span><span style=color:#f92672>(</span>input<span style=color:#f92672>.</span><span style=color:#a6e22e>getBytes</span><span style=color:#f92672>(</span>StandardCharsets<span style=color:#f92672>.</span><span style=color:#a6e22e>UTF_8</span><span style=color:#f92672>));</span>
+                <span style=color:#75715e>// 发送数据
+</span><span style=color:#75715e></span>                sc<span style=color:#f92672>.</span><span style=color:#a6e22e>write</span><span style=color:#f92672>(</span>data<span style=color:#f92672>);</span>
+                <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;exit&#34;</span><span style=color:#f92672>.</span><span style=color:#a6e22e>equals</span><span style=color:#f92672>(</span>input<span style=color:#f92672>)){</span>
+                    loop <span style=color:#f92672>=</span> <span style=color:#66d9ef>false</span><span style=color:#f92672>;</span>
+
+                <span style=color:#f92672>}</span>
+            <span style=color:#f92672>}</span>
+        <span style=color:#f92672>}</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;client exit!&#34;</span><span style=color:#f92672>);</span>
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><p>执行结果：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#75715e>/**
+</span><span style=color:#75715e> * 执行结果1：
+</span><span style=color:#75715e> * connect server 127.0.0.1:9000 success!
+</span><span style=color:#75715e> * 输入exit:客户端退出；其他为发送数据!
+</span><span style=color:#75715e> * 请输入:123
+</span><span style=color:#75715e> * 请输入:你好
+</span><span style=color:#75715e> * 请输入:中国
+</span><span style=color:#75715e> * 请输入:exit
+</span><span style=color:#75715e> * client exit!
+</span><span style=color:#75715e> */</span>
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#75715e>/**
+</span><span style=color:#75715e> * 执行结果2：
+</span><span style=color:#75715e> * connect server 127.0.0.1:9000 success!
+</span><span style=color:#75715e> * 输入exit:客户端退出；其他为发送数据!
+</span><span style=color:#75715e> * 请输入:123
+</span><span style=color:#75715e> * 请输入:xxx
+</span><span style=color:#75715e> * 请输入:exit
+</span><span style=color:#75715e> * client exit!
+</span><span style=color:#75715e> */</span>
+</code></pre></div><h3 id=多线程版本>多线程版本</h3><p><code>MTNonBlockServerDemo</code> - 服务端</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#f92672>package</span> org.mango.demo.mtnio<span style=color:#f92672>;</span>
+
+<span style=color:#f92672>import</span> java.io.IOException<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.net.InetSocketAddress<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.ByteBuffer<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.ServerSocketChannel<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.SocketChannel<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.charset.StandardCharsets<span style=color:#f92672>;</span>
+
+<span style=color:#75715e>/**
+</span><span style=color:#75715e> * @Description （服务端非阻塞）主动遍历 一线程1连接，数据读取
+</span><span style=color:#75715e> * @Date 2021-10-01 15:26
+</span><span style=color:#75715e> * @Created by mango
+</span><span style=color:#75715e> */</span>
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MTNonBlockServerDemo</span> <span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>main</span><span style=color:#f92672>(</span>String<span style=color:#f92672>[]</span> args<span style=color:#f92672>)</span> <span style=color:#66d9ef>throws</span> IOException<span style=color:#f92672>,</span> InterruptedException <span style=color:#f92672>{</span>
+        <span style=color:#75715e>// 服务端，使用ServerSocketChannel
+</span><span style=color:#75715e></span>        ServerSocketChannel serverSocketChannel <span style=color:#f92672>=</span> ServerSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>open</span><span style=color:#f92672>();</span>
+        <span style=color:#66d9ef>int</span> port <span style=color:#f92672>=</span> 9000<span style=color:#f92672>;</span>
+        <span style=color:#75715e>// 绑定本地端口
+</span><span style=color:#75715e></span>        serverSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>bind</span><span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> InetSocketAddress<span style=color:#f92672>(</span>port<span style=color:#f92672>));</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;server listen on &#34;</span> <span style=color:#f92672>+</span> port<span style=color:#f92672>);</span>
+        <span style=color:#75715e>// 设置服务端通道非阻塞
+</span><span style=color:#75715e></span>        serverSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>configureBlocking</span><span style=color:#f92672>(</span><span style=color:#66d9ef>false</span><span style=color:#f92672>);</span>
+
+        <span style=color:#66d9ef>while</span> <span style=color:#f92672>(</span><span style=color:#66d9ef>true</span><span style=color:#f92672>){</span>
+            <span style=color:#75715e>// accept方法非阻塞，立即返回，null表示没有client连接进来
+</span><span style=color:#75715e></span>            SocketChannel sc <span style=color:#f92672>=</span> serverSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>accept</span><span style=color:#f92672>();</span>
+            <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span><span style=color:#66d9ef>null</span> <span style=color:#f92672>==</span> sc<span style=color:#f92672>){</span>
+                Thread<span style=color:#f92672>.</span><span style=color:#a6e22e>sleep</span><span style=color:#f92672>(</span>200<span style=color:#f92672>);</span>
+            <span style=color:#f92672>}</span><span style=color:#66d9ef>else</span><span style=color:#f92672>{</span>
+                System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>Thread<span style=color:#f92672>.</span><span style=color:#a6e22e>currentThread</span><span style=color:#f92672>().</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>()</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; client enter &#34;</span> <span style=color:#f92672>+</span> sc<span style=color:#f92672>.</span><span style=color:#a6e22e>toString</span><span style=color:#f92672>());</span>
+                <span style=color:#75715e>// 设置连接非阻塞
+</span><span style=color:#75715e></span>                sc<span style=color:#f92672>.</span><span style=color:#a6e22e>configureBlocking</span><span style=color:#f92672>(</span><span style=color:#66d9ef>false</span><span style=color:#f92672>);</span>
+                <span style=color:#66d9ef>new</span> WorkThread<span style=color:#f92672>(</span>sc<span style=color:#f92672>).</span><span style=color:#a6e22e>start</span><span style=color:#f92672>();</span>
+            <span style=color:#f92672>}</span>
+        <span style=color:#f92672>}</span>
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+<span style=color:#75715e>/**
+</span><span style=color:#75715e> * 工作线程
+</span><span style=color:#75715e> */</span>
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>WorkThread</span> <span style=color:#66d9ef>extends</span> Thread<span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>private</span> SocketChannel socketChannel<span style=color:#f92672>;</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>WorkThread</span><span style=color:#f92672>(</span>SocketChannel socketChannel<span style=color:#f92672>){</span>
+        <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>socketChannel</span> <span style=color:#f92672>=</span> socketChannel<span style=color:#f92672>;</span>
+    <span style=color:#f92672>}</span>
+    <span style=color:#a6e22e>@Override</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>run</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+        <span style=color:#66d9ef>boolean</span> loop <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span><span style=color:#f92672>;</span>
+        String tn <span style=color:#f92672>=</span> Thread<span style=color:#f92672>.</span><span style=color:#a6e22e>currentThread</span><span style=color:#f92672>().</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>();</span>
+        String sn <span style=color:#f92672>=</span> socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>toString</span><span style=color:#f92672>();</span>
+        <span style=color:#66d9ef>try</span><span style=color:#f92672>{</span>
+            <span style=color:#75715e>// 将接收到的数据后跟 处理线程名称 发送给客户端
+</span><span style=color:#75715e></span>            <span style=color:#66d9ef>while</span><span style=color:#f92672>(</span>loop<span style=color:#f92672>){</span>
+                ByteBuffer buffer <span style=color:#f92672>=</span> ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>allocate</span><span style=color:#f92672>(</span>1024<span style=color:#f92672>);</span>
+                <span style=color:#75715e>// read() 不会阻塞
+</span><span style=color:#75715e></span>                <span style=color:#66d9ef>int</span> len <span style=color:#f92672>=</span> socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>read</span><span style=color:#f92672>(</span>buffer<span style=color:#f92672>);</span>
+                <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span>len <span style=color:#f92672>&gt;</span> 0<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+                    System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>tn <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;:&#34;</span> <span style=color:#f92672>+</span> sn <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; receive data size :&#34;</span> <span style=color:#f92672>+</span> len<span style=color:#f92672>);</span>
+                    ByteBuffer data <span style=color:#f92672>=</span> ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>allocate</span><span style=color:#f92672>(</span>len<span style=color:#f92672>);</span>
+                    <span style=color:#75715e>// 翻转缓冲区，使得能被put
+</span><span style=color:#75715e></span>                    buffer<span style=color:#f92672>.</span><span style=color:#a6e22e>flip</span><span style=color:#f92672>();</span>
+                    data<span style=color:#f92672>.</span><span style=color:#a6e22e>put</span><span style=color:#f92672>(</span>buffer<span style=color:#f92672>);</span>
+                    String sData <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> String<span style=color:#f92672>(</span>data<span style=color:#f92672>.</span><span style=color:#a6e22e>array</span><span style=color:#f92672>(),</span>StandardCharsets<span style=color:#f92672>.</span><span style=color:#a6e22e>UTF_8</span><span style=color:#f92672>);</span>
+                    System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>tn <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;:&#34;</span> <span style=color:#f92672>+</span> sn <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; receive data:&#34;</span> <span style=color:#f92672>+</span> sData<span style=color:#f92672>);</span>
+                    String rData <span style=color:#f92672>=</span> sData <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;:&#34;</span> <span style=color:#f92672>+</span> tn<span style=color:#f92672>;</span>
+                    socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>write</span><span style=color:#f92672>(</span>ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>wrap</span><span style=color:#f92672>(</span>rData<span style=color:#f92672>.</span><span style=color:#a6e22e>getBytes</span><span style=color:#f92672>(</span>StandardCharsets<span style=color:#f92672>.</span><span style=color:#a6e22e>UTF_8</span><span style=color:#f92672>)));</span>
+                <span style=color:#f92672>}</span>
+            <span style=color:#f92672>}</span>
+        <span style=color:#f92672>}</span> <span style=color:#66d9ef>catch</span> <span style=color:#f92672>(</span>IOException e<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+            <span style=color:#75715e>// 异常退出
+</span><span style=color:#75715e></span>            <span style=color:#66d9ef>try</span> <span style=color:#f92672>{</span>
+                socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>close</span><span style=color:#f92672>();</span>
+            <span style=color:#f92672>}</span> <span style=color:#66d9ef>catch</span> <span style=color:#f92672>(</span>IOException e1<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+                e1<span style=color:#f92672>.</span><span style=color:#a6e22e>printStackTrace</span><span style=color:#f92672>();</span>
+            <span style=color:#f92672>}</span>
+            System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>tn <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;:&#34;</span> <span style=color:#f92672>+</span> sn <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; exception close!&#34;</span><span style=color:#f92672>);</span>
+        <span style=color:#f92672>}</span>
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><pre><code>/**
+ * 执行结果：
+ * server listen on 9000
+ * main client enter java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54386]
+ * Thread-0:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54386] receive data size :3
+ * Thread-0:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54386] receive data:123
+ * Thread-0:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54386] receive data size :6
+ * Thread-0:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54386] receive data:你好
+ * main client enter java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54480]
+ * Thread-1:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54480] receive data size :6
+ * Thread-1:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54480] receive data:中国
+ * Thread-1:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54480] receive data size :3
+ * Thread-1:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54480] receive data:123
+ * Thread-1:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54480] receive data size :4
+ * Thread-1:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54480] receive data:exit
+ * Thread-1:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54480] exception close!
+ * Thread-0:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54386] receive data size :4
+ * Thread-0:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54386] receive data:exit
+ * Thread-0:java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:54386] exception close!
+ */
+</code></pre><p><code>MTNonBlockClientDemo</code> - 客户端</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#f92672>package</span> org.mango.demo.mtnio<span style=color:#f92672>;</span>
+
+<span style=color:#f92672>import</span> java.io.IOException<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.net.InetSocketAddress<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.ByteBuffer<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.SocketChannel<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.charset.StandardCharsets<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.util.Scanner<span style=color:#f92672>;</span>
+
+<span style=color:#75715e>/**
+</span><span style=color:#75715e> * @Date 2021-10-03 15:26
+</span><span style=color:#75715e> * @Created by mango
+</span><span style=color:#75715e> */</span>
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MTNonBlockClientDemo</span> <span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>main</span><span style=color:#f92672>(</span>String<span style=color:#f92672>[]</span> args<span style=color:#f92672>)</span> <span style=color:#66d9ef>throws</span> IOException<span style=color:#f92672>,</span> InterruptedException <span style=color:#f92672>{</span>
+        SocketChannel sc <span style=color:#f92672>=</span> SocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>open</span><span style=color:#f92672>();</span>
+        String host <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;127.0.0.1&#34;</span><span style=color:#f92672>;</span>
+        <span style=color:#66d9ef>int</span> port <span style=color:#f92672>=</span> 9000<span style=color:#f92672>;</span>
+        sc<span style=color:#f92672>.</span><span style=color:#a6e22e>connect</span><span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> InetSocketAddress<span style=color:#f92672>(</span>host<span style=color:#f92672>,</span>port<span style=color:#f92672>));</span>
+        <span style=color:#75715e>// 设置非阻塞
+</span><span style=color:#75715e></span>        sc<span style=color:#f92672>.</span><span style=color:#a6e22e>configureBlocking</span><span style=color:#f92672>(</span><span style=color:#66d9ef>false</span><span style=color:#f92672>);</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;connect server &#34;</span> <span style=color:#f92672>+</span> host <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;:&#34;</span> <span style=color:#f92672>+</span> port <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; success!&#34;</span><span style=color:#f92672>);</span>
+        <span style=color:#75715e>// 从输入流中读取数据
+</span><span style=color:#75715e></span>        Scanner scanner <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Scanner<span style=color:#f92672>(</span>System<span style=color:#f92672>.</span><span style=color:#a6e22e>in</span><span style=color:#f92672>);</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;输入exit:客户端退出；其他为发送数据!&#34;</span><span style=color:#f92672>);</span>
+        <span style=color:#66d9ef>boolean</span> loop <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span><span style=color:#f92672>;</span>
+        <span style=color:#66d9ef>while</span> <span style=color:#f92672>(</span>loop<span style=color:#f92672>){</span>
+            System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>print</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;请输入:&#34;</span><span style=color:#f92672>);</span>
+            String input <span style=color:#f92672>=</span> scanner<span style=color:#f92672>.</span><span style=color:#a6e22e>next</span><span style=color:#f92672>();</span>
+            ByteBuffer data <span style=color:#f92672>=</span> ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>wrap</span><span style=color:#f92672>(</span>input<span style=color:#f92672>.</span><span style=color:#a6e22e>getBytes</span><span style=color:#f92672>(</span>StandardCharsets<span style=color:#f92672>.</span><span style=color:#a6e22e>UTF_8</span><span style=color:#f92672>));</span>
+            <span style=color:#75715e>// 发送数据
+</span><span style=color:#75715e></span>            sc<span style=color:#f92672>.</span><span style=color:#a6e22e>write</span><span style=color:#f92672>(</span>data<span style=color:#f92672>);</span>
+            <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;exit&#34;</span><span style=color:#f92672>.</span><span style=color:#a6e22e>equals</span><span style=color:#f92672>(</span>input<span style=color:#f92672>)){</span>
+                loop <span style=color:#f92672>=</span> <span style=color:#66d9ef>false</span><span style=color:#f92672>;</span>
+            <span style=color:#f92672>}</span>
+        <span style=color:#f92672>}</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;client exit&#34;</span><span style=color:#f92672>);</span>
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><p>执行结果：</p><pre><code>/**
+ * 执行结果1：
+ * connect server 127.0.0.1:9000 success!
+ * 输入exit:客户端退出；其他为发送数据!
+ * 请输入:123
+ * 请输入:你好
+ * 请输入:exit
+ * client exit
+ */
+</code></pre><pre><code>/**
+ * 执行结果2：
+ * connect server 127.0.0.1:9000 success!
+ * 输入exit:客户端退出；其他为发送数据!
+ * 请输入:中国
+ * 请输入:123
+ * 请输入:exit
+ * client exit
+ */
+</code></pre><p><em><strong>总结：</strong></em>
+<em><strong>1. 通过channel的configureBlocking(flase)设置连接为非阻塞后，accept()或者read()方法就会直接返回</strong></em></p><p><em><strong>2. 1连接1线程虽然能提高服务端处理客户端并发连接数，但是线程资源有限，不易多开。因此多线程版本再优化就可以放到线程池管理。</strong></em></p><p><em><strong>3. 将线程用线程池管理起来，就能改为线程池版本非阻塞IO模型。</strong></em></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#75715e>// 创建工作线程池
+</span><span style=color:#75715e></span>ExecutorService executorService <span style=color:#f92672>=</span> Executors<span style=color:#f92672>.</span><span style=color:#a6e22e>newFixedThreadPool</span><span style=color:#f92672>(</span>8<span style=color:#f92672>);</span>
+<span style=color:#75715e>// 提交到线程池
+</span><span style=color:#75715e></span>executorService<span style=color:#f92672>.</span><span style=color:#a6e22e>submit</span><span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> WorkThread<span style=color:#f92672>(</span>sc<span style=color:#f92672>));</span>
+</code></pre></div><h3 id=多路复用器版本>多路复用器版本</h3><p><code>SelectNIOServerDemo</code> - 服务端</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#f92672>package</span> org.mango.demo.selectnio<span style=color:#f92672>;</span>
+
+<span style=color:#f92672>import</span> java.io.IOException<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.net.InetSocketAddress<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.ByteBuffer<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.SelectionKey<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.Selector<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.ServerSocketChannel<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.SocketChannel<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.charset.StandardCharsets<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.util.Iterator<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.util.Set<span style=color:#f92672>;</span>
+
+<span style=color:#75715e>/**
+</span><span style=color:#75715e> * @Description 多路复用器版本 服务端
+</span><span style=color:#75715e> * @Date 2021-10-03 13:40
+</span><span style=color:#75715e> * @Created by mango
+</span><span style=color:#75715e> */</span>
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>SelectNIOServerDemo</span> <span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>main</span><span style=color:#f92672>(</span>String<span style=color:#f92672>[]</span> args<span style=color:#f92672>)</span> <span style=color:#66d9ef>throws</span> IOException <span style=color:#f92672>{</span>
+        ServerSocketChannel serverSocketChannel <span style=color:#f92672>=</span> ServerSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>open</span><span style=color:#f92672>();</span>
+        <span style=color:#66d9ef>int</span> port <span style=color:#f92672>=</span> 9000<span style=color:#f92672>;</span>
+        serverSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>bind</span><span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> InetSocketAddress<span style=color:#f92672>(</span>port<span style=color:#f92672>));</span>
+        serverSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>configureBlocking</span><span style=color:#f92672>(</span><span style=color:#66d9ef>false</span><span style=color:#f92672>);</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;server listen on port &#34;</span> <span style=color:#f92672>+</span> port<span style=color:#f92672>);</span>
+
+        <span style=color:#75715e>// 设置多路复用器
+</span><span style=color:#75715e></span>        Selector selector <span style=color:#f92672>=</span> Selector<span style=color:#f92672>.</span><span style=color:#a6e22e>open</span><span style=color:#f92672>();</span>
+        <span style=color:#75715e>// 将serverSocketChannel的accept事件注册到多路复用器
+</span><span style=color:#75715e></span>        serverSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>register</span><span style=color:#f92672>(</span>selector<span style=color:#f92672>,</span> SelectionKey<span style=color:#f92672>.</span><span style=color:#a6e22e>OP_ACCEPT</span><span style=color:#f92672>);</span>
+        <span style=color:#66d9ef>while</span> <span style=color:#f92672>(</span><span style=color:#66d9ef>true</span><span style=color:#f92672>){</span>
+            <span style=color:#75715e>// 查看selector.select()是否有事件准备就绪
+</span><span style=color:#75715e></span>            selector<span style=color:#f92672>.</span><span style=color:#a6e22e>select</span><span style=color:#f92672>();</span>
+            Set<span style=color:#f92672>&lt;</span>SelectionKey<span style=color:#f92672>&gt;</span> selectionKeySet <span style=color:#f92672>=</span> selector<span style=color:#f92672>.</span><span style=color:#a6e22e>selectedKeys</span><span style=color:#f92672>();</span>
+            Iterator<span style=color:#f92672>&lt;</span>SelectionKey<span style=color:#f92672>&gt;</span> iterable <span style=color:#f92672>=</span> selectionKeySet<span style=color:#f92672>.</span><span style=color:#a6e22e>iterator</span><span style=color:#f92672>();</span>
+            <span style=color:#66d9ef>while</span><span style=color:#f92672>(</span>iterable<span style=color:#f92672>.</span><span style=color:#a6e22e>hasNext</span><span style=color:#f92672>()){</span>
+                SelectionKey selectionKey <span style=color:#f92672>=</span> iterable<span style=color:#f92672>.</span><span style=color:#a6e22e>next</span><span style=color:#f92672>();</span>
+                <span style=color:#75715e>// 将事件remove掉，防止重复处理
+</span><span style=color:#75715e></span>                iterable<span style=color:#f92672>.</span><span style=color:#a6e22e>remove</span><span style=color:#f92672>();</span>
+                <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span>selectionKey<span style=color:#f92672>.</span><span style=color:#a6e22e>isAcceptable</span><span style=color:#f92672>()){</span>
+                    <span style=color:#75715e>// 得到连接的通道
+</span><span style=color:#75715e></span>                    SocketChannel socketChannel <span style=color:#f92672>=</span> serverSocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>accept</span><span style=color:#f92672>();</span>
+                    String socketName <span style=color:#f92672>=</span> socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>toString</span><span style=color:#f92672>();</span>
+                    System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>socketName <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; connect success!&#34;</span><span style=color:#f92672>);</span>
+                    <span style=color:#75715e>// 设置为非阻塞
+</span><span style=color:#75715e></span>                    socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>configureBlocking</span><span style=color:#f92672>(</span><span style=color:#66d9ef>false</span><span style=color:#f92672>);</span>
+                    <span style=color:#75715e>// 注册读写事件到多路复用器
+</span><span style=color:#75715e></span>                    socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>register</span><span style=color:#f92672>(</span>selector<span style=color:#f92672>,</span>SelectionKey<span style=color:#f92672>.</span><span style=color:#a6e22e>OP_READ</span><span style=color:#f92672>);</span>
+                    <span style=color:#75715e>// socketChannel.register(selector,SelectionKey.OP_WRITE);
+</span><span style=color:#75715e></span>                <span style=color:#f92672>}</span><span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span>selectionKey<span style=color:#f92672>.</span><span style=color:#a6e22e>isReadable</span><span style=color:#f92672>()){</span>
+                    <span style=color:#75715e>// 得到可读的通道
+</span><span style=color:#75715e></span>                    SocketChannel socketChannel <span style=color:#f92672>=</span> <span style=color:#f92672>(</span>SocketChannel<span style=color:#f92672>)</span> selectionKey<span style=color:#f92672>.</span><span style=color:#a6e22e>channel</span><span style=color:#f92672>();</span>
+                    String socketName <span style=color:#f92672>=</span> socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>toString</span><span style=color:#f92672>();</span>
+                    <span style=color:#66d9ef>try</span> <span style=color:#f92672>{</span>
+                        <span style=color:#75715e>// 读取数据并回写数据给客户端
+</span><span style=color:#75715e></span>                        ByteBuffer buffer <span style=color:#f92672>=</span> ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>allocate</span><span style=color:#f92672>(</span>1024<span style=color:#f92672>);</span>
+                        <span style=color:#66d9ef>int</span> len <span style=color:#f92672>=</span> socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>read</span><span style=color:#f92672>(</span>buffer<span style=color:#f92672>);</span>
+                        <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>len <span style=color:#f92672>==</span> <span style=color:#f92672>-</span>1<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+                            System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>socketName <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; closed!&#34;</span><span style=color:#f92672>);</span>
+                        <span style=color:#f92672>}</span>
+                        <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>len <span style=color:#f92672>&gt;</span> 0<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+                            ByteBuffer data <span style=color:#f92672>=</span> ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>allocate</span><span style=color:#f92672>(</span>len<span style=color:#f92672>);</span>
+                            buffer<span style=color:#f92672>.</span><span style=color:#a6e22e>flip</span><span style=color:#f92672>();</span>
+                            data<span style=color:#f92672>.</span><span style=color:#a6e22e>put</span><span style=color:#f92672>(</span>buffer<span style=color:#f92672>);</span>
+                            String sData <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> String<span style=color:#f92672>(</span>data<span style=color:#f92672>.</span><span style=color:#a6e22e>array</span><span style=color:#f92672>(),</span> StandardCharsets<span style=color:#f92672>.</span><span style=color:#a6e22e>UTF_8</span><span style=color:#f92672>);</span>
+                            System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>socketName <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; receive data:&#34;</span> <span style=color:#f92672>+</span> sData<span style=color:#f92672>);</span>
+                            <span style=color:#75715e>// 回写数据
+</span><span style=color:#75715e></span>                            String tn <span style=color:#f92672>=</span> Thread<span style=color:#f92672>.</span><span style=color:#a6e22e>currentThread</span><span style=color:#f92672>().</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>();</span>
+                            String rData <span style=color:#f92672>=</span> sData <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; - &#34;</span> <span style=color:#f92672>+</span> tn<span style=color:#f92672>;</span>
+                            socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>write</span><span style=color:#f92672>(</span>ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>wrap</span><span style=color:#f92672>(</span>rData<span style=color:#f92672>.</span><span style=color:#a6e22e>getBytes</span><span style=color:#f92672>(</span>StandardCharsets<span style=color:#f92672>.</span><span style=color:#a6e22e>UTF_8</span><span style=color:#f92672>)));</span>
+                        <span style=color:#f92672>}</span>
+                    <span style=color:#f92672>}</span><span style=color:#66d9ef>catch</span> <span style=color:#f92672>(</span>Exception e<span style=color:#f92672>){</span>
+                        <span style=color:#75715e>// 异常推出
+</span><span style=color:#75715e></span>                        socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>close</span><span style=color:#f92672>();</span>
+                        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>socketName <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; exception close!&#34;</span><span style=color:#f92672>);</span>
+                    <span style=color:#f92672>}</span>
+                <span style=color:#f92672>}</span>
+            <span style=color:#f92672>}</span>
+        <span style=color:#f92672>}</span>
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><p>执行结果：</p><pre><code>/**
+ * 执行结果：
+ * server listen on port 9000
+ * java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:57934] connect success!
+ * java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:57934] receive data:123
+ * java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:57934] receive data:你好
+ * java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:57934] receive data:中国
+ * java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:58056] connect success!
+ * java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:58056] receive data:你呀
+ * java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:58056] receive data:搞毛线哦
+ * java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:58056] receive data:exit
+ * java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:58056] exception close!
+ * java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:57934] receive data:exit
+ * java.nio.channels.SocketChannel[connected local=/127.0.0.1:9000 remote=/127.0.0.1:57934] exception close!
+ */
+</code></pre><p><code>SelectNIOClientDemo</code> - 服务端</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#f92672>package</span> org.mango.demo.selectnio<span style=color:#f92672>;</span>
+
+<span style=color:#f92672>import</span> java.io.IOException<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.net.InetSocketAddress<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.ByteBuffer<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.SelectionKey<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.Selector<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.channels.SocketChannel<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.nio.charset.StandardCharsets<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.util.Iterator<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.util.Scanner<span style=color:#f92672>;</span>
+<span style=color:#f92672>import</span> java.util.Set<span style=color:#f92672>;</span>
+
+<span style=color:#75715e>/**
+</span><span style=color:#75715e> * @Date 2021-10-03 15:26
+</span><span style=color:#75715e> * @Created by mango
+</span><span style=color:#75715e> */</span>
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>SelectNIOClientDemo</span> <span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>main</span><span style=color:#f92672>(</span>String<span style=color:#f92672>[]</span> args<span style=color:#f92672>)</span> <span style=color:#66d9ef>throws</span> IOException<span style=color:#f92672>,</span> InterruptedException <span style=color:#f92672>{</span>
+        SocketChannel sc <span style=color:#f92672>=</span> SocketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>open</span><span style=color:#f92672>();</span>
+        String host <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;127.0.0.1&#34;</span><span style=color:#f92672>;</span>
+        <span style=color:#66d9ef>int</span> port <span style=color:#f92672>=</span> 9000<span style=color:#f92672>;</span>
+        sc<span style=color:#f92672>.</span><span style=color:#a6e22e>connect</span><span style=color:#f92672>(</span><span style=color:#66d9ef>new</span> InetSocketAddress<span style=color:#f92672>(</span>host<span style=color:#f92672>,</span>port<span style=color:#f92672>));</span>
+        <span style=color:#75715e>// 设置非阻塞
+</span><span style=color:#75715e></span>        sc<span style=color:#f92672>.</span><span style=color:#a6e22e>configureBlocking</span><span style=color:#f92672>(</span><span style=color:#66d9ef>false</span><span style=color:#f92672>);</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;connect server &#34;</span> <span style=color:#f92672>+</span> host <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;:&#34;</span> <span style=color:#f92672>+</span> port <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; success!&#34;</span><span style=color:#f92672>);</span>
+
+        <span style=color:#75715e>// 设置多路复用器，注册读事件
+</span><span style=color:#75715e></span>        Selector selector <span style=color:#f92672>=</span> Selector<span style=color:#f92672>.</span><span style=color:#a6e22e>open</span><span style=color:#f92672>();</span>
+        sc<span style=color:#f92672>.</span><span style=color:#a6e22e>register</span><span style=color:#f92672>(</span>selector<span style=color:#f92672>,</span> SelectionKey<span style=color:#f92672>.</span><span style=color:#a6e22e>OP_READ</span><span style=color:#f92672>);</span>
+        sc<span style=color:#f92672>.</span><span style=color:#a6e22e>register</span><span style=color:#f92672>(</span>selector<span style=color:#f92672>,</span> SelectionKey<span style=color:#f92672>.</span><span style=color:#a6e22e>OP_WRITE</span><span style=color:#f92672>);</span>
+        <span style=color:#75715e>// 从输入流中读取数据
+</span><span style=color:#75715e></span>        Scanner scanner <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Scanner<span style=color:#f92672>(</span>System<span style=color:#f92672>.</span><span style=color:#a6e22e>in</span><span style=color:#f92672>);</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;输入exit:客户端退出；其他为发送数据!&#34;</span><span style=color:#f92672>);</span>
+        <span style=color:#66d9ef>boolean</span> loop <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span><span style=color:#f92672>;</span>
+        <span style=color:#66d9ef>while</span> <span style=color:#f92672>(</span>loop<span style=color:#f92672>){</span>
+            <span style=color:#75715e>// 查看多路复用器
+</span><span style=color:#75715e></span>            selector<span style=color:#f92672>.</span><span style=color:#a6e22e>select</span><span style=color:#f92672>();</span>
+            Set<span style=color:#f92672>&lt;</span>SelectionKey<span style=color:#f92672>&gt;</span> selectionKeySet <span style=color:#f92672>=</span> selector<span style=color:#f92672>.</span><span style=color:#a6e22e>selectedKeys</span><span style=color:#f92672>();</span>
+            Iterator<span style=color:#f92672>&lt;</span>SelectionKey<span style=color:#f92672>&gt;</span> iterator <span style=color:#f92672>=</span> selectionKeySet<span style=color:#f92672>.</span><span style=color:#a6e22e>iterator</span><span style=color:#f92672>();</span>
+            <span style=color:#66d9ef>while</span> <span style=color:#f92672>(</span>iterator<span style=color:#f92672>.</span><span style=color:#a6e22e>hasNext</span><span style=color:#f92672>()){</span>
+                SelectionKey selectionKey <span style=color:#f92672>=</span> iterator<span style=color:#f92672>.</span><span style=color:#a6e22e>next</span><span style=color:#f92672>();</span>
+                <span style=color:#75715e>// 移除掉事件，防止重复处理
+</span><span style=color:#75715e></span>                iterator<span style=color:#f92672>.</span><span style=color:#a6e22e>remove</span><span style=color:#f92672>();</span>
+                <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span>selectionKey<span style=color:#f92672>.</span><span style=color:#a6e22e>isWritable</span><span style=color:#f92672>()){</span>
+                    System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>print</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;请输入:&#34;</span><span style=color:#f92672>);</span>
+                    String input <span style=color:#f92672>=</span> scanner<span style=color:#f92672>.</span><span style=color:#a6e22e>next</span><span style=color:#f92672>();</span>
+                    ByteBuffer data <span style=color:#f92672>=</span> ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>wrap</span><span style=color:#f92672>(</span>input<span style=color:#f92672>.</span><span style=color:#a6e22e>getBytes</span><span style=color:#f92672>(</span>StandardCharsets<span style=color:#f92672>.</span><span style=color:#a6e22e>UTF_8</span><span style=color:#f92672>));</span>
+                    <span style=color:#75715e>// 发送数据
+</span><span style=color:#75715e></span>                    sc<span style=color:#f92672>.</span><span style=color:#a6e22e>write</span><span style=color:#f92672>(</span>data<span style=color:#f92672>);</span>
+                    <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;exit&#34;</span><span style=color:#f92672>.</span><span style=color:#a6e22e>equals</span><span style=color:#f92672>(</span>input<span style=color:#f92672>)){</span>
+                        loop <span style=color:#f92672>=</span> <span style=color:#66d9ef>false</span><span style=color:#f92672>;</span>
+                    <span style=color:#f92672>}</span>
+                <span style=color:#f92672>}</span><span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span>selectionKey<span style=color:#f92672>.</span><span style=color:#a6e22e>isReadable</span><span style=color:#f92672>()){</span>
+                    <span style=color:#75715e>// 得到可读的通道
+</span><span style=color:#75715e></span>                    SocketChannel socketChannel <span style=color:#f92672>=</span> <span style=color:#f92672>(</span>SocketChannel<span style=color:#f92672>)</span> selectionKey<span style=color:#f92672>.</span><span style=color:#a6e22e>channel</span><span style=color:#f92672>();</span>
+                    String socketName <span style=color:#f92672>=</span> socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>toString</span><span style=color:#f92672>();</span>
+                    <span style=color:#75715e>// 读取数据并回写数据给客户端
+</span><span style=color:#75715e></span>                    ByteBuffer buffer <span style=color:#f92672>=</span> ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>allocate</span><span style=color:#f92672>(</span>1024<span style=color:#f92672>);</span>
+                    <span style=color:#66d9ef>int</span> len <span style=color:#f92672>=</span> socketChannel<span style=color:#f92672>.</span><span style=color:#a6e22e>read</span><span style=color:#f92672>(</span>buffer<span style=color:#f92672>);</span>
+                    <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span>len <span style=color:#f92672>==</span> <span style=color:#f92672>-</span>1<span style=color:#f92672>){</span>
+                        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>socketName <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; closed!&#34;</span><span style=color:#f92672>);</span>
+                    <span style=color:#f92672>}</span>
+                    <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span>len <span style=color:#f92672>&gt;</span> 0<span style=color:#f92672>){</span>
+                        ByteBuffer data <span style=color:#f92672>=</span> ByteBuffer<span style=color:#f92672>.</span><span style=color:#a6e22e>allocate</span><span style=color:#f92672>(</span>len<span style=color:#f92672>);</span>
+                        buffer<span style=color:#f92672>.</span><span style=color:#a6e22e>flip</span><span style=color:#f92672>();</span>
+                        data<span style=color:#f92672>.</span><span style=color:#a6e22e>put</span><span style=color:#f92672>(</span>buffer<span style=color:#f92672>);</span>
+                        String sData <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> String<span style=color:#f92672>(</span>data<span style=color:#f92672>.</span><span style=color:#a6e22e>array</span><span style=color:#f92672>(),</span> StandardCharsets<span style=color:#f92672>.</span><span style=color:#a6e22e>UTF_8</span><span style=color:#f92672>);</span>
+                        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span>socketName <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; receive data:&#34;</span> <span style=color:#f92672>+</span> sData<span style=color:#f92672>);</span>
+                    <span style=color:#f92672>}</span>
+                <span style=color:#f92672>}</span>
+            <span style=color:#f92672>}</span>
+        <span style=color:#f92672>}</span>
+        <span style=color:#75715e>// 关闭资源
+</span><span style=color:#75715e></span>        selector<span style=color:#f92672>.</span><span style=color:#a6e22e>close</span><span style=color:#f92672>();</span>
+        sc<span style=color:#f92672>.</span><span style=color:#a6e22e>close</span><span style=color:#f92672>();</span>
+        System<span style=color:#f92672>.</span><span style=color:#a6e22e>out</span><span style=color:#f92672>.</span><span style=color:#a6e22e>println</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;client exit&#34;</span><span style=color:#f92672>);</span>
+    <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><p>执行结果：</p><pre><code>/**
+ * 执行结果1：
+ * connect server 127.0.0.1:9000 success!
+ * 输入exit:客户端退出；其他为发送数据!
+ * 请输入:你呀
+ * 请输入:搞毛线哦
+ * 请输入:exit
+ * client exit
+ */
+</code></pre><pre><code>/**
+ * 执行结果2：
+ * connect server 127.0.0.1:9000 success!
+ * 输入exit:客户端退出；其他为发送数据!
+ * 请输入:123
+ * 请输入:你好
+ * 请输入:中国
+ * 请输入:exit
+ * client exit
+ */
+</code></pre><p><em><strong>总结</strong></em></p><p><em><strong>1. 使用Selector选择器来实现多路复用器，调用select()方法得到就绪事件。</strong></em></p><p><em><strong>2. socket关闭时，多路复用器会收到read事件，read到的字节-1。</strong></em></p></div><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=/mb/post/%E9%AB%98%E5%90%9E%E5%90%90%E9%87%8F%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E7%B3%BB%E7%BB%9Fkafka/>高吞吐量分布式消息系统kafka</a></li><li><a href=/mb/post/%E5%85%B3%E4%BA%8E%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98%E7%9A%84%E5%86%B3%E5%AE%9A/>关于一些问题的决定</a></li><li><a href=/mb/post/17%E5%B9%B44%E6%9C%88%E4%BB%BD%E6%80%BB%E7%BB%93/>17年4月份总结</a></li><li><a href=/mb/pr/>发布日记</a></li><li><a href=/mb/archives/></a></li></ul></div><div class="post-meta meta-tags"><ul class=clearfix><li><a href=/mb/tags/java>java</a></li><li><a href=/mb/tags/nio>nio</a></li></ul></div></article><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return}var b=document,a=b.createElement('script');a.async=!0,a.src='//mango-mb.disqus.com/embed.js',a.setAttribute('data-timestamp',+new Date),(b.head||b.body).appendChild(a)})()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><footer id=footer><div>&copy; 2021 <a href=http://mg.meiflower.top/mb>程序猫大刚 By 程序猫大刚</a>
+| <a rel=nofollow target=_blank href=http://beian.miit.gov.cn/>粤ICP备17082965号</a></div><br><div><div class=github-badge><a href=https://gohugo.io/ target=_black rel=nofollow><span class=badge-subject>Powered by</span><span class="badge-value bg-blue">Hugo</span></a></div><div class=github-badge><a href=https://www.flysnow.org/ target=_black><span class=badge-subject>Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a></div><div class=github-badge><a href=https://github.com/flysnow-org/maupassant-hugo target=_black><span class=badge-subject>Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a></div></div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[['$','$']],processEscapes:!0}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script src=https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js></script><a id=rocket href=#top></a><script type=text/javascript src="/mb/js/totop.js?v=0.0.0" async></script><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script><script src=/mb/js/douban.js></script></div><div id=secondary><section class=widget><form id=search action=http://mg.meiflower.top/mb/search/ method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
+<input type=hidden name=sitesearch value=http://mg.meiflower.top/mb>
+<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=http://mg.meiflower.top/mb/post/%E5%8F%91%E5%B8%83jar%E5%8C%85%E5%85%AC%E5%85%B1maven%E4%BB%93%E5%BA%93/ title=发布jar包公共maven仓库>发布jar包公共maven仓库</a></li><li><a href=http://mg.meiflower.top/mb/post/%E4%BB%8E%E4%BD%95%E8%80%8C%E6%9D%A5%E4%B9%8BJava-NIO/ title="从何而来之Java NIO">从何而来之Java NIO</a></li><li><a href=http://mg.meiflower.top/mb/post/%E9%AB%98%E5%90%9E%E5%90%90%E9%87%8F%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E7%B3%BB%E7%BB%9Fkafka/ title=高吞吐量分布式消息系统kafka>高吞吐量分布式消息系统kafka</a></li><li><a href=http://mg.meiflower.top/mb/post/%E5%85%B3%E4%BA%8E%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98%E7%9A%84%E5%86%B3%E5%AE%9A/ title=关于一些问题的决定>关于一些问题的决定</a></li><li><a href=http://mg.meiflower.top/mb/post/17%E5%B9%B44%E6%9C%88%E4%BB%BD%E6%80%BB%E7%BB%93/ title=17年4月份总结>17年4月份总结</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/categories/>分类</a></h3><ul class=widget-list><li><a href=http://mg.meiflower.top/mb/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/>中间件 (1)</a></li><li><a href=http://mg.meiflower.top/mb/categories/%E6%80%9D%E6%83%B3%E8%BF%9B%E5%8C%96/>思想进化 (1)</a></li><li><a href=http://mg.meiflower.top/mb/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/>技术文章 (3)</a></li><li><a href=http://mg.meiflower.top/mb/categories/%E7%94%9F%E6%B4%BB%E7%9B%B8%E5%85%B3/>生活相关 (1)</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/tags/>标签</a></h3><div class=tagcloud><a href=http://mg.meiflower.top/mb/tags/java/>java</a>
+<a href=http://mg.meiflower.top/mb/tags/kafka/>kafka</a>
+<a href=http://mg.meiflower.top/mb/tags/maven/>maven</a>
+<a href=http://mg.meiflower.top/mb/tags/mq/>mq</a>
+<a href=http://mg.meiflower.top/mb/tags/nio/>nio</a>
+<a href=http://mg.meiflower.top/mb/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/>方法论</a></div></section><section class=widget><h3 class=widget-title>友情链接</h3><ul class=widget-list><li><a target=_blank href=https://www.flysnow.org/ title=飞雪无情的博客>飞雪无情的博客</a></li><li><a target=_blank href=http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e title="Android Gradle权威指南">Android Gradle权威指南</a></li></ul></section><section class=widget><h3 class=widget-title>其它</h3><ul class=widget-list><li><a href=http://mg.meiflower.top/mb/index.xml>文章 RSS</a></li></ul></section></div></div></div></div></body></html>

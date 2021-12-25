@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4cd572b5-8890-4094-a2a2-a91b55cc2463" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/config.toml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -87,7 +86,7 @@
         <entry file="file://$PROJECT_DIR$/public/post/发布jar包公共maven仓库/index.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="198">
-              <caret line="133" column="238" lean-forward="true" selection-start-line="133" selection-start-column="238" selection-end-line="133" selection-end-column="238" />
+              <caret line="133" column="238" selection-start-line="133" selection-start-column="238" selection-end-line="133" selection-end-column="238" />
             </state>
           </provider>
         </entry>
@@ -193,7 +192,7 @@
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1640451198122" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1640451800948" />
     <property name="editor.config.ad.shown" value="true" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
     <property name="js.eslint.eslintPackage" value="" />
@@ -353,7 +352,7 @@
       <workItem from="1630047049004" duration="2094000" />
       <workItem from="1632215849871" duration="3274000" />
       <workItem from="1633056933872" duration="3000" />
-      <workItem from="1640445004744" duration="1581000" />
+      <workItem from="1640445004744" duration="2030000" />
     </task>
     <task id="LOCAL-00001" summary="发布">
       <created>1640445688026</created>
@@ -366,13 +365,12 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19851000" />
+    <option name="totallyTimeSpent" value="20300000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24786325" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24786325" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Nl-Palette" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -387,7 +385,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.44827586" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.44827586" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
@@ -605,7 +603,7 @@
     <entry file="file://$PROJECT_DIR$/public/post/发布jar包公共maven仓库/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
-          <caret line="133" column="238" lean-forward="true" selection-start-line="133" selection-start-column="238" selection-end-line="133" selection-end-column="238" />
+          <caret line="133" column="238" selection-start-line="133" selection-start-column="238" selection-end-line="133" selection-end-column="238" />
         </state>
       </provider>
     </entry>
