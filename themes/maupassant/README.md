@@ -1,289 +1,456 @@
 # Maupassant
 
-[![Build Status](https://travis-ci.org/tufu9441/maupassant-hexo.svg?branch=master)](https://travis-ci.org/tufu9441/maupassant-hexo)   [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/tufu9441/maupassant-hexo/blob/master/LICENSE)
+Maupassant theme, ported to Hugo.
 
-> 大道至简
+1. 预览效果:[飞雪无情的博客](http://www.flysnow.org)
+2. [English Docs](README_EN.md)
 
-[Preview](https://www.haomwei.com)｜[中文文档](https://www.haomwei.com/technology/maupassant-hexo.html)
+一款非常简洁、性能高的Hugo主题，适配不同的设备（PC，Mobile等）。 主要是基于 Typecho [Cho](https://github.com/pagecho/maupassant/), 从 [JokerQyou](https://github.com/JokerQyou/maupassant-hugo) forked，修改和添加了很多功能而成，如GA统计、最近的文章、标签云、自定义菜单、按日期归档等 .
 
-A simple Hexo template with great performance on different devices, ported from a Typecho theme by [Cho](https://github.com/pagecho/maupassant/), forked and modified from [icylogic](https://github.com/icylogic/maupassant-hexo/).
+## Preview
 
-![template preview](http://ooo.0o0.ooo/2015/10/24/562b5be12177e.jpg
- "Maupassant template preview")
+![Maupassant 主题预览](./preview.png "Maupassant 主题预览")
 
-## Installation
-Install theme and renderers:
+## 功能特性
 
-```shell
-$ git clone https://github.com/tufu9441/maupassant-hexo.git themes/maupassant
-$ npm install hexo-renderer-pug --save
-$ npm install hexo-renderer-sass --save
+1. 支持Local Search 站内搜索
+2. 最近发表的文章支持，显示最近的10篇 
+3. 分类支持，并且可以显示分类内的文章数量
+4. 标签云支持
+5. 文章目录支持
+6. 一键回到页面顶部
+13. 支持关键字SEO优化
+6. 自定义菜单支持，不限个数，自定义排序
+7. 自定义友情链接支持
+8. 支持文章按年份日期进行归档
+9. 支持GA分析统计
+17. 不蒜子页面计数器支持
+11. 代码高亮、代码行号
+10. sitemap站点地图
+5. RSS支持，并且可以自动发现RSS
+14. Google站内搜索
+15. See Also 支持
+16. Disqus评论支持
+18. 自定义css、js
+19. utteranc评论
+20. 部分自定义的shortcode
+21. 文章自定义摘要
+22. 自定义广告支持
+23. 自定义备案信息
+24. 自定义图片CDN
+25. 图片点击放大
+
+## 下载安装
+
+```bash
+cd <YOUR Bolg Root Dir>
+git clone https://github.com/flysnow-org/maupassant-hugo themes/maupassant
 ```
 
-Then change your `theme` setting in `_config.yml` to `maupassant`.
+## 配置
 
-## Configuration
-Default config:
+#### 依赖要求
 
-```YAML
-disqus:
-  enable: false ## If you want to use Disqus comment system, please set the value to true.
-  shortname: ## Your disqus_shortname, e.g. username
-  api: ## You can visit Disqus comments in China mainland without barriers using Disqus API, e.g. https://disqus.skk.moe/disqus/
-  apikey: ## Your API key obtained in Disqus API Application, e.g. yk00ZB1fjYGRkrCrDDRYDUjpp26GJWJiJRZQZ5SY0r3th5FMW6pnSzQMnWH7ua7r
-  admin: ## Username of your Disqus moderator, e.g. username
-  admin_label: ## The text of Disqus moderator badge, e.g. Mod
-uyan: ## Your uyan_id. e.g. 1234567
-livere: ## Your livere data-uid, e.g. MTAyMC8zMDAxOC78NTgz
-changyan: ## Your changyan appid, e.g. cyrALsXc8
-changyan_conf: ## Your changyan conf, e.g. prod_d8a508c2825ab57eeb43e7c69bba0e8b
-gitalk: ## See: https://github.com/gitalk/gitalk
-  enable: false ## If you want to use Gitment comment system please set the value to true.
-  owner: ## Your GitHub ID, e.g. username
-  repo: ## The repository to store your comments, make sure you're the repo's owner, e.g. gitalk.github.io
-  client_id: ## GitHub client ID, e.g. 75752dafe7907a897619
-  client_secret: ## GitHub client secret, e.g. ec2fb9054972c891289640354993b662f4cccc50
-  admin: ## Github repo owner and collaborators, only these guys can initialize github issues.
-valine: ## See: https://valine.js.org
-  enable: false ## If you want to use Valine comment system, please set the value to true.
-  appid: ## Your LeanCloud application App ID, e.g. pRBBL2JR4N7kLEGojrF0MsSs-gzGzoHsz
-  appkey: ## Your LeanCloud application App Key, e.g. tjczHpDfhjYDSYddzymYK1JJ
-  notify: false ## Mail notifier, see https://github.com/xCss/Valine/wiki/Valine-评论系统中的邮件提醒设置
-  verify: false ## Validation code.
-  placeholder: Just so so ## Comment box placeholders.
-  avatar: "mm" ## Gravatar type, see https://github.com/xCss/Valine/wiki/avatar-setting-for-valine
-  pageSize: 10 ## Number of comments per page.
-  guest_info: nick,mail,link ## Attributes of reviewers.
-minivaline: ## See: https://github.com/MiniValine/MiniValine
-  enable: false ## If you want to use MiniValine comment system, please set the value to true.
-  appId: ## Your LeanCloud application App ID, e.g. pRBBL2JR4N7kLEGojrF0MsSs-gzGzoHsz
-  appKey: ## Your LeanCloud application App Key, e.g. tjczHpDfhjYDSYddzymYK1JJ
-  placeholder: Write a Comment ## Comment box placeholder.
-  adminEmailMd5: ## The MD5 of Admin Email to show Admin Flag.
-  math: true ## Support MathJax.
-  md: true ## Support Markdown.
-  # MiniValine's display language depends on user's browser or system environment
-  # If you want everyone visiting your site to see a uniform language, you can set a force language value
-  # Available values: en  | zh-CN | (and many more)
-  # More i18n info: https://github.com/MiniValine/minivaline-i18n
-  lang:
-utterances: ## See: https://utteranc.es
-  enable: false ## If you want to use Utterances comment system, please set the value to true.
-  repo: ## The repository utterances will connect to, e.g. tufu9441/comments
-  identifier: title ## The mapping between blog posts and GitHub issues.
-  theme: github-light ## Choose an Utterances theme which matches your blog.
-twikoo: ## See: https://twikoo.js.org
-  enable: false ## If you want to use twikoo comment system, please set the value to true.
-  envId: ## Tencent CloudBase envId
-  region: ## Tencent CloudBase region, e.g. ap-shanghai
-  path: ## Article path, e.g. window.location.pathname
+Hugo Version >= v 0.60.0
 
-google_search: true ## Use Google search, true/false.
-baidu_search: false ## Use Baidu search, true/false.
-swiftype: ## Your swiftype_key, e.g. m7b11ZrsT8Me7gzApciT
-self_search: false ## Use a jQuery-based local search engine, true/false.
-google_analytics: ## Your Google Analytics tracking id, e.g. UA-42425684-2
-baidu_analytics: ## Your Baidu Analytics tracking id, e.g. 8006843039519956000
-fancybox: true ## If you want to use fancybox please set the value to true.
-show_category_count: false ## If you want to show the count of categories in the sidebar widget please set the value to true.
-toc_number: true ## If you want to add list number to toc please set the value to true.
-shareto: false ## If you want to use the share button please set the value to true, and you must have hexo-helper-qrcode installed.
-busuanzi: false ## If you want to use Busuanzi page views please set the value to true.
-wordcount: false ## If you want to display the word counter and the reading time expected to spend of each post please set the value to true, and you must have hexo-wordcount installed.
-widgets_on_small_screens: false ## Set to true to enable widgets on small screens.
-canvas_nest:
-  enable: false ## If you want to use dynamic background please set the value to true, you can also fill the following parameters to customize the dynamic effect, or just leave them blank to keep the default effect.
-  color: ## RGB value of the color, e.g. "100,99,98"
-  opacity: ## Transparency of lines, e.g. "0.7"
-  zIndex: ## The z-index property of the background, e.g. "-1"
-  count: ## Quantity of lines, e.g. "150"
-donate:
-  enable: false ## If you want to display the donate button after each post, please set the value to true and fill the following items on your need. You can also enable donate button in a page by adding a "donate: true" item to the front-matter.
-  github: ## GitHub URL, e.g. https://github.com/Kaiyuan/donate-page
-  alipay_qr: ## Path of Alipay QRcode image, e.g. /img/AliPayQR.png
-  wechat_qr: ## Path of Wechat QRcode image, e.g. /img/WeChatQR.png
-  btc_qr: ## Path of Bitcoin QRcode image, e.g. /img/BTCQR.png
-  btc_key: ## Bitcoin key, e.g. 1KuK5eK2BLsqpsFVXXSBG5wbSAwZVadt6L
-  paypal_url: ## Paypal URL, e.g. https://www.paypal.me/tufu9441
-post_copyright:
-  enable: false ## If you want to display the copyright info after each post, please set the value to true and fill the following items on your need.
-  author: ## Your author name, e.g. tufu9441
-  copyright_text: ## Your copyright text, e.g. The author owns the copyright, please indicate the source reproduced.
-love: false ## If you want the peach heart to appear when you click anywhere, set the value to true.
-plantuml: ## Using PlantUML to generate UML diagram, must install hexo-filter-plantuml (https://github.com/miao1007/hexo-filter-plantuml).
-  render: "PlantUMLServer" ##  Local or PlantUMLServer.
-  outputFormat: "svg" ## common options: svg/png
-copycode: true ## If you want to enable one-click copy of the code blocks, set the value to true.
-dark: false ## If you want to use the dark mode theme, set the value to true. Note: This feature is not complete, please open an issue if you have any problem.
-totop: true ## If you want to use the rocketship button to return to the top, set the value to true.
-external_css: false ## If you want to load an external CSS file, set the value to true and create a file named "external.css" in the source/css folder.
+#### 应用主题
 
-menu:
-  - page: home
-    directory: .
-    icon: fa-home
-  - page: archive
-    directory: archives/
-    icon: fa-archive
-  - page: about
-    directory: about/
-    icon: fa-user
-  - page: rss
-    directory: atom.xml
-    icon: fa-rss
-
-widgets: ## Six widgets in sidebar provided: search, category, tag, recent_posts, recent_comments and links.
-  - search
-  - category
-  - tag
-  - recent_posts
-  - recent_comments
-  - links
-
-links:
-  - title: site-name1
-    url: http://www.example1.com/
-  - title: site-name2
-    url: http://www.example2.com/
-  - title: site-name3
-    url: http://www.example3.com/
-
-timeline:
-  - num: 1
-    word: 2014/06/12-Start
-  - num: 2
-    word: 2014/11/29-XXX
-  - num: 3
-    word: 2015/02/18-DDD
-  - num: 4
-    word: More
-
-# Static files
-js: js
-css: css
-
-# Theme version
-version: 1.0.0
-```
-- disqus - [Disqus](https://disqus.com) comment system, integrated with [DisqusJS](https://github.com/SukkaW/DisqusJS) API.
-- uyan - [Uyan](http://www.uyan.cc) id
-- livere - [LiveRe](https://livere.com) data-uid
-- changyan - [Changyan](http://changyan.kuaizhan.com) appid
-- gitalk - [Gitalk](https://github.com/gitalk/gitalk) comment system
-- valine - [Valine](https://valine.js.org) comment system
-- minivaline - [MiniValine](https://github.com/MiniValine/MiniValine) comment system
-- utterances - [Utterances](https://utteranc.es) comment system
-- twikoo - [Twikoo](https://twikoo.js.org) comment system
-- google_search - Default search engine
-- baidu_search - Search engine for users in China
-- swiftype - [Swiftype Search](https://swiftype.com) key
-- self_search - A jQuery-based [local search engine](http://hahack.com/codes/local-search-engine-for-hexo), with the dependency on the plugin [hexo-generator-search](https://github.com/PaicHyperionDev/hexo-generator-search)
-- google_analytics - [Google Analytics](https://www.google.com/analytics/) tracking id
-- baidu_analytics - [Baidu Analytics](http://tongji.baidu.com) tracking id
-- fancybox - Enable [Fancybox](http://fancyapps.com/fancybox/)
-- show_category_count - Show the count of categories in the sidebar widget
-- toc_number - Show the list number of toc
-- shareto - Enable share button, with the dependency on the plugin [hexo-helper-qrcode](https://github.com/yscoder/hexo-helper-qrcode)
-- busuanzi - Enable [Busuanzi](http://busuanzi.ibruce.info) page views
-- wordcount - Enable [hexo-wordcount](https://github.com/willin/hexo-wordcount) of each post
-- widgets_on_small_screens - Show the widgets at the bottom of small screens
-- canvas_nest - Enable [canvas-nest.js](https://github.com/hustcc/canvas-nest.js/blob/master/README-zh.md) dynamic background
-- donate - Enable donate button after each post
-- post_copyright - Enable copyright info after each post
-- love - Enable peach heart when clicking anywhere
-- plantuml - Enable PlantUML to generate UML diagram
-- copycode - Enable one-click copy of code blocks
-- dark - Enable the dark mode of the theme
-- totop - Enable the rocketship to-top button
-- external_css - Enable loading an external CSS file
-- menu - Customize your menu of pages here, just follow the format of existied items. Don't forget to create corresponding folders inlcuding `index.md` in `source` folder to ensure the pages will correctly display. [FontAwesome](http://fontawesome.io) icon fonts have been integrated, and you can choose other icons which you like [here](http://fontawesome.io/icons/) and use them according to the instruction.
-- widgets - Choose and arrange the widgets in sidebar here.
-- links - Edit your blogroll here.
-- timeline - Show a timeline of the website by setting `layout: timeline` of a page.
-- Static files - Static files directory, for convenience of CDN usage.
-- Theme version - For automatic refresh of static files on CDN.
-
-## Features
-#### Logo
-You can set a **favicon.ico** for your website, please put it into  `source` folder of hexo directory, recommended size: 32px*32px.
-
-You can add a website logo for apple devices, please put an image named **apple-touch-icon.png** into `source` folder of hexo directory, recommended size: 114px*114px.
-
-#### Abstract
-You can control the abstract of a post shown at index, by either filling a `description:` item in `front-matter` of the `post.md`, or just inserting a `<!--more-->` before your hidden content.
-
-#### Page
-Create folders inlcuding `index.md` in `source` folder to add pages, and add a `layout: page` in `front-matter` of `index.md`. A tagcloud page can be enabled by setting `layout: tagcloud` of a page. If you need a single column page without sidebar, just set `layout: single-column` instead of `layout: page`.
-
-#### Table of Contents
-TOC in a post can be enabled by adding a `toc: true` item in `front-matter`.
-
-#### Comments
-Comment feature of each post and page can be enabled (default) and disabled by adding a `comments: true` or a `comments: false` in `front-matter`. This could be useful when you want comment feature for a guestbook page, but don't want comment feature for a about page.
-
-#### Syntax Highlighting
-Highlighted code showcase is supported, please set the `highlight` option in `_config.yml` of hexo directory like this:
-
-```YAML
-highlight:
-  enable: true
-  auto_detect: true
-  line_number: true
-  tab_replace:
+```toml
+theme = "maupassant"
 ```
 
-#### Math Equation
-Add
-```YAML
-mathjax: true
+#### 快速开始
+
+在主题的 [exampleSite](exampleSite/) 示例目录下有`config.toml `文件，把`config.toml `文件复制到你的站点目录下，然后根据自己的需求修改即可
+
+**PS: 一定要使用`post`目录，而不是`posts`,一定要记住，所以如果你使用`hugo`命令，你应该`hugo new post/filename.md`这样创建**
+
+**PS: 一定要使用`post`目录，而不是`posts`,一定要记住，所以如果你使用`hugo`命令，你应该`hugo new post/filename.md`这样创建**
+
+**PS: 一定要使用`post`目录，而不是`posts`,一定要记住，所以如果你使用`hugo`命令，你应该`hugo new post/filename.md`这样创建**
+
+
+
+#### 代码高亮
+
+从Hugo v0.60.0开始，默认使用`Goldmark`渲染MD文件，并且默认开启了代码高亮，所以该主题原来的代码高亮兼容出现问题，
+经过取舍，最终还是选用了Hugo原生的代码高亮方式，去掉了原来主题自带的基于JS的代码高亮。
+
+新的Hugo内置的代码高亮使用非常代码，默认不用任何配置就可以，如果你需要开启行号、或者更换代码样式，可以参考如下配置：
+
+*config.toml*
+```toml
+[markup]
+  [markup.highlight]
+    lineNos = true
+    style = "github"
 ```
-in Hexo's `_config.yml`.
 
-In the post which you would like to use math equation, add `mathjax: true` in the `front-matter`. For example:
+更多配合和样式参考:
 
-```YAML
-title: Test Math
-date: 2016-04-05 14:16:00
-categories: math
-mathjax: true
+[Configure Markup](https://gohugo.io/getting-started/configuration-markup)
+[Syntax Highlighting](https://gohugo.io/content-management/syntax-highlighting/)
+
+#### 自定义菜单
+
+```toml
+[menu]
+
+  [[menu.main]]
+    identifier = "books"
+    name = "新书"
+    url = "/books/"
+    weight = 2
+
+  [[menu.main]]
+    identifier = "archives"
+    name = "归档"
+    url = "/archives/"
+    weight = 3
+
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 4
+```
+
+`identifier`标志符必须是唯一的，不能重复；`weight`用于排序，值越小越靠前。
+
+####  文章目录（大纲）
+
+该主题支持文章目录（大纲）,大纲是通过`h1~h7`标题自动生成，在MD文件里就是`##`这类标题的标记，这里建议最多使用两层文章目录，而且最好是从`h2`开始，便于SEO优化。
+如果要开启一篇文章的文章目录，只需要在`Front Matter` 添加`toc=true`即可，默认是不开启文章目录的。
+
+```toml
+toc = true
+```
+当左侧空白空间宽度超过100px时，则显示悬浮目录。
+
+#### Local Search 站内搜索
+
+站内搜索默认是关闭的，如果需要使用需要以下步骤开启。
+
+1. 检查`config.toml`的`disableKinds`配置项,是否禁用了RSS，如果禁用需要开启。
+2. 在`config.toml`中找到`[params]`配置段落，增加`localSearch = true`开启站内搜索
+3. 在`content`目录下新建`search`目录,并且在`search`目录中新建`index.md`文件，内容如下
+
+```
+---
+title: "搜索"
+description: "搜索页面"
+type: "search"
 ---
 ```
-The default math delimiters are `$$...$$` and `\\[...\\]` for displayed mathematics,
-and `$...$` and `\\(...\\)` for in-line mathematics.
 
-However, if your post contains dollar signs (`$`), and they appear often in non-mathematical parts, in other words, you want to use `$` as dollar sign not inline math delimiter, please add
+然后`hugo server`启动，打开你的站点，就可以在右上角的搜索框里输入关键字进行站内搜索了。
 
-```YAML
-mathjax2: true
+
+#### 友情链接
+
+```toml
+[[params.links]]
+  title = "Android Gradle权威指南"
+  name = "Android Gradle权威指南"
+  url = "http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e"
+[[params.links]]
+  title = "常用开发工具CDN镜像"
+  name = "常用开发工具CDN镜像"
+  url = "http://mirrors.flysnow.org/"
 ```
-in Hexo's `_config.yml` instead of `mathjax: true`. Correspondingly, add `mathjax2: true` to the `front-matter` of the post in which
-you would like to use math equation.
 
-See the [example](http://zhongpu.info/2016/05/06/Mathjax%20and%20Hexo/).
+`params.links`是一个数组，所以我们可以自定义很多友情链接。`name`表示显示的链接文本，`title`表示鼠标悬停在友情链接时，显示的文本。
 
-#### Languages
-Seven languages are available for this theme currently: Simplified Chinese (zh-CN), Traditional Chinese (zh-TW), English (en), French (fr-FR), German (de-DE), Korean (ko) and Spanish (es-ES). Contributions of translating to other languages will be highly appreciated.
+#### 广告模块
 
-## Solutions
-- Check whether your Terminal's current directory is in hexo's root directory which contains `source/`, `themes/`, etc.
+广告模块在侧边栏，可以灵活配置，让博主可以放一些超链接广告、或者图片链接广告。
 
-- If you have any trouble in using this theme, please feel free to open an [issue](https://github.com/tufu9441/maupassant-hexo/issues).
+```toml
+[[params.ads]]
+  title = "领取￥1888阿里云产品通用代金券"
+  url = "https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=jdg9oj97"
 
-## Browser Support
-![Imgur](http://i.imgur.com/iO9L5ty.png)
+[[params.ads]]
+  title = "领取￥1888阿里云产品通用代金券"
+  url = "https://promotion.aliyun.com/ntms/act/vmpt/aliyun-group/home.html?userCode=jdg9oj97"
+  img = "https://img.alicdn.com/tfs/TB17qJhXpzqK1RjSZFvXXcB7VXa-200-126.jpg"
+[[params.ads]]
+  title = "领取￥1888阿里云产品通用代金券"
+  url = "https://promotion.aliyun.com/ntms/act/enterprise-discount.html?userCode=jdg9oj97"
+  img = "https://img.alicdn.com/tfs/TB1aDXhXpzqK1RjSZFvXXcB7VXa-259-194.jpg"
+```
 
-## Contributing
-All kinds of contributions (enhancements, new features, documentation & code improvements, issues & bugs reporting) are welcome.
+`params.ads`是一个数组，所以我们可以自定义很多广告。如果`img`存在，则优先使用图片广告,`title`表示鼠标悬停在广告链接时，显示的文本。
 
-Looking forward to your pull request.
+具体效果参考 [http://www.flysnow.org/](http://www.flysnow.org/)
 
-## Acknowledgements
-Thanks for all the [contributors](https://github.com/tufu9441/maupassant-hexo/graphs/contributors) of this theme.
-.
-## Maupassant on other platforms:
+#### 添加GA分析统计
+
+该主题已经支持了GA分析统计，只需要在`config.toml`配置里加入如下配置即可。
+```toml
+googleAnalytics = "GA ID"
+```
+
+#### 文章归档支持
+
+Hugo默认是不支持生成归档文件的，需要自己实现。该主题已经实现了文章归档，只需要在新建`content/archives/index.md`文件，文件内容为：
+
+```md
+title: "归档"
+description: Android资深工程师 ，Go和Java打杂师，《Android Gradle权威指南》作者，Android官方技术文档译者
+type: archives
+```
+
+`title`和`description`都可以换成你自己的，但是`type`必须是`archives`。
+
+`content/archives/index.md`表示在`content/archives/`目录下的`index.md`文件
+
+#### 添加备案信息
+
+现在网站要求添加备案信息，本主题也进行了支持，使用方式非常简单，在`config.toml`的`params`配置中添加如下设置：
+
+```toml
+[params]
+  beian = "粤ICP备XXXXXXX号-1"
+```
+
+以上配置中的备案信息要换成自己的
+
+#### 图片点击放大
+
+将会引入jquery.js 和 fancybox 的css和js
+
+```toml
+[params]
+  fancybox = true
+```
+
+#### 图片CDN
+
+将会在mark中引入的图片src前面加上设置的host, 有http前缀的路径不会在前面加入host
+注意: 路径后面不要带/ 
+> 可直接使用jsdelivr加速 后面跟上github仓库即可 
+
+```toml
+[params.image_cdn]
+    enable = true
+    Host = "https://cdn.jsdelivr.net/gh/user/user.github.io"
+```
+
+#### Disqus
+
+该主题支持Disqus评论，如果要启用Disqus，可以在`config.toml`里添加如下配置即可.
+
+```toml
+disqusShortname = "yourdiscussshortname"
+```
+
+替换成你自己的Disqus名字即可。
+
+#### 自定义文章摘要
+
+该主题采用了Hugo内置的摘要支持，大家可以通过`<!--more-->`自定义自己的摘要，也可以使用自动摘要，使用自动摘要时，可以在`config.toml`中设置摘要的长度
+
+```toml
+# 默认是70
+summaryLength = 140 
+```
+
+#### 开启版权声明
+
+该主题支持开启版权声明，如果要启用版权声明，可以在`config.toml`里添加如下配置即可。
+
+```toml
+[params.cc]
+    name = "知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议"
+    link = "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+```
+
+其中`name`和`link`可以换成自己使用的版权声明协议和链接
+
+#### utteranc
+
+该主题支持utteranc评论，这是一个基于Github  Issue的评论系统，使用方便，不用翻墙即可评论。
+可以在`config.toml`里添加如下配置即可.更多详见 [https://utteranc.es](https://utteranc.es)
+
+```toml
+[params.utteranc]
+    enable = true
+    repo = ""    # 存储评论的Repo，格式为 owner/repo
+    issueTerm = "pathname"  #表示你选择以那种方式让github issue的评论和你的文章关联。
+    theme = "github-light" # 样式主题，有github-light和github-dark两种
+```
+对于以上issueTerm可以选择的配置有
+1. `pathname` 以路径的方式，推荐选项，这样你换域名的时候就不用担心评论找不到了
+2. `url` 全链接URL路径的方式。
+3. `title` 按页面title标题的方式。
+
+其他还有几个不常用，这里就不再赘述了。
+
+#### 不蒜子页面计数器支持
+
+该主题支持不蒜子这个极简的页面计数器支持，如果要启用不蒜子，可以在`config.toml`里添加如下配置即可.
+
+```toml
+[params]
+  busuanzi = true
+```
+
+#### 关于分类的名称转为小写的问题
+
+`Hugo 0.55` 版本之前, 会有分类转成小写的问题，Hugo提供了`preserveTaxonomyNames`配置，把它设置为`true`就可以了保持原来分类的名字了。
+在 `Hugo 0.55` 这个版本，[hugo 移除了 preserveTaxonomyNames 配置](https://gohugo.io/content-management/taxonomies/#example-removing-default-taxonomies)，
+模板已经默认获取 tag 和 categories 的原始字符用来展示, 大小写的问题已经优雅的解决了。
+
+#### 禁止URL路径小写
+
+默认情况下，URL字符串里的字母都是小写的，这对于分类名、标签名是大写的来说，博客迁移后（比如从Hexo到Hugo），原来的链接就失效了，
+为了解决这个问题，Hugo提供了`disablePathToLower`配置。
+
+```toml
+## 是否禁止URL Path转小写
+disablePathToLower = true
+```
+
+#### 自定义CSS&JS
+
+```
+[params]
+  # 这里我存放在了主题的static文件夹里，根目录的似乎也可以
+  customCSS = ['douban.css', 'other.css']
+  # if ['custom.css'], load '/static/css/custom.css' file
+  customJS = ['douban.js']
+  # if ['custom.js'], load '/static/js/custom.js' file
+```
+
+#### 添加了部分自定义的shortcode
+
+* Octopress blockquote (blockquote.html)
+* Wikipedia Link Generator (wp.html)
+
+```
+{{< youku id="_XMzcxODQ2NjM2NA==" autoplay="true" >}}
+```
+
+* youku（youku.html）
+
+#### 绘图支持
+
+- 序列图(使用[js-sequence](https://bramp.github.io/js-sequence-diagrams/))
+  1. 全局使用，在`config.toml`中添加如下配置
+  
+     ```toml
+     [params.sequenceDiagrams]
+         enable = true
+         options = ""            # default: "{theme: 'simple'}"
+     ```
+     
+  2. 每篇文章单独设置，在`Front Matter` 添加如下内容
+  
+     ```yaml
+     sequenceDiagrams
+       enable: true
+     ```
+  
+   将代码块的语言标识符设置为`sequence`。例如
+  
+  ```
+  ​```sequence
+  Alice->Bob: Hello Bob, how are you?
+  Note right of Bob: Bob thinks
+  Bob-->Alice: I am good thanks!
+  ​```
+  ```
+  
+- 流程图（使用[flowchart.js](http://flowchart.js.org/)）
+  1. 全局使用，在`config.toml`中添加如下配置
+  
+     ```tom
+     [params.flowchartDiagrams]
+       enable = true
+       options = ""
+     ```
+     
+  2. 每篇文章单独设置，在`Front Matter` 添加如下内容
+  
+     ```yaml
+     flowchartDiagrams:
+       enable: true
+     ```
+  
+  
+   将代码块的语言标识符设置为`flowchat`或者`flow`。例如
+  
+   ```
+  ​```flow
+  st=>start: Start
+  op=>operation: Your Operation
+  cond=>condition: Yes or No?
+  e=>end
+  
+  st->op->cond
+  cond(yes)->e
+  cond(no)->op
+  ​```
+   ```
+  
+- graphviz（[viz.js](https://github.com/mdaines/viz.js))
+
+  需要对每篇文章单独设置是否启用，在`Front Matter` 添加如下内容
+
+  ```yaml
+  graphviz:
+    enable: true
+  ```
+
+  将代码块的语言标识符设置为`viz-<engin>`， engin是选用的graphviz绘图引擎的名称，包括`circo`、`dot`、`fdp`、`neato` 、`osage`和`twopi`。例如
+  
+  ```
+  ​```viz-dot
+  digraph G {
+  
+  	subgraph cluster_0 {
+  		style=filled;
+  		color=lightgrey;
+  		node [style=filled,color=white];
+  		a0 -> a1 -> a2 -> a3;
+  		label = "process #1";
+  	}
+  
+  	subgraph cluster_1 {
+  		node [style=filled];
+  		b0 -> b1 -> b2 -> b3;
+  		label = "process #2";
+  		color=blue
+  	}
+  	start -> a0;
+  	start -> b0;
+  	a1 -> b3;
+  	b2 -> a3;
+  	a3 -> a0;
+  	a3 -> end;
+  	b3 -> end;
+  
+  	start [shape=Mdiamond];
+  	end [shape=Msquare];
+  }
+  ​```
+  ```
+
+## 贡献
+
+欢迎大家贡献，不限于代码、Issue，功能特性，想法等等，期待看到你的PR或者ISSUE。
+
+## 其他平台上的 Maupassant 主题
+
 + Typecho：https://github.com/pagecho/maupassant/
 + Octopress：https://github.com/pagecho/mewpassant/
 + Farbox：https://github.com/pagecho/Maupassant-farbox/
 + Wordpress：https://github.com/iMuFeng/maupassant/
 + Ghost: https://github.com/LjxPrime/maupassant/
-+ Hugo: https://github.com/rujews/maupassant-hugo/
++ Hexo: https://github.com/tufu9441/maupassant-hexo
++ Hugo: https://github.com/flysnow-org/maupassant-hugo
+
+```
+
+```

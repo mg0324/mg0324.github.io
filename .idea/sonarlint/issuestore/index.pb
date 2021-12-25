@@ -7,11 +7,7 @@
 deploy-all.sh,b/b/bb3f3f3efb059f0510360d85ca3f0e114c70c233
 ;
 _config.yml,c/d/cd089ae45ce870c45e434019e8f1ed4f066cd425
-W
-'source/_posts/分布式存储FastDFS.md,1/c/1cc0bf435aa866fc166e344d14c062c4048b43b3
 f
 6source/_posts/基于helm将芒果卡片部署到k8s.md,a/1/a100371f4f86529a87ab9e8c37016d622fe22933
 F
 source/awaken/index.md,f/6/f6deedb40c386c1932115fe1c5a291425f625afe
-I
-themes/yilia2/_config.yml,2/4/24c26e8070ebb48ca64ee80f8d29a44599da08b6
