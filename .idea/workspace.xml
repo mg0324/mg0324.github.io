@@ -2,192 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4cd572b5-8890-4094-a2a2-a91b55cc2463" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/1/c/1cc0bf435aa866fc166e344d14c062c4048b43b3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/2/4/24c26e8070ebb48ca64ee80f8d29a44599da08b6" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_admin-config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_config.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy-all.sh" beforeDir="false" afterPath="$PROJECT_DIR$/deploy-all.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hexod.sh" beforeDir="false" afterPath="$PROJECT_DIR$/hugod.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/refresh_pages.py" beforeDir="false" afterPath="$PROJECT_DIR$/refresh_pages.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scaffolds/draft.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scaffolds/page.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scaffolds/post.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sod" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/CNAME" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/17年4月份初略总结.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/Java临时文件删除时注意的坑.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/Java性能注意点.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/alisql的my-cnf.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/alisql的编译安装.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/apache-tomcat-8-0-43源码编译.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/docker-machine的使用和总结.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/dubbo分布式服务框架剖析.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/github上使用pages来搭建静态网站.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/java之forkjoin体验.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/java之future异步并发体验.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/java之深入jvm之路.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/java日志门面.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/k3s初识及安装.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/k8s初识.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/k8s的web管理工具.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/k8s的命令行管理工具.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/k8s的相关发行版.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/kubeadm安装k8s集群.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/mac上使用apache-http服务器.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/maven打包dir目录暴露配置文件.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/maven模块划分之部署深入.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/minikube安装k8s集群.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/mysql下的内容发布中文章的上一条和下一条解决方案.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/mysql读写分离-中间件用mycat.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/nginx的负载均衡测试.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/rancher的安装及使用.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/sickday.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/springboot多数据源mybatis版.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/springboot集成dubbo.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/springboot集成logback做日志分割.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/xfire-1-2-6-jar和spring版本包冲突.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/关于一些问题的决定.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/发布Jar包到公共Maven仓库.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/域名证书更新.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/基于helm将芒果卡片部署到k8s.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/基于solr的全文检索解决方案.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/如何加快处理速度.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/实现单例配置文件读取.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/新技术重点-commonjs-es6-react.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/树莓派之系统安装初始化篇.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/浅析内网穿透可行方案.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/腾讯云主机组建内网.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/高吞吐量分布式消息系统kafka.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/awaken/index.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/categories/index.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/ahead.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/alipay.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/apache-mgwiki.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/apache2-folder.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/csdn.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/deepstudy/ssl_01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/deepstudy/ssl_02.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/deepstudy/ssl_03.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/default-skin.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/dm/01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/dm/02.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/dm/03.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/dm/04.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/dm/05.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/dubbo-dw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/dubbo-jg.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/dubbo-redis-zx.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/dubbo-redis.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/dubbo-zk.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/fastdfs/01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/fastdfs/02.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/fastdfs/03.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/fastdfs/04.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/forkjoin.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/gitee.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/github-pages-1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/github-pages-2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/github-pages-3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/github-pages-4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/github-pages-5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/github-pages-6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/github.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/how-faster.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/httpd-conf.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/java/jar-01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/java/jar-02.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/java/jar-03.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/javanio/bio-show.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/javanio/history.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/javanio/nio-select-show.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/jpress-on-master-slave.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/jvm/class-load.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/jvm/classloader.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/jvm/dobule-parent.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/jvm/gc-copying.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/jvm/gc-list.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/jvm/gc-mark-compact.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/jvm/gc-mark-sweep.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/jvm/gc-root.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/jvm/java-develop-time.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/jvm/jdk-art.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s-card-1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s-card-2.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s-card-3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s-card-4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s-card-helm-dir.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s-card.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s-dashboard.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/dashboard.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/future.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/helm-charts.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/k3s.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/k9s-ui.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/k9s.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/kubeadm_init_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/method.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/rancher-01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/rancher-02.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/rancher-03.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/rancher-04.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/rancher-05.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/struct.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/ui-dashboard.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/ui-kubeoperate.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/ui-kubepi.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/ui-kubesphere-01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/ui-kubesphere-02.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/ui-kuboard.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/ui-okd.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/ui-rancher-01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/ui-rancher-02.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/ui-rancher-03.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/ui-weave.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/k8s/ui-webkubectl.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/kafka/kmui.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/kafka/ll.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/kafka/pskafka.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/kafka/pszk.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/lastnext.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/mgwiki-folder.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/mycat-floder.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/mysql-rownum.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/mysql-wr.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/qzone.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/raspberry/rasp1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/raspberry/rasp2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/raspberry/rasp3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/raspberry/rasp5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/sick/01.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/slf4j/logback.xml.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/slf4j/slf4j_framework.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/slf4j/use.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/solr-asyc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/solr-block.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/solr-mind.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/txy-inner/01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/txy-inner/02.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/txy-inner/03.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/txy-inner/04.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/txy-inner/05.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/txy-inner/06.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/txy-inner/07.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/weixinpay.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/images/xfire-spring-ct.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/img/alipay.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/img/biubiubiu.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/img/default-skin.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/img/forkme.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/img/gitee.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/img/preloader.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/img/scrollbar_arrow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/img/weixin.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/pr/index.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tags/index.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hugod.sh" beforeDir="false" afterPath="$PROJECT_DIR$/hugod.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -203,31 +19,35 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/hugod.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="1" column="24" lean-forward="true" selection-start-line="1" selection-start-column="24" selection-end-line="1" selection-end-column="24" />
+            <state>
+              <caret column="18" selection-start-column="18" selection-end-column="18" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/deploy-all.sh">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="38">
+              <caret line="2" column="24" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/autod.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="38">
-              <caret line="2" column="8" lean-forward="true" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
+              <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/refresh_pages.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="316">
-              <caret line="32" column="23" selection-start-line="32" selection-start-column="23" selection-end-line="32" selection-end-column="23" />
+            <state relative-caret-position="181">
+              <caret line="39" selection-start-line="39" selection-end-line="39" />
             </state>
           </provider>
         </entry>
@@ -258,9 +78,9 @@
         <option value="$PROJECT_DIR$/source/_posts/基于helm将芒果卡片部署到k8s.md" />
         <option value="$PROJECT_DIR$/themes/yilia2/_config.yml" />
         <option value="$PROJECT_DIR$/source/awaken/index.md" />
+        <option value="$PROJECT_DIR$/refresh_pages.py" />
         <option value="$PROJECT_DIR$/hugod.sh" />
         <option value="$PROJECT_DIR$/deploy-all.sh" />
-        <option value="$PROJECT_DIR$/refresh_pages.py" />
       </list>
     </option>
   </component>
@@ -298,7 +118,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1640445541381" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1640445620795" />
     <property name="editor.config.ad.shown" value="true" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
     <property name="js.eslint.eslintPackage" value="" />
@@ -458,12 +278,12 @@
       <workItem from="1630047049004" duration="2094000" />
       <workItem from="1632215849871" duration="3274000" />
       <workItem from="1633056933872" duration="3000" />
-      <workItem from="1640445004744" duration="396000" />
+      <workItem from="1640445004744" duration="474000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18666000" />
+    <option name="totallyTimeSpent" value="18744000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -484,7 +304,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.36259145" />
+      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.44827586" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
@@ -651,27 +471,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hugod.sh">
+    <entry file="file://$PROJECT_DIR$/refresh_pages.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="24" lean-forward="true" selection-start-line="1" selection-start-column="24" selection-end-line="1" selection-end-column="24" />
+        <state relative-caret-position="181">
+          <caret line="39" selection-start-line="39" selection-end-line="39" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/deploy-all.sh">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/autod.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
-          <caret line="2" column="8" lean-forward="true" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
+          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/refresh_pages.py">
+    <entry file="file://$PROJECT_DIR$/hugod.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="32" column="23" selection-start-line="32" selection-start-column="23" selection-end-line="32" selection-end-column="23" />
+        <state>
+          <caret column="18" selection-start-column="18" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/deploy-all.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="24" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
         </state>
       </provider>
     </entry>
