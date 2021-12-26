@@ -1,6 +1,6 @@
 ---
 title: "高吞吐量分布式消息系统kafka"
-categories: ["中间件","技术文章"]
+categories: ["技术文章"]
 tags: ["mq","kafka"]
 date: 2020-11-02 12:03:20
 draft: false
