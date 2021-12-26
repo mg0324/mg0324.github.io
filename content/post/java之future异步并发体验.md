@@ -8,7 +8,7 @@ draft: false
 
 > 废话不多说，直接上代码
 
-```java
+``` java
 package org.mango.demo;
 
 import cn.hutool.http.HttpUtil;

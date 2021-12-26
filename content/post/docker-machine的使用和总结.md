@@ -10,7 +10,6 @@ draft: false
 最近在整理博客内容，因为平时使用`docker`的时候，见到了三剑客中的`docker-machine`，也就开始使用了。虽然现在`docker-machine`已经被官方弃用，不再维护更新，但是个人觉得其隔离性还是很好用的。（`Docker Desktop` 是官方主要更新维护的项目）
 
 <img src="/mb/images/dm/01.png">
-<!-- more -->
 
 ## 认识和基本使用
 1. docker-machine 可以让你管理多个docker主机，能让你本地建立多个docker虚拟机，之前docker环境相互隔离。

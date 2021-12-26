@@ -14,12 +14,10 @@ tags: ["java","maven"]
 1. 流程 https://blog.csdn.net/qq_36838191/article/details/81027586
 2. 操作 https://www.cnblogs.com/newsea/p/11604171.html
 
-
-
 ## 几个地址
-*   工单管理：[https://issues.sonatype.org](https://issues.sonatype.org/)
-*   构件仓库 : [https://oss.sonatype.org/#welcome](https://oss.sonatype.org/#welcome)
-*   仓库镜像: [http://search.maven.org/](http://search.maven.org/)
+*   工单管理: [https://issues.sonatype.org](https://issues.sonatype.org/)
+*   构件仓库: [https://oss.sonatype.org/#welcome](https://oss.sonatype.org/#welcome)
+*   仓库镜像: [http://search.maven.org/](http://search.maven.org/)
 
 ## 发布流程
 1. 创建工单

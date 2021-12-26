@@ -13,7 +13,7 @@ draft: false
 顺便提一句，修改成分布式之后，请避免使用session这种单应用存储方式，不然会出现session的分布式共享问题。<br/>
 一般都是使用单点登录，或者搭建redis集群来做分布式应用的公共存储空间。<br/>
 </div>
-<!--more-->
+
 <img src="/mb/images/dubbo-dw.png"/>
 
 ## Dubbo架构设计图
