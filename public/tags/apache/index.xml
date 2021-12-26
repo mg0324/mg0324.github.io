@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>apache on 程序猫大刚</title><link>http://mg.meiflower.top/mb/tags/apache/</link><description>Recent content in apache on 程序猫大刚</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 04 Nov 2016 17:04:02 +0000</lastBuildDate><atom:link href="http://mg.meiflower.top/mb/tags/apache/index.xml" rel="self" type="application/rss+xml"/><item><title>mac上使用apache,http服务器</title><link>http://mg.meiflower.top/mb/post/mac%E4%B8%8A%E4%BD%BF%E7%94%A8apache-http%E6%9C%8D%E5%8A%A1%E5%99%A8/</link><pubDate>Fri, 04 Nov 2016 17:04:02 +0000</pubDate><guid>http://mg.meiflower.top/mb/post/mac%E4%B8%8A%E4%BD%BF%E7%94%A8apache-http%E6%9C%8D%E5%8A%A1%E5%99%A8/</guid><description>&lt;h2 id="安装apache服务器">安装Apache服务器&lt;/h2>
+&lt;pre>&lt;code>对于mac osx的系统，一般会预装好apache的httpd服务器的。
+所以只需要使用启动和停止命令来操作。
+如果没有安装httpd服务器，可以使用
+yum install httpd来安装（在centos下），
+apt-get install httpd（ubuntu下），
+brew install httpd（mac osx下先安装brew的包管理工具）
+sudo apachectl start - 启动httpd服务器
+sudo apachectl stop - 停止httpd服务器
+&lt;/code>&lt;/pre></description></item></channel></rss>
