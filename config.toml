@@ -45,9 +45,19 @@ disqusShortname = "mango-mb"  ## 是否开启disqus评论，不要和utteranc同
   url = "https://www.flysnow.org/"
 
 [[params.links]]
-  title = "Android Gradle权威指南"
-  name = "Android Gradle权威指南"
-  url = "http://yuedu.baidu.com/ebook/14a722970740be1e640e9a3e"
+  title = "闲心"
+  name = "闲心"
+  url = "http://sentsin.com/"
+
+[[params.links]]
+  title = "前端小武"
+  name = "前端小武"
+  url = "https://xuexb.com/"
+
+[[params.links]]
+  title = "大威"
+  name = "大威"
+  url = "http://blog.wayneww.top/"
 
 ## 侧边栏广告位
 ##[[params.ads]]
