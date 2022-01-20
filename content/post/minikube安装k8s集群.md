@@ -82,4 +82,4 @@ mango@mangodeMacBook-Pro ~ % minikube dashboard
 🎉 Opening http://127.0.0.1:61718/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/ in your default browser...
 ```
 
-<img src="/mb/images/k8s/dashboard.png">
+![](/mb/images/k8s/dashboard.png)

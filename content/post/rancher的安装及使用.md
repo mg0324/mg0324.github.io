@@ -12,7 +12,7 @@ draft: false
 
 备注：rancher是一家公司，同时也是其一款产品的名称，旗下还有k3s产品，longhorn等。
 
-<img src="/mb/images/k8s/rancher-01.png">
+![](/mb/images/k8s/rancher-01.png)
 
 ## rancher安装
 官方快速入门地址： https://www.rancher.cn/quick-start/
@@ -36,7 +36,7 @@ sudo docker run --privileged -d --restart=unless-stopped --name rancher --networ
 ***安装的是rancher:v2.6-head版本***
 1. 输入虚拟机IP访问，如 `https://192.168.64.4/`,
 
-<img src="/mb/images/k8s/rancher-02.png">
+![](/mb/images/k8s/rancher-02.png)
 
 2. 按照提示获取密码
 ``` bash
@@ -45,12 +45,12 @@ sudo docker logs rancher 2>&1 | grep "Bootstrap Password:"
 ```
 3. 设置密码
 
-<img src="/mb/images/k8s/rancher-03.png">
+![](/mb/images/k8s/rancher-03.png)
 
 4. 设置中文，虽然各个版本界面布局有变化，但大同小异，摸索一下自然就会用了。
 
-<img src="/mb/images/k8s/rancher-04.png">
+![](/mb/images/k8s/rancher-04.png)
 
 5. 应用市场，集成了各种helm仓库，能快速安装主流k8s应用。
 
-<img src="/mb/images/k8s/rancher-05.png">
+![](/mb/images/k8s/rancher-05.png)

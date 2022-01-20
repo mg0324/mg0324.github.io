@@ -19,7 +19,7 @@ Apache提供了全文检索引擎lucene，现已发展到6.2.X的版本。如果
 全文检索服务应用，对外提供全文检索相关接口，配置化索引建立，api提供给其他应用来访问
 全文检索服务。
 
-<img src="/mb/images/solr-mind.png" style="width:300px;"/>
+![](/mb/images/solr-mind.png)
 
 ### solr服务器搭建
 请参考:<a href="http://www.cnblogs.com/mangyang/p/5500852.html" target="_blank">http://www.cnblogs.com/mangyang/p/5500852.html</a>
@@ -31,13 +31,13 @@ Apache提供了全文检索引擎lucene，现已发展到6.2.X的版本。如果
 解决方式：
     配置定时器，周期性的更新索引。使用apache-solr-datascheduler-1.0.jar，参考 https://code.google.com/archive/p/solr-dataimport-scheduler/
 
-<img src="/mb/images/solr-asyc.png" style="width:600px;"/>
+![](/mb/images/solr-asyc.png)
 
 * 如何知道数据是来自哪个表的？
 解决方式：
     通过solr的cores来区分。
 
-<img src="/mb/images/solr-block.png" style="width:100px;"/>
+![](/mb/images/solr-block.png)
 
 * solr 查询语法：
 参考http://www.cnblogs.com/rainbowzc/p/4354224.html

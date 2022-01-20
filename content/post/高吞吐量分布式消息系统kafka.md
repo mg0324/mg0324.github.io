@@ -37,7 +37,7 @@ yum install -y java
 * kafka_2.13-2.4.0.tgz   -  kafka软件包
 * kafka-manager-2.0.0.2-done.zip   -  kafka-manager管理界面程序
 
-<img src="/mb/images/kafka/ll.png">
+![](/mb/images/kafka/ll.png)
 
 也可以到[官网地址](http://kafka.apache.org/downloads)下载
 
@@ -67,7 +67,7 @@ vi config/zookeeper.properties
 bin/zookeeper-server-start.sh -daemon config/zookeeper.properties
 ```
 
-<img src="/mb/images/kafka/pszk.png">
+![](/mb/images/kafka/pszk.png)
 
 ### 配置并启动kafka
 
@@ -90,7 +90,7 @@ vi config/server.properties
 JMX_PORT=9999 bin/kafka-server-start.sh -daemon config/server.properties
 ```
 
-<img src="/mb/images/kafka/pskafka.png">
+![](/mb/images/kafka/pskafka.png)
 
 ### 安装并启动kafka-manager
 
@@ -116,7 +116,7 @@ vi conf/application.conf
 # nohup bin/kafka-manager -Dhttp.port=9100 &
 ```
 
-<img src="/mb/images/kafka/kmui.png">
+![](/mb/images/kafka/kmui.png)
 
 
 详细请参考：[Kafka集群管理工具kafka-manager的安装使用](https://www.cnblogs.com/frankdeng/p/9584870.html)

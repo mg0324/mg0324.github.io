@@ -66,18 +66,18 @@ Helm的一般操作：
 详情请参考： https://helm.sh/zh/docs/helm/helm/
 ### 例子
 
-<img src="/mb/images/k8s/helm-charts.png">
+![](/mb/images/k8s/helm-charts.png)
 
 ## k9s
 k9s是一款k8s客户端管理工具，在kubectl基础上加强了命令行交互体验。
 Kubernetes CLI 以时尚的方式管理您的集群！
 
-<img src="/mb/images/k8s/k9s.png">
+![](/mb/images/k8s/k9s.png)
 
 ## 实际使用
 通过 `--kubeconfig` 来指定配置文件。
 ``` bash
 k9s --kubeconfig ~/.kube/k8s.yaml
 ```
-<img src="/mb/images/k8s/k9s-ui.png">
+![](/mb/images/k8s/k9s-ui.png)
 

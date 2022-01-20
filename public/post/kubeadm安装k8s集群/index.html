@@ -52,7 +52,8 @@ Docker version 20.10.7, build f0df350
 </code></pre></div><p>安装完成后，设置开机自启动 <code>kubelet</code></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>systemctl enable kubelet
 </code></pre></div><h2 id=开始安装k8s集群>开始安装k8s集群</h2><h3 id=master节点安装>master节点安装</h3><ul><li>在master机器上使用<code>kubeadm init</code>初始化集群
 其中使用阿里云的镜像仓库，不然下载镜像会很慢。</li></ul><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>kubeadm init --apiserver-advertise-address<span style=color:#f92672>=</span>172.31.1.100 --image-repository<span style=color:#f92672>=</span>registry.aliyuncs.com/google<span style=color:#ae81ff>\_</span>containers --pod-network-cidr<span style=color:#f92672>=</span>10.244.0.0/16 --kubernetes-version<span style=color:#f92672>=</span>v1.21.0
-</code></pre></div><p>当出现如下输出，说明初始化成功！</p><p>按要求执行第一个红框中的3条命令后，执行<code>kubectl get nodes</code></p><pre><code>[root@master ~]# kubectl get nodes
+</code></pre></div><p>当出现如下输出，说明初始化成功！
+<a data-fancybox=gallery href=/mb/images/k8s/kubeadm_init_1.png><img class=mx-auto alt src=/mb/images/k8s/kubeadm_init_1.png></a></p><p>按要求执行第一个红框中的3条命令后，执行<code>kubectl get nodes</code></p><pre><code>[root@master ~]# kubectl get nodes
 NAME     STATUS   ROLES                  AGE   VERSION
 master   NotReady    control-plane,master   13d   v1.21.1
 </code></pre><p>到这里master节点就部署完成了。（目前是单节点，master也能做集群，使其高可用）</p><p><strong>如果status是Not Ready，后面会安装网络组建，等几分钟就会变成Ready了</strong></p><h3 id=node1节点加入集群>node1节点加入集群</h3><ul><li>在node1节点上使用<code>kubeadm join</code>命令加入k8s集群</li></ul><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>kubeadm join 172.31.1.100:6443 --token 4ex7v0.micj5oc8pd9ldnj8 <span style=color:#ae81ff>\\</span>  

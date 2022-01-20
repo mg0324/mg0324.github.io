@@ -8,7 +8,8 @@ tags: ["mysql"]
 ## 问题场景
 
 	在内容发布系统中，都会有类似下图的需求。
-<img src="/mb/images/lastnext.png" style="height:50px;"/>
+	
+![](/mb/images/lastnext.png)
 
 ## 遇到的问题
 
@@ -29,7 +30,7 @@ tags: ["mysql"]
 
  截图查询如下：
  
-<img src="/mb/images/mysql-rownum.png"/>
+![](/mb/images/mysql-rownum.png)
 
 ## 基于mysql的rownum解决方案
 	

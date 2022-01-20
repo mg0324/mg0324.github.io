@@ -45,7 +45,7 @@ draft: false
 * 2.4.去 <a href="https://github.com/TevinLi/amWiki" target="_blank">amWiki</a> 下载amwiki的项目，
 按照amwiki的安装步骤得到目录结构，copy到mgwiki下，得到目录图为：
 
-<img src="/mb/images/mgwiki-folder.png" style="width:300px;margin-left:20px;"/>
+![](/mb/images/mgwiki-folder.png)
 
 * 2.5.将修改后的gh-pages上的文件，提交并上传到github上的mgwiki的gh-pages分支上。
 

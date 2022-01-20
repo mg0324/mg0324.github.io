@@ -69,7 +69,7 @@ jetty能跑，肯定代码是没有问题的。（不过没找到原因之前，
 
 >然后就搜到了这篇blog,http://www.iteye.com/problems/51892 终于看到了问题的所在。
 
-<img src="/mb/images/xfire-spring-ct.png" style="width:450px;"/>
+![](/mb/images/xfire-spring-ct.png)
 
 >终于意识到我也是在调一个webservice的时候加入了xfire的包，于是就去找解决xfire包的冲突问题。
 

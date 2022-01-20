@@ -103,7 +103,7 @@ systemctl enable kubelet
 kubeadm init --apiserver-advertise-address=172.31.1.100 --image-repository=registry.aliyuncs.com/google\_containers --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.21.0
 ```
 当出现如下输出，说明初始化成功！
-<img src="/mb/images/k8s/kubeadm_init_1.png">
+![](/mb/images/k8s/kubeadm_init_1.png)
 
 按要求执行第一个红框中的3条命令后，执行`kubectl get nodes`
 ```

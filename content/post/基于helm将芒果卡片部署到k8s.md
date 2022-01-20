@@ -35,13 +35,13 @@ draft: false
 
 ## 部署架构图
 
-<img src="/mb/images/k8s-card.png">
+![](/mb/images/k8s-card.png)
 
 ## 实际操作
 
 ### 构建helm3的Charts
 
-<img src="/mb/images/k8s-card-helm-dir.png">
+![](/mb/images/k8s-card-helm-dir.png)
 
 #### configmap.yaml  基于configmap管理springboot程序的配置文件
 
@@ -311,15 +311,15 @@ TEST SUITE: None
 
 ## 效果展示
 
-<img src="/mb/images/k8s-dashboard.png">
+![](/mb/images/k8s-dashboard.png)
 
-<img src="/mb/images/k8s-card-1.png" width="300px">
+![](/mb/images/k8s-card-1.png)
 
-<img src="/mb/images/k8s-card-2.jpeg" width="300px">
+![](/mb/images/k8s-card-2.jpeg)
 
-<img src="/mb/images/k8s-card-3.png" width="300px">
+![](/mb/images/k8s-card-3.png)
 
-<img src="/mb/images/k8s-card-4.png" width="300px">
+![](/mb/images/k8s-card-4.png)
 
 ## 总结
 

@@ -51,7 +51,7 @@ jetty能跑，肯定代码是没有问题的。（不过没找到原因之前，
 org.springframework.beans.factory.BeanDefinitionStoreException: Line 15 in XML document from URL [file:/D:/apache-tomcat-8.0.26-eclipse/wtpwebapps/zhongliu/WEB-INF/classes/spring-context.xml] is invalid; nested exception is org.xml.sax.SAXParseException: Document root element &quot;beans&quot;, must match DOCTYPE root &quot;null&quot;.
 org.xml.sax.SAXParseException; lineNumber: 15; columnNumber: 27; Document root element &quot;beans&quot;, must match DOCTYPE root &quot;null&quot;.
 	at org.apache.xerces.util.ErrorHandlerWrapper.createSAXParseException(Unknown Source)
-</code></pre><blockquote><p>然后就搜到了这篇blog,http://www.iteye.com/problems/51892 终于看到了问题的所在。</p></blockquote><blockquote><p>终于意识到我也是在调一个webservice的时候加入了xfire的包，于是就去找解决xfire包的冲突问题。</p></blockquote><pre><code>&lt;dependency&gt;
+</code></pre><blockquote><p>然后就搜到了这篇blog,http://www.iteye.com/problems/51892 终于看到了问题的所在。</p></blockquote><p><a data-fancybox=gallery href=/mb/images/xfire-spring-ct.png><img class=mx-auto alt src=/mb/images/xfire-spring-ct.png></a></p><blockquote><p>终于意识到我也是在调一个webservice的时候加入了xfire的包，于是就去找解决xfire包的冲突问题。</p></blockquote><pre><code>&lt;dependency&gt;
 	&lt;groupId&gt;org.codehaus.xfire&lt;/groupId&gt;
 	&lt;artifactId&gt;xfire-all&lt;/artifactId&gt;
 	&lt;version&gt;1.2.6&lt;ersion&gt;

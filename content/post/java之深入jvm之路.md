@@ -35,7 +35,7 @@ draft: false
 ![](/mb/images/jvm/jdk-art.jpg)
 # 2.仔细看一看jvm
 ## 2.1.jvm是什么
-<img src="/mb/images/jvm/jvm-art.png" width="700px">
+![](/mb/images/jvm/jvm-art.png)
 
 ## 2.2.类加载（class loader）
 ### 2.2.1.类加载
@@ -100,7 +100,7 @@ JVM拿到字节码二进制流后，会进过链接步骤，链接包含验证�
 
 #### 2.2.2.3.双亲委派模型       
 
-<img src="/mb/images/jvm/dobule-parent.jpg" width="500px"> 
+![](/mb/images/jvm/dobule-parent.jpg)
 
 如果一个类加载器收到了一个类加载请求，它不会自己去尝试加载这个类，而是把这个请求转交给父类加载器去完成。每一个层次的类加载器都是如此。因此所有的类加载请求都应该传递到最顶层的启动类加载器中，只有到父类加载器反馈自己无法完成这个加载请求（在它的搜索范围没有找到这个类）时，子类加载器才会尝试自己去加载。
 
@@ -243,7 +243,7 @@ Tomcat如何破坏双亲委派模型的呢？
 
 **每个Tomcat的webappClassLoader加载自己的目录下的class文件，不会传递给父类加载器。**
 
-<img src="/mb/images/jvm/tomcat-classloader.png" width="500px"> 
+![](/mb/images/jvm/tomcat-classloader.png) 
 
 事实上，tomcat之所以造了一堆自己的classloader，大致是出于下面三类目的：
 
@@ -255,7 +255,7 @@ Tomcat如何破坏双亲委派模型的呢？
 
 jvm运行时数据区主要包含 方法区、运行时常量池、栈、本地方法栈、程序计数器、堆、直接内存等。
 
-<img src="/mb/images/jvm/jvm-rda.png" width="600px">
+![](/mb/images/jvm/jvm-rda.png)
 
 ### 2.3.1.方法区(method area)
 
@@ -392,7 +392,7 @@ Java中的对象都链接在一个个根节点上，所以内存中会有许多�
 
 ### 3.3.1.标记-清除（Mark-Sweep）
 
-<img src="/mb/images/jvm/gc-mark-sweep.jpg" width="600px">
+![](/mb/images/jvm/gc-mark-sweep.jpg)
 
 先标记内存空间中的对象是否是垃圾，然后再清除掉。
 
@@ -404,7 +404,7 @@ Java中的对象都链接在一个个根节点上，所以内存中会有许多�
 
 ### 3.3.2.复制（Copying)
 
-<img src="/mb/images/jvm/gc-copying.jpg" width="600px">
+![](/mb/images/jvm/gc-copying.jpg)
 
 将内存空间划分为2块相等的空间，每次只用一块；下一次将存活的对象copy到另外一个部分，然后清除掉原来使用的部分。
 
@@ -412,7 +412,7 @@ Java中的对象都链接在一个个根节点上，所以内存中会有许多�
 
 ### 3.3.3.标记整理（Mark-Compact）
 
-<img src="/mb/images/jvm/gc-mark-compact.jpg" width="600px">
+![](/mb/images/jvm/gc-mark-compact.jpg" width="600px">
 
 为了解决Copying算法的缺陷，充分利用内存空间，提出了Mark-Compact算法。该算法标记阶段和Mark-Sweep一样，但是在完成标记之后，它不是直接清理可回收对象，而是将存活对象都向一端移动，然后清理掉端边界以外的内存。
 
@@ -420,7 +420,7 @@ Java中的对象都链接在一个个根节点上，所以内存中会有许多�
 
 ## 3.4.分代收集算法
 
-<img src="/mb/images/jvm/gc-generation.png" width="800px">
+![](/mb/images/jvm/gc-generation.png)
 
 分代收集算法其实是一种理论，不是实际的算法。是将堆按年龄分代分区域，主要分为年轻代和老年代；年轻代分为Eden区和Surivior区，Surivior区分为Form和To2个区域。
 
@@ -433,7 +433,7 @@ Java中的对象都链接在一个个根节点上，所以内存中会有许多�
 
 垃圾回收器是内存回收的具体实现，常见的垃圾回收器如下图。
 
-<img src="/mb/images/jvm/gc-list.png" width="600px">
+![](/mb/images/jvm/gc-list.png)
 
 **新生代收集器**：Serial、ParNew、Parallel Scavenge
 

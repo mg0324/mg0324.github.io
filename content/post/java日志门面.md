@@ -16,7 +16,7 @@ draft: false
 
 理解为是java应用程序里的日志门面或者是各种日志框架的抽象，其中常用的实现有`java.util.logging`,`logback`,`log4j`，目前主流的是`logback`。
 
-<img src="/mb/images/slf4j/slf4j_framework.png" width="50%">
+![](/mb/images/slf4j/slf4j_framework.png)
 
 ## 2.示例slf4j+logback
 

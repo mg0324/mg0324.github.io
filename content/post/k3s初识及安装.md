@@ -12,7 +12,7 @@ draft: false
 
 架构图：
 
-<img src="/mb/images/k8s/k3s.png">
+![](/mb/images/k8s/k3s.png)
 
 
 ## 优点

@@ -17,7 +17,7 @@
 <a data-fancybox=gallery href=http://blog.meiflower.top/images/github-pages-5.png><img class=mx-auto alt src=http://blog.meiflower.top/images/github-pages-5.png></a></p><ul><li><p>2.3.git clone 远程仓库上的gh-pages分支，github pages服务器访问的就是gh-pages上的文件，默认是index.html。
 所以接下来，我们就只需要修改mgwiki上的gh-pages分支的文件资源，这样就能够从<a href=https://mg0324.github.io/mgwiki>https://mg0324.github.io/mgwiki</a>看到不同的效果了。
 可参考：<a href=http://www.cnblogs.com/lijiayi/p/githubpages.html>http://www.cnblogs.com/lijiayi/p/githubpages.html</a></p></li><li><p>2.4.去 amWiki 下载amwiki的项目，
-按照amwiki的安装步骤得到目录结构，copy到mgwiki下，得到目录图为：</p></li></ul><ul><li>2.5.将修改后的gh-pages上的文件，提交并上传到github上的mgwiki的gh-pages分支上。</li></ul><p>命令分别是：<code>git add .</code> , <code>git commit -m'msg'</code> , <code>git push origin gh-pages</code> 。</p><p>实际日志：</p><pre><code>meigangdeMacBook-Pro:mgwiki meigang$ git add .
+按照amwiki的安装步骤得到目录结构，copy到mgwiki下，得到目录图为：</p></li></ul><p><a data-fancybox=gallery href=/mb/images/mgwiki-folder.png><img class=mx-auto alt src=/mb/images/mgwiki-folder.png></a></p><ul><li>2.5.将修改后的gh-pages上的文件，提交并上传到github上的mgwiki的gh-pages分支上。</li></ul><p>命令分别是：<code>git add .</code> , <code>git commit -m'msg'</code> , <code>git push origin gh-pages</code> 。</p><p>实际日志：</p><pre><code>meigangdeMacBook-Pro:mgwiki meigang$ git add .
 meigangdeMacBook-Pro:mgwiki meigang$ git commit -m&quot;添加github pages建立静态站点&quot;
 [gh-pages 019567c] 添加github pages建立静态站点
  9 files changed, 55 insertions(+), 2 deletions(-)

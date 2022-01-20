@@ -12,7 +12,7 @@ kubernetes是一个google开源的容器编排平台，从创建应用，应用�
 
 ### 架构图
 
-<img src="/mb/images/k8s/struct.png">
+![](/mb/images/k8s/struct.png)
 
 ### 特性（好处）
 * 自动化容器的部署和复制
@@ -23,7 +23,7 @@ kubernetes是一个google开源的容器编排平台，从创建应用，应用�
 
 
 ### 特性
-<img src="/mb/images/k8s/future.png">
+![](/mb/images/k8s/future.png)
 
 ## kubernetes相关工具说明
 * kubelet
@@ -36,5 +36,5 @@ kubernetes是一个google开源的容器编排平台，从创建应用，应用�
 * minikube 安装 - [交互式安装](https://kubernetes.io/zh/docs/tutorials/kubernetes-basics/create-cluster/cluster-interactive/)
 * kubeadm安装 - 见文章 kubeadm安装k8s集群
 
-<img src="/mb/images/k8s/method.png">
+![](/mb/images/k8s/method.png)
 

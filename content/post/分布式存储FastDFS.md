@@ -13,7 +13,7 @@ draft: false
 [fastdfs作者github](https://github.com/happyfish100)
 
 
-<img src="/mb/images/fastdfs/01.png">
+![](/mb/images/fastdfs/01.png)
 
 ### Tracker Server
 * 跟踪服务器，主要做调度工作，起到均衡的作用；
@@ -45,7 +45,7 @@ draft: false
 ### 应用资源安装表
 > 本文使用docker来安装部署fdfs集群的实践。
 
-<img src="/mb/images/fastdfs/02.png">
+![](/mb/images/fastdfs/02.png)
 
 
 |  服务器  |              运行进程               |  服务器ip  |     端口     |      备注      |
@@ -296,7 +296,7 @@ nobody      56    55  0 09:04 ?        00:00:00 nginx: worker process
 root        58     1  0 09:04 pts/0    00:00:00 grep --color=auto nginx
 ```
 
-<img src="/mb/images/fastdfs/03.png">
+![](/mb/images/fastdfs/03.png)
 
 ### 部署stroage2 + nginx
 请参考 [部署stroage1+nginx](#_部署stroage1 + nginx) 步骤操作即可
@@ -323,7 +323,7 @@ group1/M00/00/00/rBEABV6ql-6AUdwAAAAADh2Bnog662.txt
 ```
 4.测试nginx访问下载
 
-<img src="/mb/images/fastdfs/04.png">
+![](/mb/images/fastdfs/04.png)
 
 ## 参考文章
 * [FastDFS高可用集群架构配置搭建](https://www.cnblogs.com/sunnydou/p/49b92d511047f4f9da6cd727cfd415d5.html)

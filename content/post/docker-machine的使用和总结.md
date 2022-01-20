@@ -9,14 +9,14 @@ draft: false
 ## 因子
 最近在整理博客内容，因为平时使用`docker`的时候，见到了三剑客中的`docker-machine`，也就开始使用了。虽然现在`docker-machine`已经被官方弃用，不再维护更新，但是个人觉得其隔离性还是很好用的。（`Docker Desktop` 是官方主要更新维护的项目）
 
-<img src="/mb/images/dm/01.png">
+![](/mb/images/dm/01.png)
 
 ## 认识和基本使用
 1. docker-machine 可以让你管理多个docker主机，能让你本地建立多个docker虚拟机，之前docker环境相互隔离。
 2. 下载对应的二进制命令文件，加入到自己的命令库，就算是安装完成，删除则算是卸载完成。
 3. 将docker-machine命令取别名dm，熟练使用ls、stop、start、ssh等命令。
 
-<img src="/mb/images/dm/02.png">
+![](/mb/images/dm/02.png)
 
 4. 可以在自己的机器上安装多个docker-machine，一个做nginx的学习，一个做mysql的学习，相互之前不影响，然后利用vbox把端口上的服务映射出来。
 
@@ -68,11 +68,11 @@ CONTAINER ID        IMAGE                 COMMAND             CREATED           
 aa130cadc27a        portainer/portainer   "/portainer"        6 seconds ago       Up 6 seconds        0.0.0.0:8000->8000/tcp, 0.0.0.0:9000->9000/tcp   portainer
 ```
 3. 通过virtualbox的端口映射，将9000端口映射到宿主机
-<img src="/mb/images/dm/03.png">
+![](/mb/images/dm/03)
 
 4. 通过浏览器访问代理的端口，http://127.0.0.1:10001
-<img src="/mb/images/dm/04.png">
-<img src="/mb/images/dm/05.png">
+![](/mb/images/dm/04)
+![](/mb/images/dm/05)
 
 ## docker-machine vs multipass
 1. 面对的人员角度不同，`docker-machine`是面对`docker`容器环境的使用者，而`multipass`则是面对`ubuntu`操作系统环境的使用者。

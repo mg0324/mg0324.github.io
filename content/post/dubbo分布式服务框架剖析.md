@@ -14,11 +14,11 @@ draft: false
 一般都是使用单点登录，或者搭建redis集群来做分布式应用的公共存储空间。<br/>
 </div>
 
-<img src="/mb/images/dubbo-dw.png"/>
+![](/mb/images/dubbo-dw.png)
 
 ## Dubbo架构设计图
  
-<img src="/mb/images/dubbo-jg.png"/>
+![](/mb/images/dubbo-jg.png)
 
 ## Dubbo注册中心
 
@@ -35,18 +35,18 @@ draft: false
 	数据库服务么？其实，你仔细想想，dubbo的提供者，消费者的节点数据一样可以存储在redis中。
 	Redis一样支持分布式存储和集群，所以也是可以做为dubbo的注册中心的。
 
-<img src="/mb/images/dubbo-redis.png"/>
+![](/mb/images/dubbo-redis.png)
 
 	dubbo使用zookeeper做注册中心，在zookeeper上的节点存储情况。
 	使用的demo示例代码地址： 
 
 <a href="http://git.oschina.net/mgang/dubbo-demo">http://git.oschina.net/mgang/dubbo-demo</a>
 
-<img src="/mb/images/dubbo-zk.png" />
+![](/mb/images/dubbo-zk.png)
 
 * Dubbo使用redis做注册中心，在redis中的存储情况。
 
-<img src="/mb/images/dubbo-redis-zx.png" />
+![](/mb/images/dubbo-redis-zx.png)
 
 
 

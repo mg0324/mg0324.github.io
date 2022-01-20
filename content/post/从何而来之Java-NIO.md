@@ -13,7 +13,7 @@ IO其实分为文件IO和流IO，这里讨论的是流IO，也就是Socket的IO�
 
 ## 图解Java网络IO发展历程
 
-<img src="/mb/images/javanio/history.png">
+![](/mb/images/javanio/history.png)
 
 * 1996年1月发布`jdk1.0`版本，支持Java BIO的`Socket`编程。
 * *2001年1月`Linux`内核发布2.4版本，支持NIO，非阻塞IO。*
@@ -22,7 +22,7 @@ IO其实分为文件IO和流IO，这里讨论的是流IO，也就是Socket的IO�
 
 ## Java实现BIO（阻塞）
 
-<img src="/mb/images/javanio/bio-show.png">
+![](/mb/images/javanio/bio-show.png)
 
 ### SocketServerDemo 服务端
 
@@ -569,7 +569,7 @@ executorService.submit(new WorkThread(sc));
 
 ### 多路复用器版本
 
-<img src="/mb/images/javanio/nio-select-show.png">
+![](/mb/images/javanio/nio-select-show.png)
 
 `SelectNIOServerDemo` - 服务端
 
