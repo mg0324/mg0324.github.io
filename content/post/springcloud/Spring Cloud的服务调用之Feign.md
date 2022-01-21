@@ -1,5 +1,5 @@
 ---
-title: "SpringCloud的服务调用之Feign"
+title: "Spring Cloud的服务调用之Feign"
 date: 2022-01-21T22:51:51+08:00
 draft: false
 categories: ["技术文章","Spring Cloud"]
