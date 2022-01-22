@@ -1,30 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4cd572b5-8890-4094-a2a2-a91b55cc2463" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/content/post/docker-machine的使用和总结.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/docker-machine的使用和总结.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/dubbo分布式服务框架剖析.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/dubbo分布式服务框架剖析.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/github上使用pages来搭建静态网站.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/github上使用pages来搭建静态网站.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/java之深入jvm之路.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/java之深入jvm之路.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/java日志门面.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/java日志门面.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/k3s初识及安装.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/k3s初识及安装.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/k8s初识.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/k8s初识.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/k8s的web管理工具.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/k8s的web管理工具.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/k8s的命令行管理工具.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/k8s的命令行管理工具.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/kubeadm安装k8s集群.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/kubeadm安装k8s集群.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/minikube安装k8s集群.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/minikube安装k8s集群.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/mysql下的内容发布中文章的上一条和下一条解决方案.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/mysql下的内容发布中文章的上一条和下一条解决方案.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/rancher的安装及使用.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/rancher的安装及使用.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/sickday.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/sickday.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/xfire-1-2-6-jar和spring版本包冲突.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/xfire-1-2-6-jar和spring版本包冲突.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/从何而来之Java-NIO.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/从何而来之Java-NIO.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/分布式存储FastDFS.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/分布式存储FastDFS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/域名证书更新.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/域名证书更新.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/基于helm将芒果卡片部署到k8s.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/基于helm将芒果卡片部署到k8s.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/基于solr的全文检索解决方案.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/基于solr的全文检索解决方案.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/腾讯云主机组建内网.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/腾讯云主机组建内网.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/content/post/高吞吐量分布式消息系统kafka.md" beforeDir="false" afterPath="$PROJECT_DIR$/content/post/高吞吐量分布式消息系统kafka.md" afterDir="false" />
-    </list>
+    <list default="true" id="4cd572b5-8890-4094-a2a2-a91b55cc2463" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,8 +76,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config.toml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="358">
-              <caret line="56" column="16" lean-forward="true" selection-start-line="56" selection-start-column="16" selection-end-line="56" selection-end-column="16" />
+            <state relative-caret-position="377">
+              <caret line="57" column="14" selection-start-line="57" selection-start-column="14" selection-end-line="57" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -111,9 +88,11 @@
     <findStrings>
       <find>meigang</find>
       <find>style=&quot;width</find>
+      <find>/mb/images</find>
     </findStrings>
     <replaceStrings>
       <replace>)</replace>
+      <replace />
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -224,7 +203,7 @@
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1642693827730" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1642818334785" />
     <property name="editor.config.ad.shown" value="true" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
     <property name="js.eslint.eslintPackage" value="" />
@@ -386,7 +365,7 @@
       <workItem from="1633056933872" duration="3000" />
       <workItem from="1640445004744" duration="2416000" />
       <workItem from="1640704469668" duration="284000" />
-      <workItem from="1642692916437" duration="870000" />
+      <workItem from="1642692916437" duration="1736000" />
     </task>
     <task id="LOCAL-00001" summary="发布">
       <created>1640445688026</created>
@@ -399,10 +378,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22086000" />
+    <option name="totallyTimeSpent" value="22952000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25396827" />
       <window_info id="Structure" order="1" weight="0.25" />
@@ -547,8 +527,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config.toml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
-          <caret line="56" column="16" lean-forward="true" selection-start-line="56" selection-start-column="16" selection-end-line="56" selection-end-column="16" />
+        <state relative-caret-position="377">
+          <caret line="57" column="14" selection-start-line="57" selection-start-column="14" selection-end-line="57" selection-end-column="14" />
         </state>
       </provider>
     </entry>
