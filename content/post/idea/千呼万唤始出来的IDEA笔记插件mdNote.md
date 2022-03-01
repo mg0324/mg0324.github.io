@@ -10,6 +10,7 @@ tags: ["idea","idea plugin","md"]
 最近工作上在做IDEA插件开发的东西，所以需要深入学习。在网上看到一个比较好的例子，实现一个笔记插件，故实现后发布这篇博客，分享给同样在学习的你。
 
 （mdNote插件下载地址：https://mangomei.lanzouy.com/iWLPb00tn8vc）
+
 更多细节及实现欢迎下载源码学习：https://gitee.com/mgang/idea-demo/tree/master/md-note
 
 其实也可以按[第一个IDEA插件hello ide开发](%E7%AC%AC%E4%B8%80%E4%B8%AAIDEA%E6%8F%92%E4%BB%B6helloide%E5%BC%80%E5%8F%91.md)里提到的发布插件的方式，发布到官网插件仓库。
@@ -112,5 +113,6 @@ public class AddMdNoteAction extends AnAction {
 * 学习到如何使用`GUI form`的方式做布局
 * 学习到`JTable`做数据展示及清除
 * 学习到如何使用`FileChooser`做文件路径选择
+
 
 更多细节及实现欢迎下载源码学习：https://gitee.com/mgang/idea-demo/tree/master/md-note
