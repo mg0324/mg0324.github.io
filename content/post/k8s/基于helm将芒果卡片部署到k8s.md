@@ -1,7 +1,7 @@
 ---
 title: "基于helm将芒果卡片部署到k8s"
 date: 2021-08-27 14:54:10
-categories: ["技术文章"]
+categories: ["技术文章","k8s"]
 tags: ["k8s","helm"]
 draft: false
 ---
