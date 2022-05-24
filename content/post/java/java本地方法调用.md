@@ -6,7 +6,7 @@ categories: ["技术文章"]
 tags: ["java","jni"]
 ---
 
-## 引子
+# 引子
 ~~~
 Class.forName("com.msql.jdbc.Driver");
 ~~~
@@ -27,9 +27,9 @@ private static native Class<?> forName0(String name, boolean initialize,
 
 ![](/mb/images/java/jni/02.png)
 
-## 简单案例入门
-### 步骤
-1. 编写Java类，定义本地方法
+# 简单案例入门
+步骤
+## 1. 编写Java类，定义本地方法
 ~~~
 public class NativeTest {
     /**
@@ -49,7 +49,7 @@ public class NativeTest {
     }
 }
 ~~~
-2. 编译Java类，并生成c的头文件
+## 2. 编译Java类，并生成c的头文件
 ```
 javah -classpath /Users/mango/git/java-study/demo-case/target/classes -d ./cdll org.mango.demo._case.native2.NativeTest
 ```
@@ -78,7 +78,7 @@ JNIEXPORT jint JNICALL Java_org_mango_demo__1case_native2_NativeTest_add
 #endif
 
 ~~~
-3. 编写C语言实现本地方法
+## 3. 编写C语言实现本地方法
 使用C的IDE工具CLion创建C语言的共享库工厂c-dll。
 
 ![](/mb/images/java/jni/03.png)
@@ -103,7 +103,7 @@ JNIEXPORT jint JNICALL Java_org_mango_demo__1case_native2_NativeTest_add
 }
 
 ~~~
-4. 编译C语言程序得到共享库DLL文件
+## 4. 编译C语言程序得到共享库DLL文件
 点击菜单build工程得到共享库文件
 
 ![](/mb/images/java/jni/06.png)
@@ -112,7 +112,7 @@ JNIEXPORT jint JNICALL Java_org_mango_demo__1case_native2_NativeTest_add
 
 ![](/mb/images/java/jni/07.png)
 
-5. 链接加载DLL文件，在Java程序内调用本地方法
+## 5. 链接加载DLL文件，在Java程序内调用本地方法
 
 将动态库文件copy到java工程的resources下（classpath）
 
