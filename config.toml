@@ -77,7 +77,7 @@ summaryLength = 100
 [params.waline]
     enable = true
     placeholder = "说点什么吧..."
-    serverURL = "https://valine-an0x9ykcy-mg0324.vercel.app" #换成你的serverURL
+    serverURL = "https://valine-m1uexx7dk-mg0324.vercel.app" #换成你的serverURL
 
 
 ## 配置 utteranc评论,教程参考 https://utteranc.es/
