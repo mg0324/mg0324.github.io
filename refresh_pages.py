@@ -27,7 +27,7 @@ header = {
     'Sec-Fetch-Mode': 'cors',
     'Sec-Fetch-Site': 'same-origin',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.193 Safari/537.36',
-    'X-CSRF-Token': 'FSA/tZyZGEuVmklMlFeU065lgeuihhZA+1rbB3yEguMQmh8g2/ExOmiosE3XTJCHjWgVWMXiv1RFig+AyZvzxg==',
+    'X-CSRF-Token': 'Z05EF2kJRP2xwHMpkNQ+QaQfI+rAmdpG4yiYy7IhnzTiiUaO3TWbngZ6dViaiTG/yOGmrHEt2v1rmcrLVahI5w==',
     'X-Requested-With': 'XMLHttpRequest'
 }
 data = {'branch': 'hugo', 'build_directory': 'public','force_https': 'false','auto_update': 'false'}
