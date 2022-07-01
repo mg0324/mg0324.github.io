@@ -10,9 +10,9 @@ preserveTaxonomyNames = true
 disablePathToLower = true
 
 hasCJKLanguage = true
-summaryLength = 50
+summaryLength = 100
 
-disqusShortname = "mango-mb"  ## 是否开启disqus评论，不要和utteranc同时开启
+# disqusShortname = "mango-mb"  ## 是否开启disqus评论，不要和utteranc同时开启
 
 [author]
   name = "程序猫大刚"
@@ -27,6 +27,7 @@ disqusShortname = "mango-mb"  ## 是否开启disqus评论，不要和utteranc同
   localSearch = true # 启用本地搜索
   beian = "粤ICP备17082965号"
   fancybox = true
+  cdnJsSite = "cdn.bootcdn.net"
 
   # 这里我存放在了主题的static文件夹里，根目录的似乎也可以
   customCSS = ['douban.css', 'other.css']
@@ -73,6 +74,12 @@ disqusShortname = "mango-mb"  ## 是否开启disqus评论，不要和utteranc同
 ##  url = "https://www.aliyun.com/acts/limit-buy?userCode=jdg9oj97"
 ##  img = "https://img.alicdn.com/tfs/TB1hblJl7Y2gK0jSZFgXXc5OFXa-750-400.jpg"
 
+[params.waline]
+    enable = true
+    placeholder = "说点什么吧..."
+    serverURL = "https://valine-an0x9ykcy-mg0324.vercel.app" #换成你的serverURL
+
+
 ## 配置 utteranc评论,教程参考 https://utteranc.es/
 [params.utteranc]
   enable = false
@@ -87,69 +94,9 @@ disqusShortname = "mango-mb"  ## 是否开启disqus评论，不要和utteranc同
 
 ## 配置代码高亮
 [markup]
-  defaultMarkdownHandler = 'goldmark'
-  [markup.asciidocExt]
-    backend = 'html5'
-    extensions = []
-    failureLevel = 'fatal'
-    noHeaderOrFooter = true
-    preserveTOC = false
-    safeMode = 'unsafe'
-    sectionNumbers = false
-    trace = false
-    verbose = false
-    workingFolderCurrent = false
-    [markup.asciidocExt.attributes]
-  [markup.blackFriday]
-    angledQuotes = false
-    footnoteAnchorPrefix = ''
-    footnoteReturnLinkContents = ''
-    fractions = true
-    hrefTargetBlank = false
-    latexDashes = true
-    nofollowLinks = false
-    noreferrerLinks = false
-    plainIDAnchors = true
-    skipHTML = false
-    smartDashes = true
-    smartypants = true
-    smartypantsQuotesNBSP = false
-    taskLists = true
-  [markup.goldmark]
-    [markup.goldmark.extensions]
-      definitionList = true
-      footnote = true
-      linkify = true
-      strikethrough = true
-      table = true
-      taskList = true
-      typographer = true
-    [markup.goldmark.parser]
-      autoHeadingID = true
-      autoHeadingIDType = 'github'
-      [markup.goldmark.parser.attribute]
-        block = false
-        title = true
-    [markup.goldmark.renderer]
-      hardWraps = false
-      unsafe = false
-      xhtml = false
   [markup.highlight]
-    anchorLineNos = false
-    codeFences = true
-    guessSyntax = false
-    hl_Lines = ''
-    lineAnchors = ''
-    lineNoStart = 1
-    lineNos = false
-    lineNumbersInTable = true
-    noClasses = true
-    style = 'monokai'
-    tabWidth = 4
-  [markup.tableOfContents]
-    endLevel = 3
-    ordered = false
-    startLevel = 2
+    lineNos = true
+    style = "github"
 
 ## 配置网站菜单
 [menu]
