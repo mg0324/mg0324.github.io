@@ -38,4 +38,6 @@ tags: ["java","juc"]
 
 ![](/mb/images/juc/jmm/07.png)
 
+## 参考文档
+* 书籍：葛一鸣 *《Java高并发程序设计第二版》
 
