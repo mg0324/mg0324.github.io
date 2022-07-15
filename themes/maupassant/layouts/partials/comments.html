@@ -17,7 +17,7 @@
     {{ if .Site.Params.waline.enable }}
     <div id="waline"></div>
     <script src="//cdn.jsdelivr.net/npm/@waline/client"></script>
-    <script>
+    <script type="text/javascript">
         var isGithub = false;
         var herf = window.location.herf;
         if(href.indexOf("mg0324.github.io")!=-1){
@@ -28,10 +28,10 @@
             serverURL = '{{ .Site.Params.waline.serverURLGithub }}';
         }
         Waline({
-                el: '#waline',
-                serverURL: serverURL,
-                placeholder: '{{ .Site.Params.waline.placeholder }}',
-            });
+            el: '#waline',
+            serverURL: serverURL,
+            placeholder: '{{ .Site.Params.waline.placeholder }}'
+        });
     </script>
     {{ end }}
 {{- end }}
