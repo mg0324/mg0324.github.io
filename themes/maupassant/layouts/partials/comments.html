@@ -18,11 +18,20 @@
     <div id="waline"></div>
     <script src="//cdn.jsdelivr.net/npm/@waline/client"></script>
     <script>
+        var isGithub = false;
+        var herf = window.href.herf;
+        if(href.indexOf("mg0324.github.io")!=-1){
+            isGithub = true;
+        }
+        var serverURL = '{{ .Site.Params.waline.serverURL }}';
+        if(isGithub){
+            serverURL = '{{ .Site.Params.waline.serverURLGithub }}';
+        }
         Waline({
-            el: '#waline',
-            serverURL: '{{ .Site.Params.waline.serverURL }}',
-            placeholder: '{{ .Site.Params.waline.placeholder }}',
-        });
+                el: '#waline',
+                serverURL: serverURL,
+                placeholder: '{{ .Site.Params.waline.placeholder }}',
+            });
     </script>
     {{ end }}
 {{- end }}

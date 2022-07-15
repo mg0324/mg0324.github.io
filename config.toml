@@ -78,6 +78,7 @@ summaryLength = 100
     enable = true
     placeholder = "说点什么吧..."
     serverURL = "https://valine-m1uexx7dk-mg0324.vercel.app" #换成你的serverURL
+    serverURLGithub = "https://valine-mg0324.vercel.app/"
 
 
 ## 配置 utteranc评论,教程参考 https://utteranc.es/
