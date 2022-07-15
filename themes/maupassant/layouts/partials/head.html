@@ -61,9 +61,13 @@
     <script>
         var _hmt = _hmt || [];
         (function() {
-            alert(window.location.href)
+            var href = window.location.href;
+            var tjId = "da7002a3263e13123d3c44e6afe80dc8";
+            if(href.indexOf("mg0324.github.io")!=-1){
+                tjId = "87868e1c195a2ea2a4058f1fd978ffe2";
+            }
           var hm = document.createElement("script");
-          hm.src = "https://hm.baidu.com/hm.js?da7002a3263e13123d3c44e6afe80dc8";
+          hm.src = "https://hm.baidu.com/hm.js?"+tjId;
           var s = document.getElementsByTagName("script")[0]; 
           s.parentNode.insertBefore(hm, s);
         })();
