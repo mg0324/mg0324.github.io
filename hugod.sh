@@ -1,2 +1,2 @@
 hugo --gc --minify
-mv public docs
+mv public mb
