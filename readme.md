@@ -1,3 +1,8 @@
+# 双部署
+
+https://mg0324.github.io/mb
+http://mg.meiflower.top/mb
+
 # 关于
 博客基于hugo框架搭建
 
