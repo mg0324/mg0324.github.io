@@ -17,23 +17,21 @@
     {{ if .Site.Params.waline.enable }}
     <div id="waline"></div>
     <script src="//cdn.jsdelivr.net/npm/@waline/client"></script>
-    <script type="text/javascript">
-        (function(){
-            if(window.location.herf.indexOf('mg0324.github.io') != -1){
-                Waline({
-                    el: '#waline',
-                    serverURL: '{{ .Site.Params.waline.serverURLGithub }}',
-                    placeholder: '{{ .Site.Params.waline.placeholder }}'
-                });
-            }else{
-                Waline({
-                    el: '#waline',
-                    serverURL: '{{ .Site.Params.waline.serverURL }}',
-                    placeholder: '{{ .Site.Params.waline.placeholder }}'
-                });
-            }
-            
-        })();
+    <script>
+        alert(window.location.href)
+        if(window.location.herf.indexOf('mg0324.github.io') != -1){
+            Waline({
+                el: '#waline',
+                serverURL: '{{ .Site.Params.waline.serverURLGithub }}',
+                placeholder: '{{ .Site.Params.waline.placeholder }}'
+            });
+        }else{
+            Waline({
+                el: '#waline',
+                serverURL: '{{ .Site.Params.waline.serverURL }}',
+                placeholder: '{{ .Site.Params.waline.placeholder }}'
+            });
+        }
     </script>
     {{ end }}
 {{- end }}
