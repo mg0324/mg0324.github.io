@@ -1,4 +1,4 @@
-baseURL = "http://mg.meiflower.top/mb"
+baseURL = "/mb"
 languageCode = "zh-CN"
 title = "程序猫大刚"
 theme = "maupassant"

@@ -30,7 +30,7 @@ header = {
     'X-CSRF-Token': 'Z05EF2kJRP2xwHMpkNQ+QaQfI+rAmdpG4yiYy7IhnzTiiUaO3TWbngZ6dViaiTG/yOGmrHEt2v1rmcrLVahI5w==',
     'X-Requested-With': 'XMLHttpRequest'
 }
-data = {'branch': 'hugo', 'build_directory': 'public','force_https': 'false','auto_update': 'false'}
+data = {'branch': 'hugo', 'build_directory': 'mb','force_https': 'false','auto_update': 'false'}
 r = requests.post("https://gitee.com/mgang/mb/pages/rebuild",data,headers=header)
 #print(r.text)
 if r.status_code == 200:
