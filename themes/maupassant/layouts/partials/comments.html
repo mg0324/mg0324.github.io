@@ -17,16 +17,6 @@
     {{ if .Site.Params.waline.enable }}
     <div id="waline"></div>
     <script src="//cdn.jsdelivr.net/npm/@waline/client"></script>
-    {{ if .absURL indexOf 'mg0324.github.io'}}
-    <script>
-        Waline({
-            el: '#waline',
-            serverURL: '{{ .Site.Params.waline.serverURLGithub }}',
-            placeholder: '{{ .Site.Params.waline.placeholder }}'
-        });
-    </script>
-    {{ end }}
-    {{ if .absURL indexOf 'mg.meiflower.top'}}
     <script>
         Waline({
             el: '#waline',
@@ -34,6 +24,5 @@
             placeholder: '{{ .Site.Params.waline.placeholder }}'
         });
     </script>
-    {{ end }}
     {{ end }}
 {{- end }}
