@@ -77,8 +77,8 @@ summaryLength = 100
 [params.waline]
     enable = true
     placeholder = "说点什么吧..."
-    ## serverURL = "https://valine-m1uexx7dk-mg0324.vercel.app" #换成你的serverURL
-    serverURL = "https://valine-mg0324.vercel.app/"
+    serverURL = "https://valine-m1uexx7dk-mg0324.vercel.app" #换成你的serverURL mg.meiflower.top
+    ## serverURL = "https://valine-mg0324.vercel.app/" #github
 
 
 ## 配置 utteranc评论,教程参考 https://utteranc.es/
