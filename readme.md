@@ -1,9 +1,10 @@
-# 双部署
 
-https://mg0324.github.io/mb
-http://mg.meiflower.top/mb
+## 双部署
+[https://mg0324.github.io/mb](https://mg0324.github.io/mb)
 
-# 关于
+[http://mg.meiflower.top/mb](http://mg.meiflower.top/mb)
+
+## 关于
 博客基于hugo框架搭建
 
 ## 新建文章
