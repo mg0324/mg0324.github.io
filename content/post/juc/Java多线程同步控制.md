@@ -1,5 +1,5 @@
 ---
-title: "Java同步控制"
+title: "Java多线程同步控制"
 date: 2022-07-17T16:44:52+08:00
 draft: false
 categories: ["Java并发"]
