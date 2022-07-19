@@ -1,6 +1,6 @@
 ---
 title: "Java关键字volatile"
-date: 2022-07-19T23:21:09
+date: 2022-07-19T23:21:09+08:00
 categories: ["Java并发"]
 tags: ["java","juc"]
 draft: false
