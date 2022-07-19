@@ -1,6 +1,7 @@
 ---
-title: "Java关键字volatile"
-date: 2022-07-19T23:21:09+08:00
+title: "Java关键字之volatile"
+date: 2022-07-19T23:28:21+08:00
+draft: false
 categories: ["Java并发"]
 tags: ["java","juc"]
 draft: false
@@ -182,3 +183,5 @@ public class VolatileNoAtomicTest {
 * 网上文章：https://www.cnblogs.com/zhangxl1016/articles/16001715.html
 * 网上文章：https://blog.csdn.net/stackfuture/article/details/122252734
 * 网上文章：https://www.cnblogs.com/hbbbs/articles/12116286.html
+
+
