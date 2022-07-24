@@ -103,6 +103,11 @@ summaryLength = 100
 [menu]
 
   [[menu.main]]
+    identifier = "sp"
+    name = "学习路线"
+    url = "/sp/"
+    weight = 1
+  [[menu.main]]
     identifier = "archives"
     name = "归档"
     url = "/archives/"
