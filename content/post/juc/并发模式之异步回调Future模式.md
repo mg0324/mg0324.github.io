@@ -8,10 +8,10 @@ tags: ["java","juc"]
 
 ## Future模式（异步获取结果，自实现）
 传统串行流程如下：
-![](images/screenshot_1658934399592.png)
+![](/mb/images/juc/future/01.png)
 在获取数据时会阻塞等待，拿到数据后再执行其他的任务。
 而`Future`模式会立即返回一个凭证（`Future`），这时可以执行其他任务；等需要数据再通过前面的`Future`凭证获取数据即可，流程如下图：
-![](images/screenshot_1658934591907.png)
+![](/mb/images/juc/future/02.png)
 
 如下我们来自己实现一个简单的Future模式：
 首先分析设计如下对象：
@@ -117,7 +117,7 @@ public class Main {
 
 ## JDK中的Future模式
 如下图，是`JDK1.8`中封装的`Future`模式实现。(1.5就又引入了`Future`模式，1.8的功能更加强大，提供了`CompletableFuture`)
-![](images/screenshot_1658938711171.png)
+![](/mb/images/juc/future/03.png)
 其中：
 * `类MyCallable`实现的`Callable`接口的`call()`方法会返回真实的数据（类似于自实现Future模式中的数据接口`Data`的`getResult()`方法)
 * FutureTask类似于FutureData，都是用来当做异步调用里的立即返回的凭证
