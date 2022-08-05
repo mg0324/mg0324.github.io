@@ -26,6 +26,9 @@ tags: ["python"]
 ## 之后的尝试
 ![](/mb/images/booknote/python/04.png)
 
+## 电子版
+电子版：https://mangomei.lanzouy.com/iiC6H0923nud
+
 
 
 
