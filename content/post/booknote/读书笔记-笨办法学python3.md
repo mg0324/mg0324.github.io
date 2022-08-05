@@ -6,7 +6,7 @@ categories: ["读书笔记"]
 tags: ["python"]
 ---
 
-![](/mb/images/booknote/python3/01.png)
+![](/mb/images/booknote/python/01.png)
 ## 读后评价
 （书的分类、书的组织结构、书的收获）
 《笨办法学Python3》是一本适合Python3的初学者实用性书籍，以52个练习题为章节讲述了Python3的基础知识，包括基本语法、控制流程、列表、字典、元组、面向对象（类，模块）、异常、文件操作及语法规范等。读完此书，读者便可具备Python3的基本语法和编程知识，可以写一些简单的程序，也可以引入一些Python的模块做一些有意思的事情。
@@ -19,13 +19,13 @@ tags: ["python"]
 * 模块`module`是包含函数和变量的python文件，引入后使用`.`来访问对应的函数或变量。
 * 类和模块差不多，都是组织函数和变量的容器，引入后用`.`来访问容器内的元素；但是模块不能复用，类却是对象的复用模板。
 * 推荐项目的目录结构如下图：
-![](/mb/images/booknote/python3/02.png)
+![](/mb/images/booknote/python/02.png)
 
 ## 卡片训练
-![](/mb/images/booknote/python3/03.png)
+![](/mb/images/booknote/python/03.png)
 
 ## 之后的尝试
-![](/mb/images/booknote/python3/04.png)
+![](/mb/images/booknote/python/04.png)
 
 
 
