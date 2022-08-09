@@ -1,5 +1,5 @@
 ---
-title: "如何计算对象的大小"
+title: "如何计算Java对象的大小"
 date: 2022-08-09T18:11:01+08:00
 draft: false
 categories: ["JVM"]
