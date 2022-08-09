@@ -7,7 +7,7 @@
 阅读</span></span></div><div class=post-content><h2 id=对象的内存布局>对象的内存布局</h2><p>在HotSpot虚拟机中，对象的内存布局分为以下3个区域：</p><ul><li>对象头</li><li>实例数据</li><li>对齐填充
 <a data-fancybox=gallery href=/mb/images/jvm2/object/01.png><img class=mx-auto alt src=/mb/images/jvm2/object/01.png></a></li></ul><h3 id=对象头>对象头</h3><p>对象头包含Mark Word和类型指针2个部分。如果是数组对象，则有一部分存储数组的长度。
 Mark Word中存储：</p><ul><li>哈希吗（HashCode）</li><li>GC分代年龄</li><li>锁状态标志</li><li>线程持有的锁</li><li>偏向线程ID</li><li>偏向时间戳</li></ul><h3 id=类型指针>类型指针</h3><p>类型指针Klass存储该对象的类对象的内存地址，可以通过该指针知道对象是属于哪个类。</p><h3 id=实例数据>实例数据</h3><p>实例数据部分就是成员变量的值，其中包括父类成员变量和本类成员变量。</p><h3 id=对齐填充>对齐填充</h3><p>保证对象内存大小是8字节的倍数，不足的部分按填充对齐。</p><h2 id=对象的创建过程>对象的创建过程</h2><p><a data-fancybox=gallery href=/mb/images/jvm2/object/02.png><img class=mx-auto alt src=/mb/images/jvm2/object/02.png></a></p><ol><li>类加载检查
-先检查对象的类是否加载，没有加载则先加载类。（类加载完成后就能计算出对象的大小，请参考<a href=xxx>Java如何计算对象大小</a></li><li>内存分配
+先检查对象的类是否加载，没有加载则先加载类。（类加载完成后就能计算出对象的大小，请参考<a href=http://mg.meiflower.top/mb/post/jvm/%E5%A6%82%E4%BD%95%E8%AE%A1%E7%AE%97Java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%A7%E5%B0%8F/>Java如何计算Java对象大小</a></li><li>内存分配
 给对象分配内存，如果使用TLAB，则优先在TLAB空间分配，再在Eden区分配。如果内存规整则使用指针碰撞方式分配内存，不规整则使用空闲列表方式分配内存。</li></ol><ul><li>指针碰撞
 内存规整（说明垃圾回收采用的是标记整理算法），已使用内存和空闲内存分界线上放着一个指针左为分界指示器。只需要将指针移动往空闲内存一端移动对象大小的距离。</li><li>空闲列表
 内存不规整（说明垃圾回收采用的是标记清除算法，有碎片），那么VM必须维护一个列表，记录哪些内存是空闲可用的，分配时从空闲列表中找到一块足够大的内存给对象示例使用。</li></ul><ol start=3><li>初始化</li></ol><ul><li>设置零值
