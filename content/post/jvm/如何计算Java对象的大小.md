@@ -6,8 +6,8 @@ categories: ["JVM"]
 tags: ["java","jvm"]
 ---
 
-## 抛出问题
-1. 搞清楚Java对象的布局结构
+## 关键点
+1. Java对象的布局结构
 2. 借助`jol-core`包来打印对象
 3. 引用的指针压缩
 
