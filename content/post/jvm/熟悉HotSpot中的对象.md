@@ -74,5 +74,6 @@ HotSpot虚拟机采用直接指针的对象访问方式。
 
 ## 参考资料
 * 周志明 * 《深入理解Java虚拟机》
+* [Java 虚拟机底层原理知识总结](https://gitee.com/Doocs/jvm/blob/main/docs/02-hotspot-jvm-object.md)
 
 
