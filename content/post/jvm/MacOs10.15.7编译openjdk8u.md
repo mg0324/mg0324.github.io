@@ -1,5 +1,5 @@
 ---
-title: "MacOs10.15"
+title: "MacOs10.15.7编译openjdk8u"
 date: 2022-08-22T22:40:21+08:00
 draft: false
 categories: ["JVM"]
