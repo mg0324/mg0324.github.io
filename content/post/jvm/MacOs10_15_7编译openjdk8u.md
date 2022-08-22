@@ -6,12 +6,13 @@ categories: ["JVM"]
 tags: ["java","jvm"]
 ---
 
+# Mac10.15.7上编译OpenJDK8u
 ## 机器环境及依赖
-操作系统：`macOs 10.15.7`
-BootJDK:   `/Library/Java/JavaVirtualMachines/jdk1.8.0_221.jdk/Contents/Home`
-XCode：`Version 11.3.1 (11C505)`
-hg命令(mercurial): `brew install mercurial`
-freetype: `brew install freetype`
+* 操作系统：`macOs 10.15.7`
+* BootJDK:   `/Library/Java/JavaVirtualMachines/jdk1.8.0_221.jdk/Contents/Home`
+* XCode：`Version 11.3.1 (11C505)`
+* hg命令(mercurial): `brew install mercurial`
+* freetype: `brew install freetype`
 **注意：笔者先前打算编译jdk8，一番折腾后各种报错，最后选择jdk8u的版本。**
 ## 1.进入本机目录并下载源码
 如果有代理请设置代理，不然可能会超时或者慢。
@@ -426,5 +427,7 @@ OpenJDK 64-Bit Server VM (build 25.71-b00, mixed mode)
 
 ## 参考文档
 在编译过程中，可能会遇到各种各样的问题，这里就不标出来了。（因为不太懂C，要怎么解决也都是查资料尝试解决的。）
-> 参考地址：https://github.com/openjdk/jdk/tree/jdk8-b120
-> 参考博客：https://blog.csdn.net/lizhengjava/article/details/105629780/
+* 参考地址：https://github.com/openjdk/jdk/tree/jdk8-b120
+* 参考博客：https://blog.csdn.net/lizhengjava/article/details/105629780/
+
+
