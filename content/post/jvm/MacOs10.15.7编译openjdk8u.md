@@ -392,7 +392,7 @@ configuration. You *should* run 'make clean' to make sure you get a
 proper build. Failure to do so might result in strange build problems.
 ~~~
 
-## 5.检查配置通过后，编译make
+## 4.检查配置通过后，编译make
 执行make images命令，编译过程耗时比较久，请耐心等待。
 ```
 $ make images
@@ -415,7 +415,7 @@ Finished building OpenJDK for target 'images'
 ```
 看到如上输出后，说明编译镜像成功。会在build下有images的目录，如下图：
 ![](/mb/images/jvm2/jdk8u/01.png)
-## 测试
+## 5.测试
 进入到目录（因机器而已）：/Users/mango/git/openjdk8u/build/macosx-x86_64-normal-server-release/images/j2sdk-image/bin，后执行`java -version`。可以将`j2sdk-bundle`下的软件包copy到`/Library/Java/JavaVirtualMachines`下，在IDEA中配置使用。
 ```
 mango@mangodeMacBook-Pro bin % ./java -version
