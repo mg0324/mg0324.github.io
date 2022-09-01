@@ -1,0 +1,255 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><title>类加载器 | 程序猫大刚</title><meta property="og:title" content="类加载器 - 程序猫大刚"><meta property="og:type" content="article"><meta property="article:published_time" content="2022-09-01T18:21:53+08:00"><meta property="article:modified_time" content="2022-09-01T18:21:53+08:00"><meta name=Keywords content="mango,mango mei,梦来梦网,芒果笔记,程序猫,猫大刚"><meta name=description content="类加载器"><meta name=author content="程序猫大刚"><meta property="og:url" content="/mb/post/jvm/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/"><link rel="shortcut icon" href=/mb/favicon.ico type=image/x-icon><link rel=stylesheet href=/mb/css/normalize.css><link rel=stylesheet href=/mb/css/style.css><script type=text/javascript src=//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js></script><link href=https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css rel=stylesheet><link rel=stylesheet href=/mb/css/douban.css><link rel=stylesheet href=/mb/css/other.css><script>var _hmt=_hmt||[];(function(){var d=window.location.href,a="da7002a3263e13123d3c44e6afe80dc8",b,c;d.indexOf("mg0324.github.io")!=-1&&(a="87868e1c195a2ea2a4058f1fd978ffe2"),b=document.createElement("script"),b.src="https://hm.baidu.com/hm.js?"+a,c=document.getElementsByTagName("script")[0],c.parentNode.insertBefore(b,c)})()</script></head><body><header id=header class=clearfix><div class=container><div class=col-group><div class=site-name><a id=logo href=/mb>程序猫大刚</a><p class=description>记录点滴，回头思过往！</p><p class=description>不积跬步无以至千里，加油吧大刚！！！</p></div><div><nav id=nav-menu class=clearfix><a class=current href=/mb>首页</a>
+<a href=/mb/sp/ title=学习路线>学习路线</a>
+<a href=/mb/archives/ title=归档>归档</a>
+<a href=/mb/pr/ title=发布日记>发布日记</a>
+<a href=http://mg.meiflower.top title=关于>关于</a></nav></div></div></div></header><div id=body><div class=container><div class=col-group><div class=col-8 id=main><div class=res-cons><style type=text/css>.post-toc{position:fixed;width:200px;margin-left:-210px;padding:5px 10px;font-family:Athelas,STHeiti,Microsoft Yahei,serif;font-size:12px;border:1px solid rgba(0,0,0,7%);border-radius:5px;background-color:rgba(255,255,255,.98);background-clip:padding-box;-webkit-box-shadow:1px 1px 2px rgba(0,0,0,.125);box-shadow:1px 1px 2px rgba(0,0,0,.125);word-wrap:break-word;white-space:nowrap;-webkit-box-sizing:border-box;box-sizing:border-box;z-index:999;cursor:pointer;max-height:70%;overflow-y:auto;overflow-x:hidden}.post-toc .post-toc-title{width:100%;margin:0 auto;font-size:20px;font-weight:400;text-transform:uppercase;text-align:center}.post-toc .post-toc-content{font-size:15px}.post-toc .post-toc-content>nav>ul{margin:10px 0}.post-toc .post-toc-content ul{padding-left:20px;list-style:square;margin:.5em;line-height:1.8em}.post-toc .post-toc-content ul ul{padding-left:15px;display:none}@media print,screen and (max-width:1057px){.post-toc{display:none}}</style><div class=post-toc style=position:absolute;top:188px><h2 class=post-toc-title>文章目录</h2><div class=post-toc-content><nav id=TableOfContents><ul><li><a href=#定义>定义</a></li><li><a href=#类与类加载器>类与类加载器</a></li><li><a href=#双亲委派模型>双亲委派模型</a><ul><li><a href=#双亲委派模型的工作流程>双亲委派模型的工作流程</a></li></ul></li><li><a href=#破坏双亲委派>破坏双亲委派</a></li><li><a href=#参考资料>参考资料</a></li></ul></nav></div></div><script type=text/javascript>$(document).ready(function(){var a=$(".post-toc"),b,c,d;a.length&&(b=$("#main").offset().left,b<220&&a.css({width:b-10,"margin-left":0-b}),c=a.offset().top-20,d={start:{position:"absolute",top:c},process:{position:"fixed",top:20}},$(window).scroll(function(){var b=$(window).scrollTop();b<c?a.css(d.start):a.css(d.process)})),$("#TableOfContents").children().length<1&&$(".post-toc").remove()})</script><article class=post><header><h1 class=post-title>类加载器</h1></header><date class="post-meta meta-date">2022年9月1日</date><div class=post-meta><span>|</span>
+<span class=meta-category><a href=/mb/categories/JVM>JVM</a></span></div><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
+阅读</span></span></div><div class=post-content><h2 id=定义>定义</h2><p>Java虚拟机通过一个类的全限定名来获取类的二进制字节流的这个动作，放到虚拟机外部实现，让应用程序自己决定如何获取所需的类。
+实现这个动作的代码叫做类加载器。</p><h2 id=类与类加载器>类与类加载器</h2><ul><li>每个类加载器都有自己独立的类名称空间。</li><li>2个类相同的判定条件：相同的Class文件被同一个类加载器加载。
+如下是自定义类加载器示例：</li></ul><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#998;font-style:italic>/**
+</span><span style=color:#998;font-style:italic> * 类加载器测试
+</span><span style=color:#998;font-style:italic> * @Author: mango
+</span><span style=color:#998;font-style:italic> * @Date: 2022/6/19 11:09 上午
+</span><span style=color:#998;font-style:italic> */</span>
+<span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>ClassLoaderTest</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>main</span><span style=color:#000;font-weight:700>(</span>String<span style=color:#000;font-weight:700>[]</span> args<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>throws</span> ClassNotFoundException <span style=color:#000;font-weight:700>{</span>
+        ClassLoader classLoader <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> ClassLoader<span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>{</span>
+            <span style=color:#3c5d5d;font-weight:700>@Override</span>
+            <span style=color:#000;font-weight:700>public</span> Class<span style=color:#000;font-weight:700>&lt;?&gt;</span> loadClass<span style=color:#000;font-weight:700>(</span>String name<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>throws</span> ClassNotFoundException <span style=color:#000;font-weight:700>{</span>
+                String fileName <span style=color:#000;font-weight:700>=</span> name<span style=color:#000;font-weight:700>.</span><span style=color:teal>substring</span><span style=color:#000;font-weight:700>(</span>name<span style=color:#000;font-weight:700>.</span><span style=color:teal>lastIndexOf</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;.&#34;</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>+</span> 1<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>+</span> <span style=color:#d14>&#34;.class&#34;</span><span style=color:#000;font-weight:700>;</span>
+                InputStream is <span style=color:#000;font-weight:700>=</span> getClass<span style=color:#000;font-weight:700>().</span><span style=color:teal>getResourceAsStream</span><span style=color:#000;font-weight:700>(</span>fileName<span style=color:#000;font-weight:700>);</span>
+                <span style=color:#000;font-weight:700>if</span><span style=color:#000;font-weight:700>(</span>is <span style=color:#000;font-weight:700>==</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                    <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>super</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadClass</span><span style=color:#000;font-weight:700>(</span>name<span style=color:#000;font-weight:700>);</span>
+                <span style=color:#000;font-weight:700>}</span>
+                <span style=color:#000;font-weight:700>try</span> <span style=color:#000;font-weight:700>{</span>
+                    <span style=color:#458;font-weight:700>byte</span><span style=color:#000;font-weight:700>[]</span> b <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> <span style=color:#458;font-weight:700>byte</span><span style=color:#000;font-weight:700>[</span>is<span style=color:#000;font-weight:700>.</span><span style=color:teal>available</span><span style=color:#000;font-weight:700>()];</span>
+                    is<span style=color:#000;font-weight:700>.</span><span style=color:teal>read</span><span style=color:#000;font-weight:700>(</span>b<span style=color:#000;font-weight:700>);</span>
+                    <span style=color:#000;font-weight:700>return</span> defineClass<span style=color:#000;font-weight:700>(</span>name<span style=color:#000;font-weight:700>,</span>b<span style=color:#000;font-weight:700>,</span>0<span style=color:#000;font-weight:700>,</span>b<span style=color:#000;font-weight:700>.</span><span style=color:teal>length</span><span style=color:#000;font-weight:700>);</span>
+                <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>catch</span> <span style=color:#000;font-weight:700>(</span>IOException e<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                    <span style=color:#000;font-weight:700>throw</span> <span style=color:#000;font-weight:700>new</span> ClassNotFoundException<span style=color:#000;font-weight:700>(</span>name<span style=color:#000;font-weight:700>);</span>
+                <span style=color:#000;font-weight:700>}</span>
+            <span style=color:#000;font-weight:700>}</span>
+        <span style=color:#000;font-weight:700>};</span>
+        Object obj <span style=color:#000;font-weight:700>=</span> classLoader<span style=color:#000;font-weight:700>.</span><span style=color:teal>loadClass</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;org.mango.demo._case.classloading.ClassLoaderTest&#34;</span><span style=color:#000;font-weight:700>);</span>
+        System<span style=color:#000;font-weight:700>.</span><span style=color:teal>out</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>println</span><span style=color:#000;font-weight:700>(</span>obj<span style=color:#000;font-weight:700>);</span>
+        System<span style=color:#000;font-weight:700>.</span><span style=color:teal>out</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>println</span><span style=color:#000;font-weight:700>(</span>obj <span style=color:#000;font-weight:700>instanceof</span> org<span style=color:#000;font-weight:700>.</span><span style=color:teal>mango</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>demo</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>_case</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>classloading</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>ClassLoaderTest</span><span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>while</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>true</span><span style=color:#000;font-weight:700>){</span>
+            <span style=color:#000;font-weight:700>try</span> <span style=color:#000;font-weight:700>{</span>
+                Thread<span style=color:#000;font-weight:700>.</span><span style=color:teal>sleep</span><span style=color:#000;font-weight:700>(</span>3000<span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>catch</span> <span style=color:#000;font-weight:700>(</span>InterruptedException e<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                e<span style=color:#000;font-weight:700>.</span><span style=color:teal>printStackTrace</span><span style=color:#000;font-weight:700>();</span>
+            <span style=color:#000;font-weight:700>}</span>
+        <span style=color:#000;font-weight:700>}</span>
+    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+<span style=color:#998;font-style:italic>/**
+</span><span style=color:#998;font-style:italic> * 结果：2个类加载器加载的同一个类对象，是不相等的
+</span><span style=color:#998;font-style:italic> * class org.mango.demo._case.classloading.ClassLoaderTest
+</span><span style=color:#998;font-style:italic> * false
+</span><span style=color:#998;font-style:italic> */</span>
+</code></pre></td></tr></table></div></div><h2 id=双亲委派模型>双亲委派模型</h2><p>在JDK9之前，类加载组织结构如下图：</p><p><a data-fancybox=gallery href=/mb/images/jvm2/class-loader/01.png><img class=mx-auto alt src=/mb/images/jvm2/class-loader/01.png></a></p><p>类加载器之间的层次关系被称为类加载器的双亲委派模型，子加载器采用组合方式使用父加载器。</p><h3 id=双亲委派模型的工作流程>双亲委派模型的工作流程</h3><p>如果一个类加载器收到了类加载请求，先判断类是否已经被加载过，如果没有被加载会把请求委派给父加载器去完成，当父加载器无法完成加载时（它的搜索范围没有找到所需的类），子加载器才会尝试去完成加载。</p><p>以下是源码部分： <code>java.lang.ClassLoader的loadClass()方法</code></p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>protected</span> Class<span style=color:#000;font-weight:700>&lt;?&gt;</span> loadClass<span style=color:#000;font-weight:700>(</span>String name<span style=color:#000;font-weight:700>,</span> <span style=color:#458;font-weight:700>boolean</span> resolve<span style=color:#000;font-weight:700>)</span>
+    <span style=color:#000;font-weight:700>throws</span> ClassNotFoundException
+<span style=color:#000;font-weight:700>{</span>
+    <span style=color:#000;font-weight:700>synchronized</span> <span style=color:#000;font-weight:700>(</span>getClassLoadingLock<span style=color:#000;font-weight:700>(</span>name<span style=color:#000;font-weight:700>))</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#998;font-style:italic>// 先检查类是否已经被加载过
+</span><span style=color:#998;font-style:italic></span>        Class<span style=color:#000;font-weight:700>&lt;?&gt;</span> c <span style=color:#000;font-weight:700>=</span> findLoadedClass<span style=color:#000;font-weight:700>(</span>name<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>c <span style=color:#000;font-weight:700>==</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            <span style=color:#458;font-weight:700>long</span> t0 <span style=color:#000;font-weight:700>=</span> System<span style=color:#000;font-weight:700>.</span><span style=color:teal>nanoTime</span><span style=color:#000;font-weight:700>();</span>
+            <span style=color:#000;font-weight:700>try</span> <span style=color:#000;font-weight:700>{</span>
+                <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>parent <span style=color:#000;font-weight:700>!=</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                    <span style=color:#998;font-style:italic>// 调用父类加载器来加载
+</span><span style=color:#998;font-style:italic></span>                    c <span style=color:#000;font-weight:700>=</span> parent<span style=color:#000;font-weight:700>.</span><span style=color:teal>loadClass</span><span style=color:#000;font-weight:700>(</span>name<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>false</span><span style=color:#000;font-weight:700>);</span>
+                <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>else</span> <span style=color:#000;font-weight:700>{</span>
+                    <span style=color:#998;font-style:italic>// 如果父类加载器为空，则默认调用Bootstrap类加载器来加载
+</span><span style=color:#998;font-style:italic></span>                    c <span style=color:#000;font-weight:700>=</span> findBootstrapClassOrNull<span style=color:#000;font-weight:700>(</span>name<span style=color:#000;font-weight:700>);</span>
+                <span style=color:#000;font-weight:700>}</span>
+            <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>catch</span> <span style=color:#000;font-weight:700>(</span>ClassNotFoundException e<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                <span style=color:#998;font-style:italic>// ClassNotFoundException thrown if class not found
+</span><span style=color:#998;font-style:italic></span>                <span style=color:#998;font-style:italic>// from the non-null parent class loader
+</span><span style=color:#998;font-style:italic></span>            <span style=color:#000;font-weight:700>}</span>
+
+            <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>c <span style=color:#000;font-weight:700>==</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                <span style=color:#998;font-style:italic>// 没有找到，则调用自己类加载器来加载
+</span><span style=color:#998;font-style:italic></span>                <span style=color:#458;font-weight:700>long</span> t1 <span style=color:#000;font-weight:700>=</span> System<span style=color:#000;font-weight:700>.</span><span style=color:teal>nanoTime</span><span style=color:#000;font-weight:700>();</span>
+                c <span style=color:#000;font-weight:700>=</span> findClass<span style=color:#000;font-weight:700>(</span>name<span style=color:#000;font-weight:700>);</span>
+
+                <span style=color:#998;font-style:italic>// this is the defining class loader; record the stats
+</span><span style=color:#998;font-style:italic></span>                sun<span style=color:#000;font-weight:700>.</span><span style=color:teal>misc</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>PerfCounter</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getParentDelegationTime</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>addTime</span><span style=color:#000;font-weight:700>(</span>t1 <span style=color:#000;font-weight:700>-</span> t0<span style=color:#000;font-weight:700>);</span>
+                sun<span style=color:#000;font-weight:700>.</span><span style=color:teal>misc</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>PerfCounter</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getFindClassTime</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>addElapsedTimeFrom</span><span style=color:#000;font-weight:700>(</span>t1<span style=color:#000;font-weight:700>);</span>
+                sun<span style=color:#000;font-weight:700>.</span><span style=color:teal>misc</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>PerfCounter</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getFindClasses</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>increment</span><span style=color:#000;font-weight:700>();</span>
+            <span style=color:#000;font-weight:700>}</span>
+        <span style=color:#000;font-weight:700>}</span>
+        <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>resolve<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            resolveClass<span style=color:#000;font-weight:700>(</span>c<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>}</span>
+        <span style=color:#000;font-weight:700>return</span> c<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><h2 id=破坏双亲委派>破坏双亲委派</h2><ul><li><p>远古时代
+JDK1.2之后才引入了双亲委派模型，但是类加载器和和抽象类ClassLoader在第一个版本就存在，所以为了兼容1.2之前的用户自定义的类加载器，JDK1.2的ClassLoader种新增了protected的findClass方法，并引导用户编写类加载器时重新findClass而不是loadClass。因为loadClass方法里的逻辑就是双亲委派的逻辑实现。</p></li><li><p>JDNI服务时代
+双亲委派模型很好地解决了各个类加载器在加载基础类型的一致性问题，但是如果是基础类中需要调用用户类的代码呢？（典型场景就是JNDI服务）</p></li></ul><blockquote><p>JNDI已经是Java标志服务，它的代码由启动类加载器加载完成（JDK1.3中在rt.jar中），属于很基础的类型。但JNDI是为了对资源的管理和查找，它需要调用其他厂商实现并部署在用户Classpath下的JNDI服务提供者（Service Provider Interface）接口的代码。</p></blockquote><p>为了解决这个问题，Java设计团队引入了线程上下文类加载器（Context ClassLoader）。
+这个类加载器可以通过java.lang.Thread类的setContextClassLoader()方 法进行设置，如果创建线程时还未设置，它将会从父线程中继承一个，如果在应用程序的全局范围内 都没有设置过的话，那这个类加载器默认就是应用程序类加载器（Application ClassLoader）。</p><p>JNDI服务使用线程上下文类加载器取加载所需的SPI服务的代码，是在Bootstrap类加载器中调用了应用类加载器去加载用户类路径里的代码，打破了双亲委派。</p><p>其中JNDI、JDBC等涉及SPI的服务都是采用线程上下文方式处理的，到JDK6之后引入了<code>ServiceLoader</code>加上<code>META-INFO/services</code>中配置信息的方案完善SPI服务的加载。</p><ul><li>追求程序动态性时代
+如代码热替换（Hot Swap)、模块热部署（Moduel Deployment）等。
+IBM的OSGI实现了模块化热部署，对类加载机制做了改进。（Java9才推出了模块化，才算是稳住）</li></ul><p><a data-fancybox=gallery href=/mb/images/jvm2/class-loader/02.png><img class=mx-auto alt src=/mb/images/jvm2/class-loader/02.png></a></p><h2 id=参考资料>参考资料</h2><ul><li>周志明 * 《深入理解Java虚拟机》</li></ul></div><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89Java%E7%B1%BB%E6%96%87%E4%BB%B6class%E7%BB%93%E6%9E%84/>熟悉Java类文件class结构</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4/>熟悉JVM字节码指令</a></li><li><a href=/mb/post/jvm/MacOs10_15_7%E7%BC%96%E8%AF%91openjdk8u/>MacOs10.15.7编译openjdk8u</a></li><li><a href=/mb/post/jvm/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6%E7%AD%96%E7%95%A5/>内存分配与回收策略</a></li><li><a href=/mb/post/jvm/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95/>垃圾收集算法</a></li></ul></div><div class="post-meta meta-tags"><ul class=clearfix><li><a href=/mb/tags/java>java</a></li><li><a href=/mb/tags/jvm>jvm</a></li></ul></div></article><div id=waline></div><script src=//cdn.jsdelivr.net/npm/@waline/client></script><script>Waline({el:'#waline',serverURL:'https://valine-m1uexx7dk-mg0324.vercel.app',placeholder:'说点什么吧...'})</script></div><footer id=footer><div>&copy; 2022 <a href=/mb>程序猫大刚 By 程序猫大刚</a>
+| <a rel=nofollow target=_blank href=http://beian.miit.gov.cn/>粤ICP备17082965号</a></div><br><div><div class=github-badge><a href=https://gohugo.io/ target=_black rel=nofollow><span class=badge-subject>Powered by</span><span class="badge-value bg-blue">Hugo</span></a></div><div class=github-badge><a href=https://www.flysnow.org/ target=_black><span class=badge-subject>Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a></div><div class=github-badge><a href=https://github.com/flysnow-org/maupassant-hugo target=_black><span class=badge-subject>Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a></div></div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[['$','$']],processEscapes:!0}}</script><script src="//cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script src=//cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js></script><a id=rocket href=#top></a><script type=text/javascript src="/mb/js/totop.js?v=0.0.0" async></script><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script><script src=/mb/js/douban.js></script></div><div id=secondary><section class=widget><form id=search action=/mb/search method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
+<input type=hidden name=sitesearch value=/mb>
+<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=/mb/post/jvm/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/ title=类加载器>类加载器</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89Java%E7%B1%BB%E6%96%87%E4%BB%B6class%E7%BB%93%E6%9E%84/ title=熟悉Java类文件class结构>熟悉Java类文件class结构</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4/ title=熟悉JVM字节码指令>熟悉JVM字节码指令</a></li><li><a href=/mb/post/jvm/MacOs10_15_7%E7%BC%96%E8%AF%91openjdk8u/ title=MacOs10.15.7编译openjdk8u>MacOs10.15.7编译openjdk8u</a></li><li><a href=/mb/post/jvm/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6%E7%AD%96%E7%95%A5/ title=内存分配与回收策略>内存分配与回收策略</a></li><li><a href=/mb/post/jvm/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95/ title=垃圾收集算法>垃圾收集算法</a></li><li><a href=/mb/post/jvm/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/ title=虚拟机相关工具>虚拟机相关工具</a></li><li><a href=/mb/post/idea/IDEA%E7%9A%84%E5%90%AF%E5%8A%A8%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/ title=IDEA的启动速度优化>IDEA的启动速度优化</a></li><li><a href=/mb/post/jvm/%E5%9B%9E%E6%94%B6%E5%A0%86%E5%92%8C%E6%96%B9%E6%B3%95%E5%8C%BA%E4%B8%AD%E5%AF%B9%E8%B1%A1/ title=回收堆和方法区中对象>回收堆和方法区中对象</a></li><li><a href=/mb/post/jvm/Java%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2/ title=Java发展历史>Java发展历史</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/categories/>分类</a></h3><ul class=widget-list><li><a href=/mb/categories/JVM/>JVM (13)</a></li><li><a href=/mb/categories/Java%E5%B9%B6%E5%8F%91/>Java并发 (11)</a></li><li><a href=/mb/categories/Spring-Cloud/>Spring Cloud (15)</a></li><li><a href=/mb/categories/idea/>idea (3)</a></li><li><a href=/mb/categories/k8s/>k8s (9)</a></li><li><a href=/mb/categories/%E6%80%9D%E6%83%B3%E8%BF%9B%E5%8C%96/>思想进化 (1)</a></li><li><a href=/mb/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/>技术文章 (62)</a></li><li><a href=/mb/categories/%E7%94%9F%E6%B4%BB%E7%9B%B8%E5%85%B3/>生活相关 (3)</a></li><li><a href=/mb/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/>读书笔记 (2)</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/tags/>标签</a></h3><div class=tagcloud><a href=/mb/tags/Spring-Cloud/>Spring Cloud</a>
+<a href=/mb/tags/alisql/>alisql</a>
+<a href=/mb/tags/apache/>apache</a>
+<a href=/mb/tags/commonjs/>commonjs</a>
+<a href=/mb/tags/docker/>docker</a>
+<a href=/mb/tags/docker-machine/>docker-machine</a>
+<a href=/mb/tags/dubbo/>dubbo</a>
+<a href=/mb/tags/es6/>es6</a>
+<a href=/mb/tags/fastdfs/>fastdfs</a>
+<a href=/mb/tags/forkjoin/>forkjoin</a>
+<a href=/mb/tags/frp/>frp</a>
+<a href=/mb/tags/futrue/>futrue</a>
+<a href=/mb/tags/gc/>gc</a>
+<a href=/mb/tags/github/>github</a>
+<a href=/mb/tags/github-pages/>github pages</a>
+<a href=/mb/tags/helm/>helm</a>
+<a href=/mb/tags/httpd/>httpd</a>
+<a href=/mb/tags/idea/>idea</a>
+<a href=/mb/tags/idea-plugin/>idea plugin</a>
+<a href=/mb/tags/java/>java</a>
+<a href=/mb/tags/jdk/>jdk</a>
+<a href=/mb/tags/jni/>jni</a>
+<a href=/mb/tags/juc/>juc</a>
+<a href=/mb/tags/jvm/>jvm</a>
+<a href=/mb/tags/k3s/>k3s</a>
+<a href=/mb/tags/k8s/>k8s</a>
+<a href=/mb/tags/k9s/>k9s</a>
+<a href=/mb/tags/kafka/>kafka</a>
+<a href=/mb/tags/kubeadm/>kubeadm</a>
+<a href=/mb/tags/kubectl/>kubectl</a>
+<a href=/mb/tags/logback/>logback</a>
+<a href=/mb/tags/logging/>logging</a>
+<a href=/mb/tags/maven/>maven</a>
+<a href=/mb/tags/md/>md</a>
+<a href=/mb/tags/minikube/>minikube</a>
+<a href=/mb/tags/mq/>mq</a>
+<a href=/mb/tags/multipass/>multipass</a>
+<a href=/mb/tags/mybatis/>mybatis</a>
+<a href=/mb/tags/mycat/>mycat</a>
+<a href=/mb/tags/mysql/>mysql</a>
+<a href=/mb/tags/nginx/>nginx</a>
+<a href=/mb/tags/nio/>nio</a>
+<a href=/mb/tags/python/>python</a>
+<a href=/mb/tags/rancher/>rancher</a>
+<a href=/mb/tags/raspberry/>raspberry</a>
+<a href=/mb/tags/react/>react</a>
+<a href=/mb/tags/redis/>redis</a>
+<a href=/mb/tags/slf4j/>slf4j</a>
+<a href=/mb/tags/solr/>solr</a>
+<a href=/mb/tags/springboot/>springboot</a>
+<a href=/mb/tags/tomcat/>tomcat</a>
+<a href=/mb/tags/webui/>webui</a>
+<a href=/mb/tags/zookeeper/>zookeeper</a>
+<a href=/mb/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/>云原生</a>
+<a href=/mb/tags/%E4%BC%98%E5%8C%96/>优化</a>
+<a href=/mb/tags/%E5%81%A5%E5%BA%B7/>健康</a>
+<a href=/mb/tags/%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2/>全文检索</a>
+<a href=/mb/tags/%E5%86%85%E7%BD%91/>内网</a>
+<a href=/mb/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/>内网穿透</a>
+<a href=/mb/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8/>分布式存储</a>
+<a href=/mb/tags/%E5%8C%85%E5%86%B2%E7%AA%81/>包冲突</a>
+<a href=/mb/tags/%E5%8D%95%E4%BE%8B/>单例</a>
+<a href=/mb/tags/%E5%9F%9F%E5%90%8D/>域名</a>
+<a href=/mb/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/>并发编程</a>
+<a href=/mb/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/>异常处理</a>
+<a href=/mb/tags/%E5%BC%82%E6%AD%A5/>异步</a>
+<a href=/mb/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/>微服务</a>
+<a href=/mb/tags/%E6%80%A7%E8%83%BD/>性能</a>
+<a href=/mb/tags/%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4/>文件删除</a>
+<a href=/mb/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/>方法论</a>
+<a href=/mb/tags/%E6%97%A5%E5%BF%97%E5%A4%84%E7%90%86/>日志处理</a>
+<a href=/mb/tags/%E6%9E%B6%E6%9E%84/>架构</a>
+<a href=/mb/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/>源码编译</a>
+<a href=/mb/tags/%E7%A6%81%E7%A2%98/>禁碘</a>
+<a href=/mb/tags/%E8%85%BE%E8%AE%AF%E4%BA%91/>腾讯云</a>
+<a href=/mb/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/>解决方案</a>
+<a href=/mb/tags/%E8%AF%81%E4%B9%A6/>证书</a>
+<a href=/mb/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/>读写分离</a>
+<a href=/mb/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/>负载均衡</a>
+<a href=/mb/tags/%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F/>部署方式</a>
+<a href=/mb/tags/%E9%98%85%E8%AF%BB/>阅读</a></div></section><section class=widget><h3 class=widget-title>友情链接</h3><ul class=widget-list><li><a target=_blank href=https://www.flysnow.org/ title=飞雪无情的博客>飞雪无情的博客</a></li><li><a target=_blank href=http://sentsin.com/ title=闲心>闲心</a></li><li><a target=_blank href=https://xuexb.com/ title=前端小武>前端小武</a></li><li><a target=_blank href=http://blog.wayneww.top/ title=大威>大威</a></li></ul></section><section class=widget><h3 class=widget-title>其它</h3><ul class=widget-list><li><a href=/mb/index.xml>文章 RSS</a></li></ul></section></div></div></div></div></body></html>
