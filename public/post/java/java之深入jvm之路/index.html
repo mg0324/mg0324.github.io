@@ -1,0 +1,325 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><title>java之深入jvm之路 | 程序猫大刚</title><meta property="og:title" content="java之深入jvm之路 - 程序猫大刚"><meta property="og:type" content="article"><meta property="article:published_time" content="2019-12-14T14:45:07+08:00"><meta property="article:modified_time" content="2019-12-14T14:45:07+08:00"><meta name=Keywords content="mango,mango mei,梦来梦网,芒果笔记,程序猫,猫大刚"><meta name=description content="java之深入jvm之路"><meta name=author content="程序猫大刚"><meta property="og:url" content="/mb/post/java/java%E4%B9%8B%E6%B7%B1%E5%85%A5jvm%E4%B9%8B%E8%B7%AF/"><link rel="shortcut icon" href=/mb/favicon.ico type=image/x-icon><link rel=stylesheet href=/mb/css/normalize.css><link rel=stylesheet href=/mb/css/style.css><script type=text/javascript src=//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js></script><link href=https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css rel=stylesheet><link rel=stylesheet href=/mb/css/douban.css><link rel=stylesheet href=/mb/css/other.css><script>var _hmt=_hmt||[];(function(){var d=window.location.href,a="da7002a3263e13123d3c44e6afe80dc8",b,c;d.indexOf("mg0324.github.io")!=-1&&(a="87868e1c195a2ea2a4058f1fd978ffe2"),b=document.createElement("script"),b.src="https://hm.baidu.com/hm.js?"+a,c=document.getElementsByTagName("script")[0],c.parentNode.insertBefore(b,c)})()</script></head><body><header id=header class=clearfix><div class=container><div class=col-group><div class=site-name><a id=logo href=/mb>程序猫大刚</a><p class=description>记录点滴，回头思过往！</p><p class=description>不积跬步无以至千里，加油吧大刚！！！</p></div><div><nav id=nav-menu class=clearfix><a class=current href=/mb>首页</a>
+<a href=/mb/sp/ title=学习路线>学习路线</a>
+<a href=/mb/archives/ title=归档>归档</a>
+<a href=/mb/pr/ title=发布日记>发布日记</a>
+<a href=http://mg.meiflower.top title=关于>关于</a></nav></div></div></div></header><div id=body><div class=container><div class=col-group><div class=col-8 id=main><div class=res-cons><style type=text/css>.post-toc{position:fixed;width:200px;margin-left:-210px;padding:5px 10px;font-family:Athelas,STHeiti,Microsoft Yahei,serif;font-size:12px;border:1px solid rgba(0,0,0,7%);border-radius:5px;background-color:rgba(255,255,255,.98);background-clip:padding-box;-webkit-box-shadow:1px 1px 2px rgba(0,0,0,.125);box-shadow:1px 1px 2px rgba(0,0,0,.125);word-wrap:break-word;white-space:nowrap;-webkit-box-sizing:border-box;box-sizing:border-box;z-index:999;cursor:pointer;max-height:70%;overflow-y:auto;overflow-x:hidden}.post-toc .post-toc-title{width:100%;margin:0 auto;font-size:20px;font-weight:400;text-transform:uppercase;text-align:center}.post-toc .post-toc-content{font-size:15px}.post-toc .post-toc-content>nav>ul{margin:10px 0}.post-toc .post-toc-content ul{padding-left:20px;list-style:square;margin:.5em;line-height:1.8em}.post-toc .post-toc-content ul ul{padding-left:15px;display:none}@media print,screen and (max-width:1057px){.post-toc{display:none}}</style><div class=post-toc style=position:absolute;top:188px><h2 class=post-toc-title>文章目录</h2><div class=post-toc-content><nav id=TableOfContents><ul><li><a href=#11java发展历史>1.1.java发展历史</a></li><li><a href=#12java体系结构>1.2.java体系结构</a></li></ul><ul><li><a href=#21jvm是什么>2.1.jvm是什么</a></li><li><a href=#22类加载class-loader>2.2.类加载（class loader）</a><ul><li><a href=#221类加载>2.2.1.类加载</a></li><li><a href=#222类加载器>2.2.2.类加载器</a></li></ul></li><li><a href=#23运行时数据区runtime-data-area>2.3.运行时数据区（runtime data area)</a><ul><li><a href=#231方法区method-area>2.3.1.方法区(method area)</a></li><li><a href=#232运行时常量池runtime-constant-pool>2.3.2.运行时常量池（Runtime Constant Pool）</a></li><li><a href=#233jvm栈jvm-stack>2.3.3.jvm栈(jvm stack)</a></li><li><a href=#234本地方法栈native-method-stack>2.3.4.本地方法栈(native method stack)</a></li><li><a href=#235程序计数器program-counter-register>2.3.5.程序计数器(program counter register)</a></li><li><a href=#236堆heap>2.3.6.堆（heap）</a></li><li><a href=#237直接内存direct-memory>2.3.7.直接内存（Direct Memory）</a></li></ul></li><li><a href=#24执行子系统execution-engine>2.4.执行子系统(execution engine)</a></li></ul><ul><li><a href=#31什么是垃圾回收>3.1.什么是垃圾回收</a></li><li><a href=#32如何定位垃圾>3.2.如何定位垃圾</a><ul><li><a href=#321引用计数算法reference-counting>3.2.1.引用计数算法(reference-counting)</a></li><li><a href=#322可达性算法gc-root-tracing>3.2.2.可达性算法(GC Root Tracing)</a></li></ul></li><li><a href=#33垃圾回收算法>3.3.垃圾回收算法</a><ul><li><a href=#331标记-清除mark-sweep>3.3.1.标记-清除（Mark-Sweep）</a></li><li><a href=#332复制copying>3.3.2.复制（Copying)</a></li><li><a href=#333标记整理mark-compact>3.3.3.标记整理（Mark-Compact）</a></li></ul></li><li><a href=#34分代收集算法>3.4.分代收集算法</a></li><li><a href=#35常见的gc回收器>3.5.常见的GC回收器</a><ul><li><a href=#351jdk各版本默认垃圾回收器>3.5.1.jdk各版本默认垃圾回收器</a></li></ul></li></ul></nav></div></div><script type=text/javascript>$(document).ready(function(){var a=$(".post-toc"),b,c,d;a.length&&(b=$("#main").offset().left,b<220&&a.css({width:b-10,"margin-left":0-b}),c=a.offset().top-20,d={start:{position:"absolute",top:c},process:{position:"fixed",top:20}},$(window).scroll(function(){var b=$(window).scrollTop();b<c?a.css(d.start):a.css(d.process)})),$("#TableOfContents").children().length<1&&$(".post-toc").remove()})</script><article class=post><header><h1 class=post-title>java之深入jvm之路</h1></header><date class="post-meta meta-date">2019年12月14日</date><div class=post-meta><span>|</span>
+<span class=meta-category><a href=/mb/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0>技术文章</a></span></div><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
+阅读</span></span></div><div class=post-content><h1 id=1仔细看一看java>1.仔细看一看java</h1><h2 id=11java发展历史>1.1.java发展历史</h2><p><a data-fancybox=gallery href=/mb/images/jvm/java-develop-time.png><img class=mx-auto alt src=/mb/images/jvm/java-develop-time.png></a></p><ul><li><p>1995年5月23 Oak语言更名为Java</p></li><li><p>1996年1月23 JDK 1.0发布</p></li><li><p>1997年2月19日JDK 1.1发布</p><blockquote><p>技术代表：JDBC，JAR文件格式，JavaBeans，RMI。</p></blockquote></li><li><p>1998年12月4日里程碑版本 JDK1.2</p><blockquote><p>技术体系拆分为面向桌面级应用开发的J2SE、面向企业级应用开发的J2EE、面向手机等移动端开发的J2ME；这本版本的 Java虚拟机第一内置了JIT（编译器）。</p></blockquote></li><li><p>1999年4月27HotSpot虚拟机发布</p><blockquote><p>HotSpot最初是一家小公司开发，由于其优秀的 表现，这家公司在1997年被sun公司收购，HotSpot虚拟机发布时是作为Java1.2的附加程序提供的，后来它成为了JDK1.3以及之后的所有版本的Sun JDK的默认虚拟机。</p></blockquote></li><li><p>2004年9月30日  JDK1.5发布</p><blockquote><p>工程代号Tiger，在语法易用性上做了很大的改进，例如：自动装箱，泛型，枚举，可变参数，遍历循环（foreach循环）等。</p></blockquote></li><li><p>2006年12月11日 JDK1.6发布</p><blockquote><p>启用Java SE6，Java 6EE，Java ME6的命名方式，提供动态语言支持，提供编译API，微型HTT服务器API；同时这个版本对Java虚拟机内部做了大量改进，包括锁与同步、垃圾收集、类加载等方面的算法都有很大的改动。</p></blockquote></li><li><p>2006年11月13日 Sun公司宣布Java开源，建立OpenJDK组织对代码进行管理</p></li><li><p>2009年12月，SUN公司发布Java EE 6</p></li><li><p>2011年7月28日，Oracle公司发布Java SE 7</p></li><li><p>2014年3月18日，Oracle公司发表Java SE 8(市场主流版本)</p></li><li><p>2017年9月21日，Oracle公司发表Java SE 9</p></li></ul><h2 id=12java体系结构>1.2.java体系结构</h2><p><a data-fancybox=gallery href=/mb/images/jvm/jdk-art.jpg><img class=mx-auto alt src=/mb/images/jvm/jdk-art.jpg></a></p><h1 id=2仔细看一看jvm>2.仔细看一看jvm</h1><h2 id=21jvm是什么>2.1.jvm是什么</h2><p><a data-fancybox=gallery href=/mb/images/jvm/jvm-art.png><img class=mx-auto alt src=/mb/images/jvm/jvm-art.png></a></p><h2 id=22类加载class-loader>2.2.类加载（class loader）</h2><h3 id=221类加载>2.2.1.类加载</h3><p>当程序主动使用某个类时，如果该类还未被加载到内存中，则JVM会通过加载、连接、初始化3个步骤来对该类进行初始化。
+<a data-fancybox=gallery href=/mb/images/jvm/class-load.jpeg><img class=mx-auto alt src=/mb/images/jvm/class-load.jpeg></a>
+（<em><strong>加载 -> 链接（验证-准备-解析） -> 初始化 -> 使用 -> 卸载</strong></em> 等生命周期）</p><p>类加载指的是将类的<code>class</code>文件读入到内存，并为之创建一个<code>java.lang.Class</code>对象，也就是说，当程序中使用任何类时，系统都会为之建立一个<code>java.lang.Class</code>对象（会存放在方法区中）。</p><p>类的加载由<code>类加载器</code>完成，<code>类加载器</code>通常由JVM提供，这些类加载器也是前面所有程序运行的基础，JVM提供的这些类加载器通常被称为<code>系统类加载器</code>。除此之外，开发者可以通过继承<code>ClassLoader</code>基类来创建自己的类加载器。</p><h4 id=2211加载>2.2.1.1.加载</h4><p>将<em><strong>某处</strong></em>的<code>class字节码</code>读入到JVM内存中，得到<code>class</code>的<em><strong>二进制流</strong></em>
+JVM规范中并没有限制class的二进制流从何处来，因此出现了如下技术：</p><ul><li>zip/jar/ear/war</li><li>网络</li><li>动态代理</li><li>应用生成，例如jsp</li><li>&mldr;</li></ul><h4 id=2212链接>2.2.1.2.链接</h4><p>JVM拿到字节码二进制流后，会进过链接步骤，链接包含验证、准备和解析。</p><ul><li><p>验证</p><blockquote><p>文件格式验证、元数据验证、字节码验证、符号引用验证。
+流是不是以<code>0xCAFFBABE</code>开头，（明确知道是正规的<code>class</code>集合时可以使用<code>-Xverify:none</code>关闭验证）</p></blockquote></li><li><p>准备</p><blockquote><p>为类的变量(<code>static</code>修饰的)分配内存（方法区）及初始值，执行类代码块如<code>static{}</code>代码块</p></blockquote></li><li><p>解析</p><blockquote><p>常量池里的<em><strong>符号引用</strong></em>替换为<em><strong>直接引用</strong></em>。</p></blockquote><blockquote><p>符号引用：符号引用是以一组符号来描述所引用的目标，符号可以是任何的字面形式的字面量，只要不会出现冲突能够定位到就行。布局和内存无关。</p></blockquote><blockquote><p>直接引用：是指向目标的指针，偏移量或者能够直接定位的句柄。该引用是和内存中的布局有关的，并且一定加载进来的。</p></blockquote></li></ul><h3 id=222类加载器>2.2.2.类加载器</h3><h4 id=2221定义>2.2.2.1.定义</h4><p>虚拟机设计团队把类加载阶段中的</p><blockquote><p>通过一个类的全限定名来获取描述此类的二进制字节流</p></blockquote><p>的这个动作放到Java虚拟机外部去实现，以便让应用程序自己决定如何去获取所需要的类。</p><p>实现这个动作的代码模块就是<code>类加载器</code>。</p><h4 id=2222三大类加载器>2.2.2.2.三大类加载器</h4><p><a data-fancybox=gallery href=/mb/images/jvm/classloader.png><img class=mx-auto alt src=/mb/images/jvm/classloader.png></a></p><ul><li>启动类加载器（<code>Bootstrap ClassLoader</code>）</li></ul><blockquote><p>是嵌在JVM内核中的加载器，该加载器是用C++语言写的，主要负载加载<code>JAVA_HOME/lib</code>下的类库，启动类加载器无法被应用程序直接使用。</p></blockquote><ul><li>扩展类加载器（<code>Extension ClassLoader</code>）</li></ul><blockquote><p>该加载器器是用JAVA编写，且它的父类加载器是<code>Bootstrap ClassLoader</code>，是由<code>sun.misc.Launcher$ExtClassLoader</code>实现的，主要加载<code>JAVA_HOME/lib/ext</code>目录中的类库。开发者可以选择使用扩展类加载器。</p></blockquote><ul><li>应用程序类加载器（<code>Application ClassLoader</code>）</li></ul><blockquote><p>系统类加载器，也称为应用程序类加载器，负责加载应用程序<code>classpath</code>目录下的所有<code>jar</code>和<code>class</code>文件。它的父加载器为<code>Ext ClassLoader</code>。</p></blockquote><h4 id=2223双亲委派模型>2.2.2.3.双亲委派模型</h4><p><a data-fancybox=gallery href=/mb/images/jvm/dobule-parent.jpg><img class=mx-auto alt src=/mb/images/jvm/dobule-parent.jpg></a></p><p>如果一个类加载器收到了一个类加载请求，它不会自己去尝试加载这个类，而是把这个请求转交给父类加载器去完成。每一个层次的类加载器都是如此。因此所有的类加载请求都应该传递到最顶层的启动类加载器中，只有到父类加载器反馈自己无法完成这个加载请求（在它的搜索范围没有找到这个类）时，子类加载器才会尝试自己去加载。</p><p>委派能确保一个类只被加载一次。</p><p>双亲委派模型很好地解决了各个类加载器的基础类统一问题(越基础的类由越上层的加载器进行加载)，基础类之所以被称为“基础”，是因为它们总是作为被调用代码调用的API。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>protected</span> <span style=color:#000;font-weight:700>synchronized</span> Class<span style=color:#000;font-weight:700>&lt;?&gt;</span> loadClass<span style=color:#000;font-weight:700>(</span>String paramString<span style=color:#000;font-weight:700>,</span> <span style=color:#458;font-weight:700>boolean</span> paramBoolean<span style=color:#000;font-weight:700>)</span>
+  <span style=color:#000;font-weight:700>throws</span> ClassNotFoundException
+<span style=color:#000;font-weight:700>{</span>
+  <span style=color:#998;font-style:italic>//检查是否被加载过
+</span><span style=color:#998;font-style:italic></span>  Class localClass <span style=color:#000;font-weight:700>=</span> findLoadedClass<span style=color:#000;font-weight:700>(</span>paramString<span style=color:#000;font-weight:700>);</span>
+  <span style=color:#998;font-style:italic>//如果没有加载，则调用父类加载器
+</span><span style=color:#998;font-style:italic></span>  <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>localClass <span style=color:#000;font-weight:700>==</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#000;font-weight:700>try</span> <span style=color:#000;font-weight:700>{</span>
+      <span style=color:#998;font-style:italic>//父类加载器不为空
+</span><span style=color:#998;font-style:italic></span>      <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>parent</span> <span style=color:#000;font-weight:700>!=</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span>
+        localClass <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>parent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadClass</span><span style=color:#000;font-weight:700>(</span>paramString<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>false</span><span style=color:#000;font-weight:700>);</span>
+      <span style=color:#000;font-weight:700>else</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#998;font-style:italic>//父类加载器为空，则使用启动类加载器
+</span><span style=color:#998;font-style:italic></span>        localClass <span style=color:#000;font-weight:700>=</span> findBootstrapClass0<span style=color:#000;font-weight:700>(</span>paramString<span style=color:#000;font-weight:700>);</span>
+      <span style=color:#000;font-weight:700>}</span>
+    <span style=color:#000;font-weight:700>}</span>
+    <span style=color:#000;font-weight:700>catch</span> <span style=color:#000;font-weight:700>(</span>ClassNotFoundException localClassNotFoundException<span style=color:#000;font-weight:700>)</span>
+    <span style=color:#000;font-weight:700>{</span>
+      <span style=color:#998;font-style:italic>//如果父类加载失败，则使用自己的findClass方法进行加载
+</span><span style=color:#998;font-style:italic></span>      localClass <span style=color:#000;font-weight:700>=</span> findClass<span style=color:#000;font-weight:700>(</span>paramString<span style=color:#000;font-weight:700>);</span>
+    <span style=color:#000;font-weight:700>}</span>
+  <span style=color:#000;font-weight:700>}</span>
+  <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>paramBoolean<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+    resolveClass<span style=color:#000;font-weight:700>(</span>localClass<span style=color:#000;font-weight:700>);</span>
+  <span style=color:#000;font-weight:700>}</span>
+  <span style=color:#000;font-weight:700>return</span> localClass<span style=color:#000;font-weight:700>;</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><h4 id=2224破坏双亲委派模型>2.2.2.4.破坏双亲委派模型</h4><p>参考资料：</p><ol><li><a href=https://www.cnblogs.com/yueshutong/p/11430885.html>JDBC、Tomcat为什么要破坏双亲委派模型？</a></li><li><a href=https://www.jianshu.com/p/60dbd8009c64>聊聊JDBC是如何破坏双亲委派模型的</a></li></ol><blockquote><p>如果基础类，要调用用户类的代码？ 例如JNDI,JDBC,JCE,JAXB和JBI等。</p><p>Java中所有涉及SPI的加载动作基本上都采用<code>线程上下文件类加载器(Thread Context ClassLoader)</code>(这个类加载器可以通过<code>java.lang.Thread</code>类的<code>setContextClassLoader()</code>方法进行设置。</p></blockquote><ul><li>用户强制复写<code>loadClass()</code>，即可打破双亲委派模型。不推荐，建议复写<code>findClass()</code>。</li><li>看看JDBC如何实现的？</li></ul><h5 id=22241jdbc如何破坏双亲委派模型>2.2.2.4.1.JDBC如何破坏双亲委派模型</h5><blockquote><p>首先，理解一下为什么JDBC需要破坏双亲委派模式，原因是原生的JDBC中Driver驱动本身只是一个接口，并没有具体的实现，具体的实现是由不同数据库类型去实现的。例如，MySQL的mysql-connector-<em>.jar中的Driver类具体实现的。 原生的JDBC中的类是放在rt.jar包的，是由启动类加载器进行类加载的，在JDBC中的Driver类中需要动态去加载不同数据库类型的Driver类，而mysql-connector-</em>.jar中的Driver类是用户自己写的代码，那启动类加载器肯定是不能进行加载的，既然是自己编写的代码，那就需要由应用程序启动类去进行类加载。于是乎，这个时候就引入线程上下文件类加载器(Thread Context ClassLoader)。有了这个东西之后，程序就可以把原本需要由启动类加载器进行加载的类，由应用程序类加载器去进行加载了。</p></blockquote><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">64
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">65
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">66
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">67
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">68
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">69
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">70
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">71
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">72
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">73
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">74
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">75
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">76
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">77
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">78
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>	<span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> Connection <span style=color:#900;font-weight:700>getConnection</span><span style=color:#000;font-weight:700>(</span>
+        String url<span style=color:#000;font-weight:700>,</span> java<span style=color:#000;font-weight:700>.</span><span style=color:teal>util</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>Properties</span> info<span style=color:#000;font-weight:700>,</span> Class<span style=color:#000;font-weight:700>&lt;?&gt;</span> caller<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>throws</span> SQLException <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#998;font-style:italic>/*
+</span><span style=color:#998;font-style:italic>         * When callerCl is null, we should check the application&#39;s
+</span><span style=color:#998;font-style:italic>         * (which is invoking this class indirectly)
+</span><span style=color:#998;font-style:italic>         * classloader, so that the JDBC driver class outside rt.jar
+</span><span style=color:#998;font-style:italic>         * can be loaded from here.
+</span><span style=color:#998;font-style:italic>         */</span>
+        <span style=color:#998;font-style:italic>//callerCL为空的时候，其实说明这个ClassLoader是启动类加载器，但是这个启动类加载并不能识别rt.jar之外的类，这个时候就把callerCL赋值为Thread.currentThread().getContextClassLoader();也就是应用程序启动类
+</span><span style=color:#998;font-style:italic></span>        ClassLoader callerCL <span style=color:#000;font-weight:700>=</span> caller <span style=color:#000;font-weight:700>!=</span> <span style=color:#000;font-weight:700>null</span> <span style=color:#000;font-weight:700>?</span> caller<span style=color:#000;font-weight:700>.</span><span style=color:teal>getClassLoader</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>:</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>synchronized</span><span style=color:#000;font-weight:700>(</span>DriverManager<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            <span style=color:#998;font-style:italic>// synchronize loading of the correct classloader.
+</span><span style=color:#998;font-style:italic></span>            <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>callerCL <span style=color:#000;font-weight:700>==</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                callerCL <span style=color:#000;font-weight:700>=</span> Thread<span style=color:#000;font-weight:700>.</span><span style=color:teal>currentThread</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>getContextClassLoader</span><span style=color:#000;font-weight:700>();</span>
+            <span style=color:#000;font-weight:700>}</span>
+        <span style=color:#000;font-weight:700>}</span>
+
+        <span style=color:#000;font-weight:700>if</span><span style=color:#000;font-weight:700>(</span>url <span style=color:#000;font-weight:700>==</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            <span style=color:#000;font-weight:700>throw</span> <span style=color:#000;font-weight:700>new</span> SQLException<span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;The url cannot be null&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#d14>&#34;08001&#34;</span><span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>}</span>
+
+        println<span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;DriverManager.getConnection(\&#34;&#34;</span> <span style=color:#000;font-weight:700>+</span> url <span style=color:#000;font-weight:700>+</span> <span style=color:#d14>&#34;\&#34;)&#34;</span><span style=color:#000;font-weight:700>);</span>
+
+        <span style=color:#998;font-style:italic>// Walk through the loaded registeredDrivers attempting to make a connection.
+</span><span style=color:#998;font-style:italic></span>        <span style=color:#998;font-style:italic>// Remember the first exception that gets raised so we can reraise it.
+</span><span style=color:#998;font-style:italic></span>        SQLException reason <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>;</span>
+
+        <span style=color:#000;font-weight:700>for</span><span style=color:#000;font-weight:700>(</span>DriverInfo aDriver <span style=color:#000;font-weight:700>:</span> registeredDrivers<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            <span style=color:#998;font-style:italic>// If the caller does not have permission to load the driver then
+</span><span style=color:#998;font-style:italic></span>            <span style=color:#998;font-style:italic>// skip it.
+</span><span style=color:#998;font-style:italic></span>            <span style=color:#998;font-style:italic>//继续看这里 
+</span><span style=color:#998;font-style:italic></span>            <span style=color:#000;font-weight:700>if</span><span style=color:#000;font-weight:700>(</span>isDriverAllowed<span style=color:#000;font-weight:700>(</span>aDriver<span style=color:#000;font-weight:700>.</span><span style=color:teal>driver</span><span style=color:#000;font-weight:700>,</span> callerCL<span style=color:#000;font-weight:700>))</span> <span style=color:#000;font-weight:700>{</span>
+                <span style=color:#000;font-weight:700>try</span> <span style=color:#000;font-weight:700>{</span>
+                    println<span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;    trying &#34;</span> <span style=color:#000;font-weight:700>+</span> aDriver<span style=color:#000;font-weight:700>.</span><span style=color:teal>driver</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getClass</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>());</span>
+                    Connection con <span style=color:#000;font-weight:700>=</span> aDriver<span style=color:#000;font-weight:700>.</span><span style=color:teal>driver</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>connect</span><span style=color:#000;font-weight:700>(</span>url<span style=color:#000;font-weight:700>,</span> info<span style=color:#000;font-weight:700>);</span>
+                    <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>con <span style=color:#000;font-weight:700>!=</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                        <span style=color:#998;font-style:italic>// Success!
+</span><span style=color:#998;font-style:italic></span>                        println<span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;getConnection returning &#34;</span> <span style=color:#000;font-weight:700>+</span> aDriver<span style=color:#000;font-weight:700>.</span><span style=color:teal>driver</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getClass</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>());</span>
+                        <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>(</span>con<span style=color:#000;font-weight:700>);</span>
+                    <span style=color:#000;font-weight:700>}</span>
+                <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>catch</span> <span style=color:#000;font-weight:700>(</span>SQLException ex<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                    <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>reason <span style=color:#000;font-weight:700>==</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                        reason <span style=color:#000;font-weight:700>=</span> ex<span style=color:#000;font-weight:700>;</span>
+                    <span style=color:#000;font-weight:700>}</span>
+                <span style=color:#000;font-weight:700>}</span>
+
+            <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>else</span> <span style=color:#000;font-weight:700>{</span>
+                println<span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;    skipping: &#34;</span> <span style=color:#000;font-weight:700>+</span> aDriver<span style=color:#000;font-weight:700>.</span><span style=color:teal>getClass</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>());</span>
+            <span style=color:#000;font-weight:700>}</span>
+
+        <span style=color:#000;font-weight:700>}</span>
+
+        <span style=color:#998;font-style:italic>// if we got here nobody could connect.
+</span><span style=color:#998;font-style:italic></span>        <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>reason <span style=color:#000;font-weight:700>!=</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span>    <span style=color:#000;font-weight:700>{</span>
+            println<span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;getConnection failed: &#34;</span> <span style=color:#000;font-weight:700>+</span> reason<span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>throw</span> reason<span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>}</span>
+
+        println<span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;getConnection: no suitable driver found for &#34;</span><span style=color:#000;font-weight:700>+</span> url<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>throw</span> <span style=color:#000;font-weight:700>new</span> SQLException<span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;No suitable driver found for &#34;</span><span style=color:#000;font-weight:700>+</span> url<span style=color:#000;font-weight:700>,</span> <span style=color:#d14>&#34;08001&#34;</span><span style=color:#000;font-weight:700>);</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#458;font-weight:700>boolean</span> <span style=color:#900;font-weight:700>isDriverAllowed</span><span style=color:#000;font-weight:700>(</span>Driver driver<span style=color:#000;font-weight:700>,</span> ClassLoader classLoader<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#458;font-weight:700>boolean</span> result <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>false</span><span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>if</span><span style=color:#000;font-weight:700>(</span>driver <span style=color:#000;font-weight:700>!=</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            Class<span style=color:#000;font-weight:700>&lt;?&gt;</span> aClass <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>;</span>
+            <span style=color:#000;font-weight:700>try</span> <span style=color:#000;font-weight:700>{</span>
+                <span style=color:#998;font-style:italic>//这一步会对类进行初始化的动作，而初始化之前自然也要进行的类的加载工作
+</span><span style=color:#998;font-style:italic></span>                aClass <span style=color:#000;font-weight:700>=</span>  Class<span style=color:#000;font-weight:700>.</span><span style=color:teal>forName</span><span style=color:#000;font-weight:700>(</span>driver<span style=color:#000;font-weight:700>.</span><span style=color:teal>getClass</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>(),</span> <span style=color:#000;font-weight:700>true</span><span style=color:#000;font-weight:700>,</span> classLoader<span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>catch</span> <span style=color:#000;font-weight:700>(</span>Exception ex<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                result <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>false</span><span style=color:#000;font-weight:700>;</span>
+            <span style=color:#000;font-weight:700>}</span>
+
+             result <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>(</span> aClass <span style=color:#000;font-weight:700>==</span> driver<span style=color:#000;font-weight:700>.</span><span style=color:teal>getClass</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>?</span> <span style=color:#000;font-weight:700>true</span> <span style=color:#000;font-weight:700>:</span> <span style=color:#000;font-weight:700>false</span><span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>}</span>
+
+        <span style=color:#000;font-weight:700>return</span> result<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><h5 id=22242tomcat如何破坏双亲委派模型>2.2.2.4.2.TOMCAT如何破坏双亲委派模型</h5><p>Tomcat如何破坏双亲委派模型的呢？</p><p><strong>每个Tomcat的webappClassLoader加载自己的目录下的class文件，不会传递给父类加载器。</strong></p><p><a data-fancybox=gallery href=/mb/images/jvm/tomcat-classloader.png><img class=mx-auto alt src=/mb/images/jvm/tomcat-classloader.png></a></p><p>事实上，tomcat之所以造了一堆自己的classloader，大致是出于下面三类目的：</p><ul><li>对于各个 <code>webapp</code>中的 <code>class</code>和 <code>lib</code>，需要相互隔离，不能出现一个应用中加载的类库会影响另一个应用的情况，而对于许多应用，需要有共享的lib以便不浪费资源。</li><li>与 <code>jvm</code>一样的安全性问题。使用单独的 <code>classloader</code>去装载 <code>tomcat</code>自身的类库，以免其他恶意或无意的破坏；</li><li>热部署。相信大家一定为 <code>tomcat</code>修改文件不用重启就自动重新装载类库而惊叹吧。</li></ul><h2 id=23运行时数据区runtime-data-area>2.3.运行时数据区（runtime data area)</h2><p>jvm运行时数据区主要包含 方法区、运行时常量池、栈、本地方法栈、程序计数器、堆、直接内存等。</p><p><a data-fancybox=gallery href=/mb/images/jvm/jvm-rda.png><img class=mx-auto alt src=/mb/images/jvm/jvm-rda.png></a></p><h3 id=231方法区method-area>2.3.1.方法区(method area)</h3><p>方法区和堆一样，是各个线程共享内存区域，用来存放已被加载类信息、常量、静态变量、即时编译器编译后的代码等数据。</p><p>在jdk1.7中，被称为“永久代”（Permanent Generation）；</p><p>在jdk1.8中，被称为“元数据”(Matadata)。</p><h3 id=232运行时常量池runtime-constant-pool>2.3.2.运行时常量池（Runtime Constant Pool）</h3><p>运行时常量池是方法区中的一部分。Class文件中除了有类的版本、字段、方法、接口等描述信息外，还有一项信息是常量池（Constant Pool Table)，用于存放编译期生成的各种<strong>字面量</strong>和 <strong>符号引用</strong> ，这部分内容将在类加载后进入方法区的运行时常量池中存放。</p><p><code>String.intern()</code> 请参考 <a href=https://www.cnblogs.com/naliyixin/p/8984077.html>https://www.cnblogs.com/naliyixin/p/8984077.html</a></p><blockquote><p>采用new 创建的字符串对象不进入字符串池，直接用静态字符串的操作的会添加到字符串池。</p><p>在定义变量的时候赋值，如果赋值的是静态的字符串，就会执行进入字符串池的操作，如果池中含有该字符串，则返回引用。</p></blockquote><h3 id=233jvm栈jvm-stack>2.3.3.jvm栈(jvm stack)</h3><p>jvm栈，又称Java虚拟机栈，是<strong>线程私有</strong>的，它的生命周期与线程相同。</p><p>jvm栈描述的是Java方法执行的内存模型：每个Java方法在执行的时候都会创建一个栈帧（Stack Frame)，用于存储局部变量表、操作数栈、动态链接、方法出口等信息。每一个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。</p><h4 id=2331栈帧stack-frame>2.3.3.1.栈帧(Stack Frame)</h4><ul><li><p>局部变量表：存放方法参数、局部变量；</p></li><li><p>操作数栈： 存放执行字节码指令，如iadd等， 更多请参考 <a href=https://www.cnblogs.com/kexianting/p/8523296.html>https://www.cnblogs.com/kexianting/p/8523296.html</a></p></li><li><p>动态链接： 存放符号引用，运行时才确定是直接引用，支持多态特性。</p></li><li><p>方法出口：存放返回地址（returnAddress类型，指向一条字节码地址的指令）。</p></li></ul><h4 id=2332stackoverflowerror和outofmemoryerror异常>2.3.3.2.StackOverflowError和OutOfMemoryError异常</h4><p>这个区域定义了2个异常：</p><ul><li><p>如果线程请求的栈深度大于虚拟机所允许的深度，将抛出StackOverflowError异常。（大部分虚拟机可动态扩展）</p></li><li><p>如果线程请求的栈无法申请到足够的内存，就会抛出OutOfMemoryError异常。</p></li></ul><h3 id=234本地方法栈native-method-stack>2.3.4.本地方法栈(native method stack)</h3><p>本地方法栈和虚拟机栈类似，也是<strong>线程私有</strong>的，区别在于虚拟机栈用于执行Java方法（字节码）服务；而本地方法栈用于执行虚拟机使用到的Native方法服务。在虚拟机规范中对本地方法栈中方法使用的语言，使用方式与数据结构并没有强制规定，因此具体的虚拟机可以自由实现它。</p><p>有的虚拟机（比如Sun HotSpot虚拟机）直接把本地方法栈和虚拟机栈合并。</p><p>想了解更多关于Java本地方法，请参考 <a href=https://blog.csdn.net/lansine2005/article/details/5753741>https://blog.csdn.net/lansine2005/article/details/5753741</a></p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>IHaveNatives</span>
+    <span style=color:#000;font-weight:700>{</span>
+      <span style=color:#000;font-weight:700>native</span> <span style=color:#000;font-weight:700>public</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>Native1</span><span style=color:#000;font-weight:700>(</span> <span style=color:#458;font-weight:700>int</span> x <span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>;</span>
+      <span style=color:#000;font-weight:700>native</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>public</span> <span style=color:#458;font-weight:700>long</span> <span style=color:#900;font-weight:700>Native2</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>;</span>
+      <span style=color:#000;font-weight:700>native</span> <span style=color:#000;font-weight:700>synchronized</span> <span style=color:#000;font-weight:700>private</span> <span style=color:#458;font-weight:700>float</span> <span style=color:#900;font-weight:700>Native3</span><span style=color:#000;font-weight:700>(</span> Object o <span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>;</span>
+      <span style=color:#000;font-weight:700>native</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>Native4</span><span style=color:#000;font-weight:700>(</span> <span style=color:#458;font-weight:700>int</span><span style=color:#000;font-weight:700>[]</span> ary <span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>throws</span> Exception <span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span> 
+
+<span style=color:#998;font-style:italic>// java.system.loadLibrary()加载dll库，在调用本地方法时
+</span></code></pre></td></tr></table></div></div><h3 id=235程序计数器program-counter-register>2.3.5.程序计数器(program counter register)</h3><p>程序计数器是一块较小的内存空间，可以看做是当前线程所执行的字节码行号指示器。</p><p>字节码解释器工作时就是通过改变计数器的值来选取吓一跳需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复(cpu)、线程切换(cpu)等基础功能都需要依赖程序计数器来完成。</p><p>为了线程切换后能恢复到正确的执行位置，每条线程都需要一个独立的程序计数器，各个线程之间计数器互补影响，独立存储，所以程序计数器也是<strong>线程私有</strong>的内存。</p><h3 id=236堆heap>2.3.6.堆（heap）</h3><p>Java堆是Java虚拟机中所管理内存最大的一块，是被所有线程共享的一块内存区域，在虚拟机启动时创建。Java堆是GC（垃圾回收）管理的主要区域，因此很多时候被叫做GC堆。</p><p>几乎所有对象都要在Java堆上分配。（随着JIT编译器的发展和逃逸技术成熟，所有对象都分配在堆上就没那么绝对了）</p><p>从内存回收角度，分代收集算法，可分为 新生代和老年代，更细可分为Eden区、From Survivor区、To Survivor区和老年区。从内存分配角度，线程共享的Java堆中可能划分出多个线程私有的分配缓存区（Thread Local Allocation Buffer,TLAB）。</p><p>Java程序可通过<code>-Xmx</code>和<code>-Xms</code>等参数配置堆内存的大小。更多jvm参数，请参考 <a href=https://www.cnblogs.com/shoshana-kong/p/10559186.html>https://www.cnblogs.com/shoshana-kong/p/10559186.html</a></p><h3 id=237直接内存direct-memory>2.3.7.直接内存（Direct Memory）</h3><p>直接内存并不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范中定义的内存区域。但这部分内存被频繁使用，也会导致OOM异常。</p><p>在JDK1.4中加入了NIO，引入了一种基于通道（Channel）与缓冲区（Buffer）的IO方式，它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用进行操作。（在一些缓存场景显著提高性能，因为避免了Java堆和Native堆中来回复制数据）</p><h2 id=24执行子系统execution-engine>2.4.执行子系统(execution engine)</h2><h1 id=3仔细看一看gc>3.仔细看一看GC</h1><h2 id=31什么是垃圾回收>3.1.什么是垃圾回收</h2><p>在C语言、C++语言中，可以通过malloc和free来主动申请内存和释放内存，程序的内存是由开发者自己管理的。但是这样有个缺点，就是很多程序容易出现内存泄漏的问题。所以在Java语言中，Java设计者引入了垃圾回收机制，由Java虚拟机来自动完成内存回收，清除掉已经不再使用的对象，释放内存空间。</p><h2 id=32如何定位垃圾>3.2.如何定位垃圾</h2><p>可以添加<code>-XX:+PrintGCDetails</code>配置，打印GC日志来分析垃圾回收过程。</p><h3 id=321引用计数算法reference-counting>3.2.1.引用计数算法(reference-counting)</h3><p>每个对象都有一个引用计数器，当对象被引用一次，计数器就加1，当对象引用失效一次就减1，当计数器为0，意味着对象是垃圾对象，可以被GC回收。<strong>循环引用的对象无法被判断为垃圾</strong></p><h3 id=322可达性算法gc-root-tracing>3.2.2.可达性算法(GC Root Tracing)</h3><p><a data-fancybox=gallery href=/mb/images/jvm/gc-root.png><img class=mx-auto alt src=/mb/images/jvm/gc-root.png></a></p><p>从GC Root作为起点开始搜索，那么整个连通图中对象都是活的，对于GC Root无法达到的对象便是垃圾对象，随时可被GC回收。</p><p>采用引用计数算法的系统只需在每个实例对象创建之初，通过计数器来记录所有的引用次数即可。而可达性算法，则需要再次GC时，遍历整个GC根节点来判断是否回收。</p><p>Java中的对象都链接在一个个根节点上，所以内存中会有许多的根节点（即GC Roots），内存回收的时候最费时间的就是找到这些根节点。Java虚拟机中有一种表OopMap记录了部分根节点和对象的链接关系，通过它可以进行<strong>枚举根节点</strong>。但在程序运行的过程中一直都有对象的创建，消亡，所以该表一直都在变化，所以必须在某个时刻更新表，这个时间点称为<strong>安全点（safe point）</strong>。根据表找到对象的根节点，通过引用链找到该对象判断它是否GC可达。</p><h4 id=3221gc-root存放的对象>3.2.2.1.GC Root存放的对象</h4><p>（1）虚拟机栈中的引用对象
+（2）方法去中静态属性引用的对象
+（3）方法区中常量引用的对象
+（4）本地方法栈native方法引用的对象</p><h4 id=3222缺陷>3.2.2.2.缺陷</h4><ol><li>耗时长：找到根节点以及在大量数据中逐个检查引用耗费大量时间。</li><li>GC停顿：安全点问题，这个时间点会导致Java所有执行线程的停顿。</li></ol><h4 id=3223算法优化>3.2.2.3.算法优化</h4><ol><li><strong>枚举根节点</strong>：在类加载完成时就将根节点和对象的链接关系写入到OopMap中，后续查询直接查OopMap。</li><li><strong>安全点</strong>：因为程序运行过程中，会有对象创建，消亡，所以OopMap一直在变化。于是需要在某个时刻更新OopMap，这个时间点就是安全点。安全点的时候回Stop The World。</li><li><strong>安全区域</strong>：由于Java程序大部分是多线程的，所以在某个安全点时，会有线程（sleep/blocked)无法到达安全点的情况，于是拓宽安全点为安全区域。</li></ol><h2 id=33垃圾回收算法>3.3.垃圾回收算法</h2><h3 id=331标记-清除mark-sweep>3.3.1.标记-清除（Mark-Sweep）</h3><p><a data-fancybox=gallery href=/mb/images/jvm/gc-mark-sweep.jpg><img class=mx-auto alt src=/mb/images/jvm/gc-mark-sweep.jpg></a></p><p>先标记内存空间中的对象是否是垃圾，然后再清除掉。</p><p>缺点：</p><ol><li>内存碎片</li><li>效率低</li><li>单线程会stw</li></ol><h3 id=332复制copying>3.3.2.复制（Copying)</h3><p><a data-fancybox=gallery href=/mb/images/jvm/gc-copying.jpg><img class=mx-auto alt src=/mb/images/jvm/gc-copying.jpg></a></p><p>将内存空间划分为2块相等的空间，每次只用一块；下一次将存活的对象copy到另外一个部分，然后清除掉原来使用的部分。</p><p>缺点：内存空间缩小一半，<strong>该算法应用在新生代的Surivior区</strong>。</p><h3 id=333标记整理mark-compact>3.3.3.标记整理（Mark-Compact）</h3><p>![](/mb/images/jvm/gc-mark-compact.jpg" width=&ldquo;600px&rdquo;></p><p>为了解决Copying算法的缺陷，充分利用内存空间，提出了Mark-Compact算法。该算法标记阶段和Mark-Sweep一样，但是在完成标记之后，它不是直接清理可回收对象，而是将存活对象都向一端移动，然后清理掉端边界以外的内存。</p><p>缺点：效率低，<strong>该算法应用在老年代</strong>。</p><h2 id=34分代收集算法>3.4.分代收集算法</h2><p><a data-fancybox=gallery href=/mb/images/jvm/gc-generation.png><img class=mx-auto alt src=/mb/images/jvm/gc-generation.png></a></p><p>分代收集算法其实是一种理论，不是实际的算法。是将堆按年龄分代分区域，主要分为年轻代和老年代；年轻代分为Eden区和Surivior区，Surivior区分为Form和To2个区域。</p><ol><li>年轻代 ： 老年代 = 1 ：2</li><li>Eden区 ： Form区 ： To区 = 8 ：1：1</li><li>年轻代里的对象存活15次后将进入老年代</li><li>如果对象内存大于S区一半，将直接进入老年代</li></ol><h2 id=35常见的gc回收器>3.5.常见的GC回收器</h2><p>垃圾回收器是内存回收的具体实现，常见的垃圾回收器如下图。</p><p><a data-fancybox=gallery href=/mb/images/jvm/gc-list.png><img class=mx-auto alt src=/mb/images/jvm/gc-list.png></a></p><p><strong>新生代收集器</strong>：Serial、ParNew、Parallel Scavenge</p><p><strong>老年代收集器</strong>：CMS、Serial Old、Parallel Old</p><p><strong>整堆收集器</strong>： G1</p><p>了解几个概念：</p><p><strong>并行收集</strong>：指多条垃圾收集线程并行工作，但此时用户线程仍处于等待状态。</p><p><strong>并发收集</strong>：指用户线程与垃圾收集线程同时工作（不一定是并行的可能会交替执行）。用户程序在继续运行，而垃圾收集程序运行在另一个CPU上。</p><p><strong>吞吐量</strong>：即CPU用于运行用户代码的时间与CPU总消耗时间的比值（吞吐量 = 运行用户代码时间 / ( 运行用户代码时间 + 垃圾收集时间 )）。例如：虚拟机共运行100分钟，垃圾收集器花掉1分钟，那么吞吐量就是99%</p><p>常用的垃圾收集器：</p><ol><li>Serial收集器： 单线程，串行；使用<code>-XX:+UseSerialGC</code>配置开启；Serial收集器使用在新生代，是JDK1.3.1之前虚拟机的新生代垃圾收集的唯一选择；Serial Old收集器使用在老年代。</li><li>ParNew收集器：多线程，使用<code>-XX:+UseParNewGC</code>配置开启，使用<code>-XX:ParalleGCThread=4</code>来设置线程数，应用在新生代。</li><li>Parallel Scavenge收集器：多线程，并行；带有自适应调节策略；应用在新生代；使用多线程和标记-整理算法。</li><li>Serial Old收集器：单线程，串行；是Serial在老年代的实现版本。</li><li>Parallel Old收集器： 多线程，并行；是Parallel在老年代的实现版本。</li><li>CMS收集器： 使用标记-清除算法；并发收集，低停顿。应用在老年代。</li><li>G1收集器：并行收集，并发收集；分代收集；空间整合；可预测停顿；使用<code>-XX:+UseG1GC</code>配置开启。整堆区域收集。</li></ol><p>详细请参考 <a href=https://www.cnblogs.com/chenpt/p/9803298.html>https://www.cnblogs.com/chenpt/p/9803298.html</a></p><h3 id=351jdk各版本默认垃圾回收器>3.5.1.jdk各版本默认垃圾回收器</h3><table><thead><tr><th>jdk版本</th><th>新生代</th><th>老年代</th></tr></thead><tbody><tr><td>1.6,1.7,1.8</td><td>Parallel Scavenge</td><td>Parallel Old</td></tr><tr><td>1.9</td><td>G1</td><td>G1</td></tr></tbody></table></div><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=/mb/post/java/java%E6%97%A5%E5%BF%97%E9%97%A8%E9%9D%A2/>java日志门面</a></li><li><a href=/mb/post/java/Java%E6%80%A7%E8%83%BD%E6%B3%A8%E6%84%8F%E7%82%B9/>Java性能注意点</a></li><li><a href=/mb/post/me/sickday/>生病的日子</a></li><li><a href=/mb/post/nginx/nginx%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%B5%8B%E8%AF%95/>nginx的负载均衡测试</a></li><li><a href=/mb/post/handleway/%E5%A6%82%E4%BD%95%E5%8A%A0%E5%BF%AB%E5%A4%84%E7%90%86%E9%80%9F%E5%BA%A6/>如何加快处理速度</a></li></ul></div><div class="post-meta meta-tags"><ul class=clearfix><li><a href=/mb/tags/java>java</a></li><li><a href=/mb/tags/jdk>jdk</a></li><li><a href=/mb/tags/jvm>jvm</a></li><li><a href=/mb/tags/gc>gc</a></li></ul></div></article><div id=waline></div><script src=//cdn.jsdelivr.net/npm/@waline/client></script><script>Waline({el:'#waline',serverURL:'https://valine-m1uexx7dk-mg0324.vercel.app',placeholder:'说点什么吧...'})</script></div><footer id=footer><div>&copy; 2022 <a href=/mb>程序猫大刚 By 程序猫大刚</a>
+| <a rel=nofollow target=_blank href=http://beian.miit.gov.cn/>粤ICP备17082965号</a></div><br><div><div class=github-badge><a href=https://gohugo.io/ target=_black rel=nofollow><span class=badge-subject>Powered by</span><span class="badge-value bg-blue">Hugo</span></a></div><div class=github-badge><a href=https://www.flysnow.org/ target=_black><span class=badge-subject>Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a></div><div class=github-badge><a href=https://github.com/flysnow-org/maupassant-hugo target=_black><span class=badge-subject>Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a></div></div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[['$','$']],processEscapes:!0}}</script><script src="//cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script src=//cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js></script><a id=rocket href=#top></a><script type=text/javascript src="/mb/js/totop.js?v=0.0.0" async></script><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script><script src=/mb/js/douban.js></script></div><div id=secondary><section class=widget><form id=search action=/mb/search method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
+<input type=hidden name=sitesearch value=/mb>
+<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/ title=熟悉JVM内存区域>熟悉JVM内存区域</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%B9%B6%E5%8F%91%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90/ title=HotSpot垃圾算法实现之并发的可达性分析>HotSpot垃圾算法实现之并发的可达性分析</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%AE%B0%E5%BF%86%E9%9B%86%E4%B8%8E%E5%8D%A1%E8%A1%A8%E5%92%8C%E5%86%99%E5%B1%8F%E9%9A%9C/ title=HotSpot垃圾算法实现之记忆集与卡表和写屏障>HotSpot垃圾算法实现之记忆集与卡表和写屏障</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E6%9E%9A%E4%B8%BE%E6%A0%B9%E8%8A%82%E7%82%B9%E5%92%8C%E5%AE%89%E5%85%A8%E7%82%B9%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F/ title=HotSpot垃圾算法实现之枚举根节点和安全点安全区域>HotSpot垃圾算法实现之枚举根节点和安全点安全区域</a></li><li><a href=/mb/post/jvm/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/ title=类加载器>类加载器</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89Java%E7%B1%BB%E6%96%87%E4%BB%B6class%E7%BB%93%E6%9E%84/ title=熟悉Java类文件class结构>熟悉Java类文件class结构</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4/ title=熟悉JVM字节码指令>熟悉JVM字节码指令</a></li><li><a href=/mb/post/jvm/MacOs10_15_7%E7%BC%96%E8%AF%91openjdk8u/ title=MacOs10.15.7编译openjdk8u>MacOs10.15.7编译openjdk8u</a></li><li><a href=/mb/post/jvm/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6%E7%AD%96%E7%95%A5/ title=内存分配与回收策略>内存分配与回收策略</a></li><li><a href=/mb/post/jvm/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95/ title=垃圾收集算法>垃圾收集算法</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/categories/>分类</a></h3><ul class=widget-list><li><a href=/mb/categories/JVM/>JVM (17)</a></li><li><a href=/mb/categories/Java%E5%B9%B6%E5%8F%91/>Java并发 (11)</a></li><li><a href=/mb/categories/Spring-Cloud/>Spring Cloud (15)</a></li><li><a href=/mb/categories/idea/>idea (3)</a></li><li><a href=/mb/categories/k8s/>k8s (9)</a></li><li><a href=/mb/categories/%E6%80%9D%E6%83%B3%E8%BF%9B%E5%8C%96/>思想进化 (1)</a></li><li><a href=/mb/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/>技术文章 (62)</a></li><li><a href=/mb/categories/%E7%94%9F%E6%B4%BB%E7%9B%B8%E5%85%B3/>生活相关 (3)</a></li><li><a href=/mb/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/>读书笔记 (2)</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/tags/>标签</a></h3><div class=tagcloud><a href=/mb/tags/Spring-Cloud/>Spring Cloud</a>
+<a href=/mb/tags/alisql/>alisql</a>
+<a href=/mb/tags/apache/>apache</a>
+<a href=/mb/tags/commonjs/>commonjs</a>
+<a href=/mb/tags/docker/>docker</a>
+<a href=/mb/tags/docker-machine/>docker-machine</a>
+<a href=/mb/tags/dubbo/>dubbo</a>
+<a href=/mb/tags/es6/>es6</a>
+<a href=/mb/tags/fastdfs/>fastdfs</a>
+<a href=/mb/tags/forkjoin/>forkjoin</a>
+<a href=/mb/tags/frp/>frp</a>
+<a href=/mb/tags/futrue/>futrue</a>
+<a href=/mb/tags/gc/>gc</a>
+<a href=/mb/tags/github/>github</a>
+<a href=/mb/tags/github-pages/>github pages</a>
+<a href=/mb/tags/helm/>helm</a>
+<a href=/mb/tags/httpd/>httpd</a>
+<a href=/mb/tags/idea/>idea</a>
+<a href=/mb/tags/idea-plugin/>idea plugin</a>
+<a href=/mb/tags/java/>java</a>
+<a href=/mb/tags/jdk/>jdk</a>
+<a href=/mb/tags/jni/>jni</a>
+<a href=/mb/tags/juc/>juc</a>
+<a href=/mb/tags/jvm/>jvm</a>
+<a href=/mb/tags/k3s/>k3s</a>
+<a href=/mb/tags/k8s/>k8s</a>
+<a href=/mb/tags/k9s/>k9s</a>
+<a href=/mb/tags/kafka/>kafka</a>
+<a href=/mb/tags/kubeadm/>kubeadm</a>
+<a href=/mb/tags/kubectl/>kubectl</a>
+<a href=/mb/tags/logback/>logback</a>
+<a href=/mb/tags/logging/>logging</a>
+<a href=/mb/tags/maven/>maven</a>
+<a href=/mb/tags/md/>md</a>
+<a href=/mb/tags/minikube/>minikube</a>
+<a href=/mb/tags/mq/>mq</a>
+<a href=/mb/tags/multipass/>multipass</a>
+<a href=/mb/tags/mybatis/>mybatis</a>
+<a href=/mb/tags/mycat/>mycat</a>
+<a href=/mb/tags/mysql/>mysql</a>
+<a href=/mb/tags/nginx/>nginx</a>
+<a href=/mb/tags/nio/>nio</a>
+<a href=/mb/tags/python/>python</a>
+<a href=/mb/tags/rancher/>rancher</a>
+<a href=/mb/tags/raspberry/>raspberry</a>
+<a href=/mb/tags/react/>react</a>
+<a href=/mb/tags/redis/>redis</a>
+<a href=/mb/tags/slf4j/>slf4j</a>
+<a href=/mb/tags/solr/>solr</a>
+<a href=/mb/tags/springboot/>springboot</a>
+<a href=/mb/tags/tomcat/>tomcat</a>
+<a href=/mb/tags/webui/>webui</a>
+<a href=/mb/tags/zookeeper/>zookeeper</a>
+<a href=/mb/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/>云原生</a>
+<a href=/mb/tags/%E4%BC%98%E5%8C%96/>优化</a>
+<a href=/mb/tags/%E5%81%A5%E5%BA%B7/>健康</a>
+<a href=/mb/tags/%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2/>全文检索</a>
+<a href=/mb/tags/%E5%86%85%E7%BD%91/>内网</a>
+<a href=/mb/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/>内网穿透</a>
+<a href=/mb/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8/>分布式存储</a>
+<a href=/mb/tags/%E5%8C%85%E5%86%B2%E7%AA%81/>包冲突</a>
+<a href=/mb/tags/%E5%8D%95%E4%BE%8B/>单例</a>
+<a href=/mb/tags/%E5%9F%9F%E5%90%8D/>域名</a>
+<a href=/mb/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/>并发编程</a>
+<a href=/mb/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/>异常处理</a>
+<a href=/mb/tags/%E5%BC%82%E6%AD%A5/>异步</a>
+<a href=/mb/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/>微服务</a>
+<a href=/mb/tags/%E6%80%A7%E8%83%BD/>性能</a>
+<a href=/mb/tags/%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4/>文件删除</a>
+<a href=/mb/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/>方法论</a>
+<a href=/mb/tags/%E6%97%A5%E5%BF%97%E5%A4%84%E7%90%86/>日志处理</a>
+<a href=/mb/tags/%E6%9E%B6%E6%9E%84/>架构</a>
+<a href=/mb/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/>源码编译</a>
+<a href=/mb/tags/%E7%A6%81%E7%A2%98/>禁碘</a>
+<a href=/mb/tags/%E8%85%BE%E8%AE%AF%E4%BA%91/>腾讯云</a>
+<a href=/mb/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/>解决方案</a>
+<a href=/mb/tags/%E8%AF%81%E4%B9%A6/>证书</a>
+<a href=/mb/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/>读写分离</a>
+<a href=/mb/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/>负载均衡</a>
+<a href=/mb/tags/%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F/>部署方式</a>
+<a href=/mb/tags/%E9%98%85%E8%AF%BB/>阅读</a></div></section><section class=widget><h3 class=widget-title>友情链接</h3><ul class=widget-list><li><a target=_blank href=https://www.flysnow.org/ title=飞雪无情的博客>飞雪无情的博客</a></li><li><a target=_blank href=http://sentsin.com/ title=闲心>闲心</a></li><li><a target=_blank href=https://xuexb.com/ title=前端小武>前端小武</a></li><li><a target=_blank href=http://blog.wayneww.top/ title=大威>大威</a></li></ul></section><section class=widget><h3 class=widget-title>其它</h3><ul class=widget-list><li><a href=/mb/index.xml>文章 RSS</a></li></ul></section></div></div></div></div></body></html>

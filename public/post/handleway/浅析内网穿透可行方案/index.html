@@ -1,0 +1,99 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><title>浅析内网穿透可行方案 | 程序猫大刚</title><meta property="og:title" content="浅析内网穿透可行方案 - 程序猫大刚"><meta property="og:type" content="article"><meta property="article:published_time" content="2020-03-12T11:13:12+08:00"><meta property="article:modified_time" content="2020-03-12T11:13:12+08:00"><meta name=Keywords content="mango,mango mei,梦来梦网,芒果笔记,程序猫,猫大刚"><meta name=description content="浅析内网穿透可行方案"><meta name=author content="程序猫大刚"><meta property="og:url" content="/mb/post/handleway/%E6%B5%85%E6%9E%90%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E5%8F%AF%E8%A1%8C%E6%96%B9%E6%A1%88/"><link rel="shortcut icon" href=/mb/favicon.ico type=image/x-icon><link rel=stylesheet href=/mb/css/normalize.css><link rel=stylesheet href=/mb/css/style.css><script type=text/javascript src=//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js></script><link href=https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css rel=stylesheet><link rel=stylesheet href=/mb/css/douban.css><link rel=stylesheet href=/mb/css/other.css><script>var _hmt=_hmt||[];(function(){var d=window.location.href,a="da7002a3263e13123d3c44e6afe80dc8",b,c;d.indexOf("mg0324.github.io")!=-1&&(a="87868e1c195a2ea2a4058f1fd978ffe2"),b=document.createElement("script"),b.src="https://hm.baidu.com/hm.js?"+a,c=document.getElementsByTagName("script")[0],c.parentNode.insertBefore(b,c)})()</script></head><body><header id=header class=clearfix><div class=container><div class=col-group><div class=site-name><a id=logo href=/mb>程序猫大刚</a><p class=description>记录点滴，回头思过往！</p><p class=description>不积跬步无以至千里，加油吧大刚！！！</p></div><div><nav id=nav-menu class=clearfix><a class=current href=/mb>首页</a>
+<a href=/mb/sp/ title=学习路线>学习路线</a>
+<a href=/mb/archives/ title=归档>归档</a>
+<a href=/mb/pr/ title=发布日记>发布日记</a>
+<a href=http://mg.meiflower.top title=关于>关于</a></nav></div></div></div></header><div id=body><div class=container><div class=col-group><div class=col-8 id=main><div class=res-cons><style type=text/css>.post-toc{position:fixed;width:200px;margin-left:-210px;padding:5px 10px;font-family:Athelas,STHeiti,Microsoft Yahei,serif;font-size:12px;border:1px solid rgba(0,0,0,7%);border-radius:5px;background-color:rgba(255,255,255,.98);background-clip:padding-box;-webkit-box-shadow:1px 1px 2px rgba(0,0,0,.125);box-shadow:1px 1px 2px rgba(0,0,0,.125);word-wrap:break-word;white-space:nowrap;-webkit-box-sizing:border-box;box-sizing:border-box;z-index:999;cursor:pointer;max-height:70%;overflow-y:auto;overflow-x:hidden}.post-toc .post-toc-title{width:100%;margin:0 auto;font-size:20px;font-weight:400;text-transform:uppercase;text-align:center}.post-toc .post-toc-content{font-size:15px}.post-toc .post-toc-content>nav>ul{margin:10px 0}.post-toc .post-toc-content ul{padding-left:20px;list-style:square;margin:.5em;line-height:1.8em}.post-toc .post-toc-content ul ul{padding-left:15px;display:none}@media print,screen and (max-width:1057px){.post-toc{display:none}}</style><div class=post-toc style=position:absolute;top:188px><h2 class=post-toc-title>文章目录</h2><div class=post-toc-content><nav id=TableOfContents><ul><li><a href=#缘起>缘起</a></li><li><a href=#内网穿透原理>内网穿透原理</a></li><li><a href=#可行方案列举>可行方案列举</a><ul><li><a href=#ngroksunny-ngrok>ngrok，sunny-ngrok</a></li><li><a href=#natapp>natapp</a></li><li><a href=#花生壳>花生壳</a></li><li><a href=#frp>frp</a></li><li><a href=#nat123>nat123</a></li></ul></li></ul></nav></div></div><script type=text/javascript>$(document).ready(function(){var a=$(".post-toc"),b,c,d;a.length&&(b=$("#main").offset().left,b<220&&a.css({width:b-10,"margin-left":0-b}),c=a.offset().top-20,d={start:{position:"absolute",top:c},process:{position:"fixed",top:20}},$(window).scroll(function(){var b=$(window).scrollTop();b<c?a.css(d.start):a.css(d.process)})),$("#TableOfContents").children().length<1&&$(".post-toc").remove()})</script><article class=post><header><h1 class=post-title>浅析内网穿透可行方案</h1></header><date class="post-meta meta-date">2020年3月12日</date><div class=post-meta><span>|</span>
+<span class=meta-category><a href=/mb/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0>技术文章</a></span></div><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
+阅读</span></span></div><div class=post-content><h2 id=缘起>缘起</h2><ul><li>最近在做一个微信网站，需要和微信对接。发现开发的时候需要将自己电脑上的服务映射到公网上，才能接收到微信公众平台的回调。</li><li>因此，百度搜寻整理各种可行的内网穿透方案。</li></ul><h2 id=内网穿透原理>内网穿透原理</h2><blockquote><p>以下纯属个人理解，不保证完全正确。想要自己机器或者自己机器上的web服务暴露在internet上，就需要有一个公网ip访问点，然后和自己的机器建立socket 长连接关联。这样就可以访问公网ip某个路径，代理到自己机器上的web服务上。</p></blockquote><p>原理图请参考frp的架构图：</p><p><a data-fancybox=gallery href="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcwNzAzMTEyOTQxNDU3?x-oss-process=image/format,png"><img class=mx-auto alt=这里写图片描述 src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcwNzAzMTEyOTQxNDU3?x-oss-process=image/format,png"></a></p><h2 id=可行方案列举>可行方案列举</h2><ul><li>1.ngrok,sunny-ngrok,cpolar</li><li>2.natapp</li><li>3.花生壳</li><li>4.frp</li><li>5.nat123</li><li>&mldr;</li></ul><h3 id=ngroksunny-ngrok>ngrok，sunny-ngrok</h3><p><a data-fancybox=gallery href="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcwNzAzMTExNzIwMjM0?x-oss-process=image/format,png"><img class=mx-auto alt=这里写图片描述 src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcwNzAzMTExNzIwMjM0?x-oss-process=image/format,png"></a></p><blockquote><p>ngork是一个代理应用，托管在github上。可以利用其搭建自己的代理服务器（有公网服务器，类似阿里云主机），也可以直接使用别人搭建好的服务，如sunny-ngrok,或者是natapp的服务。
+如此，你只需要关心客户端的配置，一般是要代理的ip和端口。别人做的代理服务器一般都是有流量，带宽限制的，当然可以收费来盈利。多是一个隧道对应一个web代理。客户端通过命令连接到代理服务器上。
+官网链接：https://www.ngrok.cc/ <a href=http://ngrok.2bdata.com/>http://ngrok.2bdata.com/</a> <a href=https://ngrok.com/>https://ngrok.com/</a> <a href=https://www.cpolar.com/>https://www.cpolar.com/</a>
+<a data-fancybox=gallery href="https://img-blog.csdnimg.cn/20191231114933834.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21nMDMyNA==,size_16,color_FFFFFF,t_70"><img class=mx-auto alt=在这里插入图片描述 src="https://img-blog.csdnimg.cn/20191231114933834.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21nMDMyNA==,size_16,color_FFFFFF,t_70"></a>
+<a data-fancybox=gallery href="https://img-blog.csdnimg.cn/20191231115058874.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21nMDMyNA==,size_16,color_FFFFFF,t_70"><img class=mx-auto alt=在这里插入图片描述 src="https://img-blog.csdnimg.cn/20191231115058874.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21nMDMyNA==,size_16,color_FFFFFF,t_70"></a>
+<a data-fancybox=gallery href="https://img-blog.csdnimg.cn/20191231115259450.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21nMDMyNA==,size_16,color_FFFFFF,t_70"><img class=mx-auto alt=在这里插入图片描述 src="https://img-blog.csdnimg.cn/20191231115259450.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21nMDMyNA==,size_16,color_FFFFFF,t_70"></a>
+<a data-fancybox=gallery href="https://img-blog.csdnimg.cn/2019123111462725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21nMDMyNA==,size_16,color_FFFFFF,t_70"><img class=mx-auto alt=在这里插入图片描述 src="https://img-blog.csdnimg.cn/2019123111462725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21nMDMyNA==,size_16,color_FFFFFF,t_70"></a></p></blockquote><h3 id=natapp>natapp</h3><blockquote><p>和sunny-ngrok类似，又一个代理服务器，这个服务器也有免费隧道，但是比起sunny-ngrok，则更多的商业气息。在做微信开发调试时，还是可以试用下的。操作也是类似，下载客户端，启动命令连接代理服务器，即可。
+官网链接：https://natapp.cn/</p></blockquote><h3 id=花生壳>花生壳</h3><blockquote><p>商业级服务，之前没有强制实名认证和备案，还是可以选择的。强制后，我想也只有公司会考虑了，像我这种开发者，只是需要代理调试，还是不倾向。
+官网链接：http://www.oray.com/</p></blockquote><h3 id=frp>frp</h3><blockquote><p>这里重点介绍一下这个代理应用。此应用让我真正理解了内网穿透的原理。上述的各种方案实现基本都是此原理实现者，我个人认为。参考内网穿透原理图。</p></blockquote><ul><li>1.将frps服务启动在有公网IP的服务器上，如阿里云主机。</li><li>2.frpc启动在自己机器上，连接公网上的frps服务器。这样(frps就知道和他连接的各个frpc在哪里，等请求来了，直接代理转发到对应的frpc上）</li><li>3.frp是一种代理架构，有写类似nginx。自己不做业务逻辑实现，只是代理请求并按配置转发。这样就能做到一个域名下挂多个应用的效果。</li><li>4.和nginx不同的最大点，还是frp是服务端和客户端的架构。而nginx只有服务端，其代理转发的只能在一个内网中，无法内网穿透。</li></ul><blockquote><p>github 托管地址：https://github.com/fatedier/frp
+具体使用请参考frp中的文档。</p></blockquote><h3 id=nat123>nat123</h3><blockquote><p>不支持苹果操作系统，在windows上测试成功。在服务端开启nat123的端口映射配置，然后在要访问该端口的机器开启访问者连接。</p></blockquote><p><a data-fancybox=gallery href="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcwNzAzMTcyMDM1MDk0?x-oss-process=image/format,png"><img class=mx-auto alt=这里写图片描述 src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcwNzAzMTcyMDM1MDk0?x-oss-process=image/format,png"></a></p><p><a data-fancybox=gallery href="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcwNzAzMTcyMTQ2MjE3?x-oss-process=image/format,png"><img class=mx-auto alt=这里写图片描述 src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcwNzAzMTcyMTQ2MjE3?x-oss-process=image/format,png"></a></p></div><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=/mb/post/java/java%E4%B9%8Bfuture%E5%BC%82%E6%AD%A5%E5%B9%B6%E5%8F%91%E4%BD%93%E9%AA%8C/>java之future异步并发体验</a></li><li><a href=/mb/post/java/java%E4%B9%8Bforkjoin%E4%BD%93%E9%AA%8C/>java之forkjoin体验</a></li><li><a href=/mb/post/java/java%E4%B9%8B%E6%B7%B1%E5%85%A5jvm%E4%B9%8B%E8%B7%AF/>java之深入jvm之路</a></li><li><a href=/mb/post/java/java%E6%97%A5%E5%BF%97%E9%97%A8%E9%9D%A2/>java日志门面</a></li><li><a href=/mb/post/me/sickday/>生病的日子</a></li></ul></div><div class="post-meta meta-tags"><ul class=clearfix><li><a href=/mb/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F>内网穿透</a></li><li><a href=/mb/tags/frp>frp</a></li></ul></div></article><div id=waline></div><script src=//cdn.jsdelivr.net/npm/@waline/client></script><script>Waline({el:'#waline',serverURL:'https://valine-m1uexx7dk-mg0324.vercel.app',placeholder:'说点什么吧...'})</script></div><footer id=footer><div>&copy; 2022 <a href=/mb>程序猫大刚 By 程序猫大刚</a>
+| <a rel=nofollow target=_blank href=http://beian.miit.gov.cn/>粤ICP备17082965号</a></div><br><div><div class=github-badge><a href=https://gohugo.io/ target=_black rel=nofollow><span class=badge-subject>Powered by</span><span class="badge-value bg-blue">Hugo</span></a></div><div class=github-badge><a href=https://www.flysnow.org/ target=_black><span class=badge-subject>Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a></div><div class=github-badge><a href=https://github.com/flysnow-org/maupassant-hugo target=_black><span class=badge-subject>Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a></div></div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[['$','$']],processEscapes:!0}}</script><script src="//cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script src=//cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js></script><a id=rocket href=#top></a><script type=text/javascript src="/mb/js/totop.js?v=0.0.0" async></script><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script><script src=/mb/js/douban.js></script></div><div id=secondary><section class=widget><form id=search action=/mb/search method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
+<input type=hidden name=sitesearch value=/mb>
+<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/ title=熟悉JVM内存区域>熟悉JVM内存区域</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%B9%B6%E5%8F%91%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90/ title=HotSpot垃圾算法实现之并发的可达性分析>HotSpot垃圾算法实现之并发的可达性分析</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%AE%B0%E5%BF%86%E9%9B%86%E4%B8%8E%E5%8D%A1%E8%A1%A8%E5%92%8C%E5%86%99%E5%B1%8F%E9%9A%9C/ title=HotSpot垃圾算法实现之记忆集与卡表和写屏障>HotSpot垃圾算法实现之记忆集与卡表和写屏障</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E6%9E%9A%E4%B8%BE%E6%A0%B9%E8%8A%82%E7%82%B9%E5%92%8C%E5%AE%89%E5%85%A8%E7%82%B9%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F/ title=HotSpot垃圾算法实现之枚举根节点和安全点安全区域>HotSpot垃圾算法实现之枚举根节点和安全点安全区域</a></li><li><a href=/mb/post/jvm/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/ title=类加载器>类加载器</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89Java%E7%B1%BB%E6%96%87%E4%BB%B6class%E7%BB%93%E6%9E%84/ title=熟悉Java类文件class结构>熟悉Java类文件class结构</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4/ title=熟悉JVM字节码指令>熟悉JVM字节码指令</a></li><li><a href=/mb/post/jvm/MacOs10_15_7%E7%BC%96%E8%AF%91openjdk8u/ title=MacOs10.15.7编译openjdk8u>MacOs10.15.7编译openjdk8u</a></li><li><a href=/mb/post/jvm/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6%E7%AD%96%E7%95%A5/ title=内存分配与回收策略>内存分配与回收策略</a></li><li><a href=/mb/post/jvm/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95/ title=垃圾收集算法>垃圾收集算法</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/categories/>分类</a></h3><ul class=widget-list><li><a href=/mb/categories/JVM/>JVM (17)</a></li><li><a href=/mb/categories/Java%E5%B9%B6%E5%8F%91/>Java并发 (11)</a></li><li><a href=/mb/categories/Spring-Cloud/>Spring Cloud (15)</a></li><li><a href=/mb/categories/idea/>idea (3)</a></li><li><a href=/mb/categories/k8s/>k8s (9)</a></li><li><a href=/mb/categories/%E6%80%9D%E6%83%B3%E8%BF%9B%E5%8C%96/>思想进化 (1)</a></li><li><a href=/mb/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/>技术文章 (62)</a></li><li><a href=/mb/categories/%E7%94%9F%E6%B4%BB%E7%9B%B8%E5%85%B3/>生活相关 (3)</a></li><li><a href=/mb/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/>读书笔记 (2)</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/tags/>标签</a></h3><div class=tagcloud><a href=/mb/tags/Spring-Cloud/>Spring Cloud</a>
+<a href=/mb/tags/alisql/>alisql</a>
+<a href=/mb/tags/apache/>apache</a>
+<a href=/mb/tags/commonjs/>commonjs</a>
+<a href=/mb/tags/docker/>docker</a>
+<a href=/mb/tags/docker-machine/>docker-machine</a>
+<a href=/mb/tags/dubbo/>dubbo</a>
+<a href=/mb/tags/es6/>es6</a>
+<a href=/mb/tags/fastdfs/>fastdfs</a>
+<a href=/mb/tags/forkjoin/>forkjoin</a>
+<a href=/mb/tags/frp/>frp</a>
+<a href=/mb/tags/futrue/>futrue</a>
+<a href=/mb/tags/gc/>gc</a>
+<a href=/mb/tags/github/>github</a>
+<a href=/mb/tags/github-pages/>github pages</a>
+<a href=/mb/tags/helm/>helm</a>
+<a href=/mb/tags/httpd/>httpd</a>
+<a href=/mb/tags/idea/>idea</a>
+<a href=/mb/tags/idea-plugin/>idea plugin</a>
+<a href=/mb/tags/java/>java</a>
+<a href=/mb/tags/jdk/>jdk</a>
+<a href=/mb/tags/jni/>jni</a>
+<a href=/mb/tags/juc/>juc</a>
+<a href=/mb/tags/jvm/>jvm</a>
+<a href=/mb/tags/k3s/>k3s</a>
+<a href=/mb/tags/k8s/>k8s</a>
+<a href=/mb/tags/k9s/>k9s</a>
+<a href=/mb/tags/kafka/>kafka</a>
+<a href=/mb/tags/kubeadm/>kubeadm</a>
+<a href=/mb/tags/kubectl/>kubectl</a>
+<a href=/mb/tags/logback/>logback</a>
+<a href=/mb/tags/logging/>logging</a>
+<a href=/mb/tags/maven/>maven</a>
+<a href=/mb/tags/md/>md</a>
+<a href=/mb/tags/minikube/>minikube</a>
+<a href=/mb/tags/mq/>mq</a>
+<a href=/mb/tags/multipass/>multipass</a>
+<a href=/mb/tags/mybatis/>mybatis</a>
+<a href=/mb/tags/mycat/>mycat</a>
+<a href=/mb/tags/mysql/>mysql</a>
+<a href=/mb/tags/nginx/>nginx</a>
+<a href=/mb/tags/nio/>nio</a>
+<a href=/mb/tags/python/>python</a>
+<a href=/mb/tags/rancher/>rancher</a>
+<a href=/mb/tags/raspberry/>raspberry</a>
+<a href=/mb/tags/react/>react</a>
+<a href=/mb/tags/redis/>redis</a>
+<a href=/mb/tags/slf4j/>slf4j</a>
+<a href=/mb/tags/solr/>solr</a>
+<a href=/mb/tags/springboot/>springboot</a>
+<a href=/mb/tags/tomcat/>tomcat</a>
+<a href=/mb/tags/webui/>webui</a>
+<a href=/mb/tags/zookeeper/>zookeeper</a>
+<a href=/mb/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/>云原生</a>
+<a href=/mb/tags/%E4%BC%98%E5%8C%96/>优化</a>
+<a href=/mb/tags/%E5%81%A5%E5%BA%B7/>健康</a>
+<a href=/mb/tags/%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2/>全文检索</a>
+<a href=/mb/tags/%E5%86%85%E7%BD%91/>内网</a>
+<a href=/mb/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/>内网穿透</a>
+<a href=/mb/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8/>分布式存储</a>
+<a href=/mb/tags/%E5%8C%85%E5%86%B2%E7%AA%81/>包冲突</a>
+<a href=/mb/tags/%E5%8D%95%E4%BE%8B/>单例</a>
+<a href=/mb/tags/%E5%9F%9F%E5%90%8D/>域名</a>
+<a href=/mb/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/>并发编程</a>
+<a href=/mb/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/>异常处理</a>
+<a href=/mb/tags/%E5%BC%82%E6%AD%A5/>异步</a>
+<a href=/mb/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/>微服务</a>
+<a href=/mb/tags/%E6%80%A7%E8%83%BD/>性能</a>
+<a href=/mb/tags/%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4/>文件删除</a>
+<a href=/mb/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/>方法论</a>
+<a href=/mb/tags/%E6%97%A5%E5%BF%97%E5%A4%84%E7%90%86/>日志处理</a>
+<a href=/mb/tags/%E6%9E%B6%E6%9E%84/>架构</a>
+<a href=/mb/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/>源码编译</a>
+<a href=/mb/tags/%E7%A6%81%E7%A2%98/>禁碘</a>
+<a href=/mb/tags/%E8%85%BE%E8%AE%AF%E4%BA%91/>腾讯云</a>
+<a href=/mb/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/>解决方案</a>
+<a href=/mb/tags/%E8%AF%81%E4%B9%A6/>证书</a>
+<a href=/mb/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/>读写分离</a>
+<a href=/mb/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/>负载均衡</a>
+<a href=/mb/tags/%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F/>部署方式</a>
+<a href=/mb/tags/%E9%98%85%E8%AF%BB/>阅读</a></div></section><section class=widget><h3 class=widget-title>友情链接</h3><ul class=widget-list><li><a target=_blank href=https://www.flysnow.org/ title=飞雪无情的博客>飞雪无情的博客</a></li><li><a target=_blank href=http://sentsin.com/ title=闲心>闲心</a></li><li><a target=_blank href=https://xuexb.com/ title=前端小武>前端小武</a></li><li><a target=_blank href=http://blog.wayneww.top/ title=大威>大威</a></li></ul></section><section class=widget><h3 class=widget-title>其它</h3><ul class=widget-list><li><a href=/mb/index.xml>文章 RSS</a></li></ul></section></div></div></div></div></body></html>
