@@ -1,0 +1,476 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><title>MacOs10.15.7编译openjdk8u | 程序猫大刚</title><meta property="og:title" content="MacOs10.15.7编译openjdk8u - 程序猫大刚"><meta property="og:type" content="article"><meta property="article:published_time" content="2022-08-22T22:40:21+08:00"><meta property="article:modified_time" content="2022-08-22T22:40:21+08:00"><meta name=Keywords content="mango,mango mei,梦来梦网,芒果笔记,程序猫,猫大刚"><meta name=description content="MacOs10.15.7编译openjdk8u"><meta name=author content="程序猫大刚"><meta property="og:url" content="/mb/post/jvm/MacOs10_15_7%E7%BC%96%E8%AF%91openjdk8u/"><link rel="shortcut icon" href=/mb/favicon.ico type=image/x-icon><link rel=stylesheet href=/mb/css/normalize.css><link rel=stylesheet href=/mb/css/style.css><script type=text/javascript src=//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js></script><link href=https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css rel=stylesheet><link rel=stylesheet href=/mb/css/douban.css><link rel=stylesheet href=/mb/css/other.css><script>var _hmt=_hmt||[];(function(){var d=window.location.href,a="da7002a3263e13123d3c44e6afe80dc8",b,c;d.indexOf("mg0324.github.io")!=-1&&(a="87868e1c195a2ea2a4058f1fd978ffe2"),b=document.createElement("script"),b.src="https://hm.baidu.com/hm.js?"+a,c=document.getElementsByTagName("script")[0],c.parentNode.insertBefore(b,c)})()</script></head><body><header id=header class=clearfix><div class=container><div class=col-group><div class=site-name><a id=logo href=/mb>程序猫大刚</a><p class=description>记录点滴，回头思过往！</p><p class=description>不积跬步无以至千里，加油吧大刚！！！</p></div><div><nav id=nav-menu class=clearfix><a class=current href=/mb>首页</a>
+<a href=/mb/sp/ title=学习路线>学习路线</a>
+<a href=/mb/archives/ title=归档>归档</a>
+<a href=/mb/pr/ title=发布日记>发布日记</a>
+<a href=http://mg.meiflower.top title=关于>关于</a></nav></div></div></div></header><div id=body><div class=container><div class=col-group><div class=col-8 id=main><div class=res-cons><style type=text/css>.post-toc{position:fixed;width:200px;margin-left:-210px;padding:5px 10px;font-family:Athelas,STHeiti,Microsoft Yahei,serif;font-size:12px;border:1px solid rgba(0,0,0,7%);border-radius:5px;background-color:rgba(255,255,255,.98);background-clip:padding-box;-webkit-box-shadow:1px 1px 2px rgba(0,0,0,.125);box-shadow:1px 1px 2px rgba(0,0,0,.125);word-wrap:break-word;white-space:nowrap;-webkit-box-sizing:border-box;box-sizing:border-box;z-index:999;cursor:pointer;max-height:70%;overflow-y:auto;overflow-x:hidden}.post-toc .post-toc-title{width:100%;margin:0 auto;font-size:20px;font-weight:400;text-transform:uppercase;text-align:center}.post-toc .post-toc-content{font-size:15px}.post-toc .post-toc-content>nav>ul{margin:10px 0}.post-toc .post-toc-content ul{padding-left:20px;list-style:square;margin:.5em;line-height:1.8em}.post-toc .post-toc-content ul ul{padding-left:15px;display:none}@media print,screen and (max-width:1057px){.post-toc{display:none}}</style><div class=post-toc style=position:absolute;top:188px><h2 class=post-toc-title>文章目录</h2><div class=post-toc-content><nav id=TableOfContents><ul><li><a href=#机器环境及依赖>机器环境及依赖</a></li><li><a href=#1进入本机目录并下载源码>1.进入本机目录并下载源码</a></li><li><a href=#2获取其他需要的存储库>2.获取其他需要的存储库</a></li><li><a href=#3检查配置bash-configure>3.检查配置bash ./configure</a></li><li><a href=#4检查配置通过后编译make>4.检查配置通过后，编译make</a></li><li><a href=#5测试>5.测试</a></li><li><a href=#参考文档>参考文档</a></li></ul></nav></div></div><script type=text/javascript>$(document).ready(function(){var a=$(".post-toc"),b,c,d;a.length&&(b=$("#main").offset().left,b<220&&a.css({width:b-10,"margin-left":0-b}),c=a.offset().top-20,d={start:{position:"absolute",top:c},process:{position:"fixed",top:20}},$(window).scroll(function(){var b=$(window).scrollTop();b<c?a.css(d.start):a.css(d.process)})),$("#TableOfContents").children().length<1&&$(".post-toc").remove()})</script><article class=post><header><h1 class=post-title>MacOs10.15.7编译openjdk8u</h1></header><date class="post-meta meta-date">2022年8月22日</date><div class=post-meta><span>|</span>
+<span class=meta-category><a href=/mb/categories/JVM>JVM</a></span></div><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
+阅读</span></span></div><div class=post-content><h1 id=mac10157上编译openjdk8u>Mac10.15.7上编译OpenJDK8u</h1><h2 id=机器环境及依赖>机器环境及依赖</h2><ul><li>操作系统：<code>macOs 10.15.7</code></li><li>BootJDK: <code>/Library/Java/JavaVirtualMachines/jdk1.8.0_221.jdk/Contents/Home</code></li><li>XCode：<code>Version 11.3.1 (11C505)</code></li><li>hg命令(mercurial): <code>brew install mercurial</code></li><li>freetype: <code>brew install freetype</code>
+<strong>注意：笔者先前打算编译jdk8，一番折腾后各种报错，最后选择jdk8u的版本。</strong></li></ul><h2 id=1进入本机目录并下载源码>1.进入本机目录并下载源码</h2><p>如果有代理请设置代理，不然可能会超时或者慢。</p><pre><code>export http_proxys=http://127.0.0.1:9999
+export http_proxy=http://127.0.0.1:9999
+</code></pre><pre><code>cd ~/git
+mango@mangodeMacBook-Pro git % hg clone https://hg.openjdk.java.net/jdk8u/jdk8u/ openjdk8u
+requesting all changes
+adding changesets
+adding manifests
+adding file changes
+added 2579 changesets with 3115 changes to 142 files
+new changesets cfeea66a3fa8:a323800a7172
+updating to branch default
+86 files updated, 0 files merged, 0 files removed, 0 files unresolved
+</code></pre><h2 id=2获取其他需要的存储库>2.获取其他需要的存储库</h2><pre><code>您可以运行位于根存储库中的 get_source.sh 脚本来获取
+  其他需要的存储库：
+    cd openjdk8u &amp;&amp; sh ./get_source.sh
+</code></pre><p>该过程很慢，请耐心等待。</p><pre><code>mango@mangodeMacBook-Pro openjdk8u % sh get_source.sh
+# Repositories:  corba jaxp jaxws langtools jdk hotspot nashorn
+                corba:   hg clone https://hg.openjdk.java.net/jdk8u/jdk8u/corba corba
+                 jaxp:   hg clone https://hg.openjdk.java.net/jdk8u/jdk8u/jaxp jaxp
+                 jaxp:   requesting all changes
+                corba:   requesting all changes
+                 jaxp:   adding changesets
+                corba:   adding changesets
+                corba:   adding manifests
+                 jaxp:   adding manifests
+                corba:   adding file changes
+                 jaxp:   adding file changes
+                corba:   added 2042 changesets with 4998 changes to 1392 files
+                corba:   new changesets 55540e827aef:5cbb81265d86
+                corba:   updating to branch default
+                corba:   1198 files updated, 0 files merged, 0 files removed, 0 files unresolved
+                jaxws:   hg clone https://hg.openjdk.java.net/jdk8u/jdk8u/jaxws jaxws
+                jaxws:   requesting all changes
+                jaxws:   adding changesets
+                jaxws:   adding manifests
+                jaxws:   adding file changes
+                 jaxp:   added 2139 changesets with 8610 changes to 4242 files
+                 jaxp:   new changesets 6ce5f4757bde:4356d7da8e0d
+                 jaxp:   updating to branch default
+                 jaxp:   2059 files updated, 0 files merged, 0 files removed, 0 files unresolved
+            langtools:   hg clone https://hg.openjdk.java.net/jdk8u/jdk8u/langtools langtools
+            langtools:   requesting all changes
+            langtools:   adding changesets
+            langtools:   adding manifests
+            langtools:   adding file changes
+                jaxws:   added 1933 changesets with 13926 changes to 6752 files
+                jaxws:   new changesets 0961a4a21176:ec2d4135d03f
+                jaxws:   updating to branch default
+                jaxws:   3735 files updated, 0 files merged, 0 files removed, 0 files unresolved
+                  jdk:   hg clone https://hg.openjdk.java.net/jdk8u/jdk8u/jdk jdk
+                  jdk:   requesting all changes
+                  jdk:   adding changesets
+                  jdk:   adding manifests
+            langtools:   added 3958 changesets with 22810 changes to 7200 files
+            langtools:   new changesets 9a66ca7c79fa:bc8bc5deb3ae
+            langtools:   updating to branch default
+            langtools:   6402 files updated, 0 files merged, 0 files removed, 0 files unresolved
+              hotspot:   hg clone https://hg.openjdk.java.net/jdk8u/jdk8u/hotspot hotspot
+              hotspot:   requesting all changes
+              hotspot:   adding changesets
+              hotspot:   adding manifests
+              hotspot:   adding file changes
+              hotspot:   added 9532 changesets with 44715 changes to 6238 files
+              hotspot:   new changesets a61af66fc99e:69087d08d473
+              hotspot:   updating to branch default
+              hotspot:   5266 files updated, 0 files merged, 0 files removed, 0 files unresolved
+              nashorn:   hg clone https://hg.openjdk.java.net/jdk8u/jdk8u/nashorn nashorn
+              nashorn:   requesting all changes
+              nashorn:   adding changesets
+              nashorn:   adding manifests
+              nashorn:   adding file changes
+                  jdk:   adding file changes
+              nashorn:   added 2617 changesets with 11766 changes to 2994 files
+              nashorn:   new changesets b8a1b238c77c:0761f5431f9d
+              nashorn:   updating to branch default
+              nashorn:   2775 files updated, 0 files merged, 0 files removed, 0 files unresolved
+# Repositories:  jdk
+                  jdk:   hg clone https://hg.openjdk.java.net/jdk8u/jdk8u/jdk jdk
+                  jdk:   requesting all changes
+                  jdk:   adding changesets
+                  jdk:   adding manifests
+                  jdk:   adding file changes
+                  jdk:   added 14627 changesets with 107868 changes to 30915 files
+                  jdk:   new changesets 37a05a11f281:7fcf35286d52
+                  jdk:   updating to branch default
+                  jdk:   25940 files updated, 0 files merged, 0 files removed, 0 files unresolved
+# Repositories:  . corba jaxp jaxws langtools jdk hotspot nashorn
+                    .:   cd . &amp;&amp; hg pull -u
+                corba:   cd corba &amp;&amp; hg pull -u
+                 jaxp:   cd jaxp &amp;&amp; hg pull -u
+                jaxws:   cd jaxws &amp;&amp; hg pull -u
+            langtools:   cd langtools &amp;&amp; hg pull -u
+                  jdk:   cd jdk &amp;&amp; hg pull -u
+              hotspot:   cd hotspot &amp;&amp; hg pull -u
+              nashorn:   cd nashorn &amp;&amp; hg pull -u
+                    .:   pulling from https://hg.openjdk.java.net/jdk8u/jdk8u/
+                corba:   pulling from https://hg.openjdk.java.net/jdk8u/jdk8u/corba
+                jaxws:   pulling from https://hg.openjdk.java.net/jdk8u/jdk8u/jaxws
+                 jaxp:   pulling from https://hg.openjdk.java.net/jdk8u/jdk8u/jaxp
+              hotspot:   pulling from https://hg.openjdk.java.net/jdk8u/jdk8u/hotspot
+                  jdk:   pulling from https://hg.openjdk.java.net/jdk8u/jdk8u/jdk
+              nashorn:   pulling from https://hg.openjdk.java.net/jdk8u/jdk8u/nashorn
+            langtools:   pulling from https://hg.openjdk.java.net/jdk8u/jdk8u/langtools
+                corba:   searching for changes
+                corba:   no changes found
+                  jdk:   searching for changes
+                  jdk:   no changes found
+                jaxws:   searching for changes
+                jaxws:   no changes found
+                 jaxp:   searching for changes
+                 jaxp:   no changes found
+              nashorn:   searching for changes
+              nashorn:   no changes found
+              hotspot:   searching for changes
+              hotspot:   no changes found
+                    .:   searching for changes
+                    .:   no changes found
+            langtools:   searching for changes
+            langtools:   no changes found
+</code></pre><h2 id=3检查配置bash-configure>3.检查配置bash ./configure</h2><pre><code>mango@mangodeMacBook-Pro openjdk8u % sh configure
+Running generated-configure.sh
+configure: Configuration created at Mon Aug 22 16:03:43 CST 2022.
+configure: configure script generated at timestamp 1625670527.
+checking for basename... /usr/bin/basename
+checking for bash... /bin/bash
+checking for cat... /bin/cat
+checking for chmod... /bin/chmod
+checking for cmp... /usr/bin/cmp
+checking for comm... /usr/bin/comm
+checking for cp... /bin/cp
+checking for cut... /usr/bin/cut
+checking for date... /bin/date
+checking for gdiff... no
+checking for diff... /usr/bin/diff
+checking for dirname... /usr/bin/dirname
+checking for echo... /bin/echo
+checking for expr... /bin/expr
+checking for file... /usr/bin/file
+checking for find... /usr/bin/find
+checking for head... /usr/bin/head
+checking for ln... /bin/ln
+checking for ls... /bin/ls
+checking for mkdir... /bin/mkdir
+checking for mktemp... /usr/bin/mktemp
+checking for mv... /bin/mv
+checking for nawk... no
+checking for gawk... no
+checking for awk... /usr/bin/awk
+checking for printf... /usr/bin/printf
+checking for rm... /bin/rm
+checking for sh... /bin/sh
+checking for sort... /usr/bin/sort
+checking for tail... /usr/bin/tail
+checking for tar... /usr/bin/tar
+checking for tee... /usr/bin/tee
+checking for touch... /usr/bin/touch
+checking for tr... /usr/bin/tr
+checking for uname... /usr/bin/uname
+checking for uniq... /usr/bin/uniq
+checking for wc... /usr/bin/wc
+checking for which... /usr/bin/which
+checking for xargs... /usr/bin/xargs
+checking for gawk... no
+checking for mawk... no
+checking for nawk... no
+checking for awk... awk
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for cygpath... no
+checking for greadlink... no
+checking for readlink... /usr/bin/readlink
+checking for df... /bin/df
+checking for SetFile... /usr/bin/SetFile
+checking for cpio... /usr/bin/cpio
+checking build system type... x86_64-apple-darwin19.6.0
+checking host system type... x86_64-apple-darwin19.6.0
+checking target system type... x86_64-apple-darwin19.6.0
+checking openjdk-build os-cpu... macosx-x86_64
+checking openjdk-target os-cpu... macosx-x86_64
+checking compilation type... native
+checking for top-level directory... /Users/mango/git/openjdk8u
+checking for presence of closed sources... no
+checking if closed source is suppressed (openjdk-only)... no
+checking which variant of the JDK to build... normal
+checking which interpreter of the JVM to build... template
+checking which variants of the JVM to build... server
+checking which debug level to use... release
+checking for sysroot...
+checking for toolchain path...
+checking for extra path...
+checking where to store configuration... in default location
+checking what configuration name to use... macosx-x86_64-normal-server-release
+checking for apt-get... no
+checking for yum... no
+checking for port... no
+checking for pkgutil... pkgutil
+checking for gmake... no
+checking for make... /usr/bin/make
+configure: Testing potential make at /usr/bin/make, found using make in PATH
+configure: Using GNU make 3.81 (or later) at /usr/bin/make (version: GNU Make 3.81)
+checking if find supports -delete... yes
+checking for unzip... /usr/bin/unzip
+checking for zip... /usr/bin/zip
+checking for ldd... no
+checking for readelf... no
+checking for greadelf... no
+checking for hg... /Users/mango/envs/homebrew//bin/hg
+checking for stat... /usr/bin/stat
+checking for time... /usr/bin/time
+checking for dsymutil... /usr/bin/dsymutil
+checking for xattr... /usr/bin/xattr
+checking for codesign... /usr/bin/codesign
+checking if openjdk_codesign certificate is present... no
+checking for pkg-config... /Users/mango/envs/homebrew//bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for 7z... no
+checking for unzip... unzip
+checking for wget... wget
+checking headful support... include support for both headful and headless
+checking whether to build JFR... true
+configure: Found potential Boot JDK using JAVA_HOME
+checking for Boot JDK... /Library/Java/JavaVirtualMachines/jdk1.8.0_221.jdk/Contents/Home
+checking Boot JDK version... java version &quot;1.8.0_221&quot; Java(TM) SE Runtime Environment (build 1.8.0_221-b11) Java HotSpot(TM) 64-Bit Server VM (build 25.221-b11, mixed mode)
+checking for java in Boot JDK... ok
+checking for javac in Boot JDK... ok
+checking for javah in Boot JDK... ok
+checking for javap in Boot JDK... ok
+checking for jar in Boot JDK... ok
+checking for rmic in Boot JDK... ok
+checking for native2ascii in Boot JDK... ok
+checking if Boot JDK is 32 or 64 bits... 64
+checking flags for boot jdk java command ...
+checking flags for boot jdk java command for big workloads...  -Xms64M -Xmx1600M -XX:ThreadStackSize=1536
+checking flags for boot jdk java command for small workloads...  -XX:+UseSerialGC -Xms32M -Xmx512M
+configure: Xcode major version: 11
+configure: Using default toolchain clang (clang/LLVM)
+checking Determining if we need to set DEVELOPER_DIR... no
+checking for xcodebuild... /usr/bin/xcodebuild
+checking Determining Xcode SDK path... /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk
+checking for clang... /usr/bin/clang
+checking resolved symbolic links for CC... no symlink
+configure: Using clang C compiler version 11.0.0 [Apple clang version 11.0.0 (clang-1100.0.33.17) Target: x86_64-apple-darwin19.6.0 Thread model: posix InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin]
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables...
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/bin/clang accepts -g... yes
+checking for /usr/bin/clang option to accept ISO C89... none needed
+checking for clang++... /usr/bin/clang++
+checking resolved symbolic links for CXX... no symlink
+configure: Using clang C++ compiler version 11.0.0 [Apple clang version 11.0.0 (clang-1100.0.33.17) Target: x86_64-apple-darwin19.6.0 Thread model: posix InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin]
+checking whether we are using the GNU C++ compiler... yes
+checking whether /usr/bin/clang++ accepts -g... yes
+checking how to run the C preprocessor... /usr/bin/clang -E
+checking how to run the C++ preprocessor... /usr/bin/clang++ -E
+checking for ar... ar
+configure: Rewriting AR to &quot;/usr/bin/ar&quot;
+checking for gcc... gcc
+checking whether we are using the GNU Objective C compiler... yes
+checking whether gcc accepts -g... yes
+configure: Rewriting OBJC to &quot;/usr/bin/gcc&quot;
+checking for lipo... /usr/bin/lipo
+checking for strip... strip
+configure: Rewriting STRIP to &quot;/usr/bin/strip&quot;
+checking for otool... /usr/bin/otool
+checking for nm... nm
+configure: Rewriting NM to &quot;/usr/bin/nm&quot;
+checking for gobjdump... no
+checking for objdump... objdump
+configure: Rewriting OBJDUMP to &quot;/usr/bin/objdump&quot;
+checking for jtreg... no
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking stdio.h usability... yes
+checking stdio.h presence... yes
+checking for stdio.h... yes
+checking size of int *... 8
+checking for target address size... 64 bits
+checking whether byte ordering is bigendian... no
+checking if the C compiler supports &quot;-m64&quot;... yes
+checking if the C++ compiler supports &quot;-m64&quot;... yes
+checking if both compilers support &quot;-m64&quot;... yes
+checking if the C compiler supports &quot;-m64&quot;... yes
+checking if the C++ compiler supports &quot;-m64&quot;... yes
+checking if both compilers support &quot;-m64&quot;... yes
+checking if we should generate debug symbols... true
+checking if we should zip debug-info files... yes
+checking what type of native debug symbols to use (this will override previous settings)... not specified
+configure: --with-native-debug-symbols not specified. Using values from --disable-debug-symbols and --disable-zip-debug-info
+checking what is not needed on MacOSX?... alsa pulse x11
+checking for X... no
+checking for X11/extensions/shape.h... no
+checking cups/cups.h usability... yes
+checking cups/cups.h presence... yes
+checking for cups/cups.h... yes
+checking cups/ppd.h usability... yes
+checking cups/ppd.h presence... yes
+checking for cups/ppd.h... yes
+checking for FREETYPE... yes
+checking for freetype... yes (using pkg-config)
+checking if we can compile and link with freetype... yes
+checking if we should bundle freetype... no
+checking for main in -ljpeg... no
+configure: Will use jpeg decoder bundled with the OpenJDK source
+checking for which giflib to use... bundled
+checking for compress in -lz... yes
+checking for which zlib to use... system
+checking for cos in -lm... yes
+checking for dlopen in -ldl... yes
+checking if elliptic curve crypto implementation is present... yes
+checking for number of cores... 2
+checking for memory size... 8192 MB
+checking for appropriate number of jobs to run in parallel... 2
+checking whether to use sjavac... no
+checking is ccache enabled... no
+checking if build directory is on local disk... yes
+configure: creating /Users/mango/git/openjdk8u/build/macosx-x86_64-normal-server-release/config.status
+config.status: creating /Users/mango/git/openjdk8u/build/macosx-x86_64-normal-server-release/spec.gmk
+config.status: creating /Users/mango/git/openjdk8u/build/macosx-x86_64-normal-server-release/hotspot-spec.gmk
+config.status: creating /Users/mango/git/openjdk8u/build/macosx-x86_64-normal-server-release/bootcycle-spec.gmk
+config.status: creating /Users/mango/git/openjdk8u/build/macosx-x86_64-normal-server-release/compare.sh
+config.status: creating /Users/mango/git/openjdk8u/build/macosx-x86_64-normal-server-release/spec.sh
+config.status: creating /Users/mango/git/openjdk8u/build/macosx-x86_64-normal-server-release/Makefile
+config.status: creating /Users/mango/git/openjdk8u/build/macosx-x86_64-normal-server-release/config.h
+config.status: /Users/mango/git/openjdk8u/build/macosx-x86_64-normal-server-release/config.h is unchanged
+found it
+
+====================================================
+A new configuration has been successfully created in
+/Users/mango/git/openjdk8u/build/macosx-x86_64-normal-server-release
+using default settings.
+
+Configuration summary:
+* Debug level:    release
+* JDK variant:    normal
+* JVM variants:   server
+* OpenJDK target: OS: macosx, CPU architecture: x86, address length: 64
+
+Tools summary:
+* Boot JDK:       java version &quot;1.8.0_221&quot; Java(TM) SE Runtime Environment (build 1.8.0_221-b11) Java HotSpot(TM) 64-Bit Server VM (build 25.221-b11, mixed mode)  (at /Library/Java/JavaVirtualMachines/jdk1.8.0_221.jdk/Contents/Home)
+* Toolchain:      clang (clang/LLVM)
+* C Compiler:     Version 11.0.0 (at /usr/bin/clang)
+* C++ Compiler:   Version 11.0.0 (at /usr/bin/clang++)
+
+Build performance summary:
+* Cores to use:   2
+* Memory limit:   8192 MB
+
+WARNING: The result of this configuration has overridden an older
+configuration. You *should* run 'make clean' to make sure you get a
+proper build. Failure to do so might result in strange build problems.
+</code></pre><h2 id=4检查配置通过后编译make>4.检查配置通过后，编译make</h2><p>执行make images命令，编译过程耗时比较久，请耐心等待。</p><pre><code>$ make images
+省略大部分日志......
+----- Build times -------
+Start 2022-08-22 16:20:35
+End   2022-08-22 16:44:13
+00:00:26 corba
+00:10:12 demos
+00:04:55 hotspot
+00:02:17 images
+00:00:15 jaxp
+00:00:26 jaxws
+00:04:15 jdk
+00:00:34 langtools
+00:00:18 nashorn
+00:23:38 TOTAL
+-------------------------
+Finished building OpenJDK for target 'images'
+</code></pre><p>看到如上输出后，说明编译镜像成功。会在build下有images的目录，如下图：
+<a data-fancybox=gallery href=/mb/images/jvm2/jdk8u/01.png><img class=mx-auto alt src=/mb/images/jvm2/jdk8u/01.png></a></p><h2 id=5测试>5.测试</h2><p>进入到目录（因机器而已）：/Users/mango/git/openjdk8u/build/macosx-x86_64-normal-server-release/images/j2sdk-image/bin，后执行<code>java -version</code>。可以将<code>j2sdk-bundle</code>下的软件包copy到<code>/Library/Java/JavaVirtualMachines</code>下，在IDEA中配置使用。</p><pre><code>mango@mangodeMacBook-Pro bin % ./java -version
+openjdk version &quot;1.8.0-internal&quot;
+OpenJDK Runtime Environment (build 1.8.0-internal-mango_2022_08_22_16_19-b00)
+OpenJDK 64-Bit Server VM (build 25.71-b00, mixed mode)
+</code></pre><h2 id=参考文档>参考文档</h2><p>在编译过程中，可能会遇到各种各样的问题，这里就不标出来了。（因为不太懂C，要怎么解决也都是查资料尝试解决的。）</p><ul><li>参考地址：https://github.com/openjdk/jdk/tree/jdk8-b120</li><li>参考博客：https://blog.csdn.net/lizhengjava/article/details/105629780/</li></ul></div><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=/mb/post/jvm/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6%E7%AD%96%E7%95%A5/>内存分配与回收策略</a></li><li><a href=/mb/post/jvm/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95/>垃圾收集算法</a></li><li><a href=/mb/post/jvm/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/>虚拟机相关工具</a></li><li><a href=/mb/post/jvm/%E5%9B%9E%E6%94%B6%E5%A0%86%E5%92%8C%E6%96%B9%E6%B3%95%E5%8C%BA%E4%B8%AD%E5%AF%B9%E8%B1%A1/>回收堆和方法区中对象</a></li><li><a href=/mb/post/jvm/Java%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2/>Java发展历史</a></li></ul></div><div class="post-meta meta-tags"><ul class=clearfix><li><a href=/mb/tags/java>java</a></li><li><a href=/mb/tags/jvm>jvm</a></li></ul></div></article><div id=waline></div><script src=//cdn.jsdelivr.net/npm/@waline/client></script><script>Waline({el:'#waline',serverURL:'https://valine-m1uexx7dk-mg0324.vercel.app',placeholder:'说点什么吧...'})</script></div><footer id=footer><div>&copy; 2022 <a href=/mb>程序猫大刚 By 程序猫大刚</a>
+| <a rel=nofollow target=_blank href=http://beian.miit.gov.cn/>粤ICP备17082965号</a></div><br><div><div class=github-badge><a href=https://gohugo.io/ target=_black rel=nofollow><span class=badge-subject>Powered by</span><span class="badge-value bg-blue">Hugo</span></a></div><div class=github-badge><a href=https://www.flysnow.org/ target=_black><span class=badge-subject>Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a></div><div class=github-badge><a href=https://github.com/flysnow-org/maupassant-hugo target=_black><span class=badge-subject>Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a></div></div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[['$','$']],processEscapes:!0}}</script><script src="//cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script src=//cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js></script><a id=rocket href=#top></a><script type=text/javascript src="/mb/js/totop.js?v=0.0.0" async></script><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script><script src=/mb/js/douban.js></script></div><div id=secondary><section class=widget><form id=search action=/mb/search method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
+<input type=hidden name=sitesearch value=/mb>
+<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/ title=熟悉JVM内存区域>熟悉JVM内存区域</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%B9%B6%E5%8F%91%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90/ title=HotSpot垃圾算法实现之并发的可达性分析>HotSpot垃圾算法实现之并发的可达性分析</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%AE%B0%E5%BF%86%E9%9B%86%E4%B8%8E%E5%8D%A1%E8%A1%A8%E5%92%8C%E5%86%99%E5%B1%8F%E9%9A%9C/ title=HotSpot垃圾算法实现之记忆集与卡表和写屏障>HotSpot垃圾算法实现之记忆集与卡表和写屏障</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E6%9E%9A%E4%B8%BE%E6%A0%B9%E8%8A%82%E7%82%B9%E5%92%8C%E5%AE%89%E5%85%A8%E7%82%B9%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F/ title=HotSpot垃圾算法实现之枚举根节点和安全点安全区域>HotSpot垃圾算法实现之枚举根节点和安全点安全区域</a></li><li><a href=/mb/post/jvm/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/ title=类加载器>类加载器</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89Java%E7%B1%BB%E6%96%87%E4%BB%B6class%E7%BB%93%E6%9E%84/ title=熟悉Java类文件class结构>熟悉Java类文件class结构</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89JVM%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4/ title=熟悉JVM字节码指令>熟悉JVM字节码指令</a></li><li><a href=/mb/post/jvm/MacOs10_15_7%E7%BC%96%E8%AF%91openjdk8u/ title=MacOs10.15.7编译openjdk8u>MacOs10.15.7编译openjdk8u</a></li><li><a href=/mb/post/jvm/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6%E7%AD%96%E7%95%A5/ title=内存分配与回收策略>内存分配与回收策略</a></li><li><a href=/mb/post/jvm/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95/ title=垃圾收集算法>垃圾收集算法</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/categories/>分类</a></h3><ul class=widget-list><li><a href=/mb/categories/JVM/>JVM (17)</a></li><li><a href=/mb/categories/Java%E5%B9%B6%E5%8F%91/>Java并发 (11)</a></li><li><a href=/mb/categories/Spring-Cloud/>Spring Cloud (15)</a></li><li><a href=/mb/categories/idea/>idea (3)</a></li><li><a href=/mb/categories/k8s/>k8s (9)</a></li><li><a href=/mb/categories/%E6%80%9D%E6%83%B3%E8%BF%9B%E5%8C%96/>思想进化 (1)</a></li><li><a href=/mb/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/>技术文章 (62)</a></li><li><a href=/mb/categories/%E7%94%9F%E6%B4%BB%E7%9B%B8%E5%85%B3/>生活相关 (3)</a></li><li><a href=/mb/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/>读书笔记 (2)</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/tags/>标签</a></h3><div class=tagcloud><a href=/mb/tags/Spring-Cloud/>Spring Cloud</a>
+<a href=/mb/tags/alisql/>alisql</a>
+<a href=/mb/tags/apache/>apache</a>
+<a href=/mb/tags/commonjs/>commonjs</a>
+<a href=/mb/tags/docker/>docker</a>
+<a href=/mb/tags/docker-machine/>docker-machine</a>
+<a href=/mb/tags/dubbo/>dubbo</a>
+<a href=/mb/tags/es6/>es6</a>
+<a href=/mb/tags/fastdfs/>fastdfs</a>
+<a href=/mb/tags/forkjoin/>forkjoin</a>
+<a href=/mb/tags/frp/>frp</a>
+<a href=/mb/tags/futrue/>futrue</a>
+<a href=/mb/tags/gc/>gc</a>
+<a href=/mb/tags/github/>github</a>
+<a href=/mb/tags/github-pages/>github pages</a>
+<a href=/mb/tags/helm/>helm</a>
+<a href=/mb/tags/httpd/>httpd</a>
+<a href=/mb/tags/idea/>idea</a>
+<a href=/mb/tags/idea-plugin/>idea plugin</a>
+<a href=/mb/tags/java/>java</a>
+<a href=/mb/tags/jdk/>jdk</a>
+<a href=/mb/tags/jni/>jni</a>
+<a href=/mb/tags/juc/>juc</a>
+<a href=/mb/tags/jvm/>jvm</a>
+<a href=/mb/tags/k3s/>k3s</a>
+<a href=/mb/tags/k8s/>k8s</a>
+<a href=/mb/tags/k9s/>k9s</a>
+<a href=/mb/tags/kafka/>kafka</a>
+<a href=/mb/tags/kubeadm/>kubeadm</a>
+<a href=/mb/tags/kubectl/>kubectl</a>
+<a href=/mb/tags/logback/>logback</a>
+<a href=/mb/tags/logging/>logging</a>
+<a href=/mb/tags/maven/>maven</a>
+<a href=/mb/tags/md/>md</a>
+<a href=/mb/tags/minikube/>minikube</a>
+<a href=/mb/tags/mq/>mq</a>
+<a href=/mb/tags/multipass/>multipass</a>
+<a href=/mb/tags/mybatis/>mybatis</a>
+<a href=/mb/tags/mycat/>mycat</a>
+<a href=/mb/tags/mysql/>mysql</a>
+<a href=/mb/tags/nginx/>nginx</a>
+<a href=/mb/tags/nio/>nio</a>
+<a href=/mb/tags/python/>python</a>
+<a href=/mb/tags/rancher/>rancher</a>
+<a href=/mb/tags/raspberry/>raspberry</a>
+<a href=/mb/tags/react/>react</a>
+<a href=/mb/tags/redis/>redis</a>
+<a href=/mb/tags/slf4j/>slf4j</a>
+<a href=/mb/tags/solr/>solr</a>
+<a href=/mb/tags/springboot/>springboot</a>
+<a href=/mb/tags/tomcat/>tomcat</a>
+<a href=/mb/tags/webui/>webui</a>
+<a href=/mb/tags/zookeeper/>zookeeper</a>
+<a href=/mb/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/>云原生</a>
+<a href=/mb/tags/%E4%BC%98%E5%8C%96/>优化</a>
+<a href=/mb/tags/%E5%81%A5%E5%BA%B7/>健康</a>
+<a href=/mb/tags/%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2/>全文检索</a>
+<a href=/mb/tags/%E5%86%85%E7%BD%91/>内网</a>
+<a href=/mb/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/>内网穿透</a>
+<a href=/mb/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8/>分布式存储</a>
+<a href=/mb/tags/%E5%8C%85%E5%86%B2%E7%AA%81/>包冲突</a>
+<a href=/mb/tags/%E5%8D%95%E4%BE%8B/>单例</a>
+<a href=/mb/tags/%E5%9F%9F%E5%90%8D/>域名</a>
+<a href=/mb/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/>并发编程</a>
+<a href=/mb/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/>异常处理</a>
+<a href=/mb/tags/%E5%BC%82%E6%AD%A5/>异步</a>
+<a href=/mb/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/>微服务</a>
+<a href=/mb/tags/%E6%80%A7%E8%83%BD/>性能</a>
+<a href=/mb/tags/%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4/>文件删除</a>
+<a href=/mb/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/>方法论</a>
+<a href=/mb/tags/%E6%97%A5%E5%BF%97%E5%A4%84%E7%90%86/>日志处理</a>
+<a href=/mb/tags/%E6%9E%B6%E6%9E%84/>架构</a>
+<a href=/mb/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/>源码编译</a>
+<a href=/mb/tags/%E7%A6%81%E7%A2%98/>禁碘</a>
+<a href=/mb/tags/%E8%85%BE%E8%AE%AF%E4%BA%91/>腾讯云</a>
+<a href=/mb/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/>解决方案</a>
+<a href=/mb/tags/%E8%AF%81%E4%B9%A6/>证书</a>
+<a href=/mb/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/>读写分离</a>
+<a href=/mb/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/>负载均衡</a>
+<a href=/mb/tags/%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F/>部署方式</a>
+<a href=/mb/tags/%E9%98%85%E8%AF%BB/>阅读</a></div></section><section class=widget><h3 class=widget-title>友情链接</h3><ul class=widget-list><li><a target=_blank href=https://www.flysnow.org/ title=飞雪无情的博客>飞雪无情的博客</a></li><li><a target=_blank href=http://sentsin.com/ title=闲心>闲心</a></li><li><a target=_blank href=https://xuexb.com/ title=前端小武>前端小武</a></li><li><a target=_blank href=http://blog.wayneww.top/ title=大威>大威</a></li></ul></section><section class=widget><h3 class=widget-title>其它</h3><ul class=widget-list><li><a href=/mb/index.xml>文章 RSS</a></li></ul></section></div></div></div></div></body></html>

@@ -1,5 +1,5 @@
 ---
-title: "HotSpot垃圾算法实现之并发可达性分析"
+title: "HotSpot垃圾算法实现之并发的可达性分析"
 date: 2022-09-26T22:37:18+08:00
 draft: false
 categories: ["JVM"]
