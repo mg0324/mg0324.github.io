@@ -9,7 +9,9 @@
 博客基于hugo框架搭建
 
 ## 部署日志
-
+``` shell
+hugo server -b "http://hw.meiflower.top:30000/mb/" -p 30000 --bind "0.0.0.0"
+```
 * 2022-11-24
 
   * 因为服务器过期，续费太贵，将k8s集群关闭，购买hw服务器1年

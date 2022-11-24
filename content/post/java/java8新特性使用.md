@@ -1,12 +1,12 @@
 ---
-title: java8新特性使用
-date: 2022-11-24 11:38:20
+title: "java8新特性使用"
+date: 2022-11-24T13:54:02+08:00
+draft: false
 categories: ["技术文章","Java"]
 tags: ["jdk8","新特性"]
-draft: false
 ---
 
-## Stream api
+## Stream api2
 
 ### Collect to Map
 
@@ -43,3 +43,4 @@ f1(1,2,result -> {
   System.out.println(result);
 })
 ```
+
