@@ -4,8 +4,8 @@ hugo --gc --minify
 rm -rf public/images
 #scp -r public/img/* root@hw:/data/mb/img
 rm -rf public/img
-rm -rf /data/mb/mb
-cp -r public/* /data/mb/mb/
+rm -rf /data/mb/mb/*
+cp -r public/* /data/mb/mb
 echo ‘目录更新成功’
 rm -rf public
 rm -rf mb
