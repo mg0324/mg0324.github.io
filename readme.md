@@ -11,6 +11,8 @@
 ## 部署日志
 ``` shell
 hugo server -b "http://hw.meiflower.top:30000/mb/" -p 30000 --bind "0.0.0.0"
+# 整理上传
+cp -r static/images/tool/ /data/mb/images
 ```
 * 2022-11-24
 
