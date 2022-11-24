@@ -1,7 +1,7 @@
 ---
 title: java之forkjoin体验
 date: 2020-03-06 10:52:37
-categories: ["技术文章"]
+categories: ["技术文章","Java"]
 tags: ["java","forkjoin","并发编程"]
 draft: false
 ---

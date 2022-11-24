@@ -1,7 +1,7 @@
 ---
 title: java之深入jvm之路
 date: 2019-12-14 14:45:07
-categories: ["技术文章"]
+categories: ["技术文章","Java"]
 tags: ["java","jdk","jvm","gc"]
 draft: false
 ---

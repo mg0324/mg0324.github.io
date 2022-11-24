@@ -1,7 +1,7 @@
 ---
 title: 'java日志门面'
 date: 2019-12-14 13:44:06
-categories: ["技术文章"]
+categories: ["技术文章","Java"]
 tags: ["java","slf4j","logging"]
 draft: false
 ---

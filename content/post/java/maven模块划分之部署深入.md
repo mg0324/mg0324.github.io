@@ -1,7 +1,7 @@
 ---
 title: maven模块划分之部署深入
 date: 2017-12-06 17:24:20
-categories: ["技术文章"]
+categories: ["技术文章","Java"]
 tags: ["maven","部署方式","架构"]
 draft: false
 ---

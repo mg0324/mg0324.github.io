@@ -1,7 +1,7 @@
 ---
 title: Java性能注意点
 date: 2016-11-04 15:56:32
-categories: ["技术文章"]
+categories: ["技术文章","Java"]
 tags: ["java","性能"]
 draft: false
 ---

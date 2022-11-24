@@ -2,7 +2,7 @@
 title: "Java本地方法调用"
 date: 2022-05-24T23:08:25+08:00
 draft: false
-categories: ["技术文章"]
+categories: ["技术文章","Java"]
 tags: ["java","jni"]
 ---
 

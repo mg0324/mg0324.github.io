@@ -2,7 +2,7 @@
 title: "发布jar包公共maven仓库"
 date: 2021-12-25T22:18:49+08:00
 draft: false
-categories: ["技术文章"]
+categories: ["技术文章","Java"]
 tags: ["java","maven"]
 ---
 
