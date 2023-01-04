@@ -7,3 +7,5 @@ node_modules/
 .deploy_git/
 .hugo_build.lock
 public
+.history/
+.idea/
