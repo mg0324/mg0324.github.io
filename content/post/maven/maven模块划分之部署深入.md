@@ -10,7 +10,7 @@ draft: false
 > 在代码之路上快快慢慢几个春秋之后，多多少少都会经历一些框架的更迭。多数都是好用替代繁琐，新技术替换老技术。此刻，正是刚刚好的时机，来深入maven模块合理感谢华哥，受益匪浅的一课。
 
 ## 技术框架时间线
-![](/mb/images/maven/skil-time-line.png)
+![](/mb/images/maven/skill-time-line.png)
 
 * jsp+servlet > 最原始无框架时期，会用一些dbutil,bootstartp等。
 * ssh2+freemarker > struts2当时火，hibernate还未被mybatis攻克。
