@@ -8,6 +8,10 @@
 
 博客基于hugo框架搭建
 
+## 写作方式
+***请使用vs code远程连接到hw服务器的/data/git/mb目录下写作***
+因为发布命令记录跳板机编写，让编写环境不再随桌面端操作系统差异而变化。
+
 ## 部署日志
 ``` shell
 hugo server -b "http://hw.meiflower.top:30000/mb/" -p 30000 --bind "0.0.0.0"
