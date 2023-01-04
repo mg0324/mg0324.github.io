@@ -1,8 +1,8 @@
 ---
 title: alisql的my.cnf
 date: 2016-11-04 16:42:24
-categories: ["技术文章"]
-tags: ["mysql","alisql"]
+categories: ["技术文章","数据库"]
+tags: ["SQL","mysql","alisql"]
 draft: false
 ---
 

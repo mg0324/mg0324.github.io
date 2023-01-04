@@ -5,7 +5,14 @@
         | <a rel="nofollow" target="_blank" href="http://beian.miit.gov.cn/">{{.Site.Params.beian}}</a>
         {{ end }}
     </div>
-    <br />
+    {{ if .Site.Params.busuanzi }}
+        <div style="padding:8px;">
+            <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+            <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+            <span id="busuanzi_container_site_uv">本站总访客数<span id="busuanzi_value_site_uv"></span>人</span>
+            <!-- <span id="busuanzi_container_page_pv">本文总阅读量<span id="busuanzi_value_page_pv"></span>次</span> -->
+        </div>
+    {{ end }}
     <div>
         <div class="github-badge">
             <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
@@ -136,11 +143,10 @@
     {{ template "_internal/google_analytics.html" . }}
 {{- end -}}
 
-{{ if .Site.Params.busuanzi }}
-    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
-{{ end }}
+
 
 <!-- custom js -->
 {{ range .Site.Params.customJS }}
     <script src='{{ "/js/" | relURL }}{{ . }}'></script>
 {{ end }}
+

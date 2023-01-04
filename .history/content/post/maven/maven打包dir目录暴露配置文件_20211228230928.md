@@ -1,7 +1,7 @@
 ---
 title: maven打包dir目录暴露配置文件
 date: 2017-12-13 16:58:29
-categories: ["技术文章"]
+categories: ["技术文章","Java"]
 tags: ["maven","springboot"]
 draft: false
 ---

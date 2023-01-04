@@ -1,7 +1,7 @@
 ---
 title: java之future异步并发体验
 date: 2020-03-06 11:36:48
-categories: ["技术文章"]
+categories: ["技术文章","Java"]
 tags: ["java","futrue","异步","并发编程"]
 draft: false
 ---

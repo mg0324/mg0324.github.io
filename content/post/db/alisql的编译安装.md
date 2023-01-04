@@ -1,8 +1,8 @@
 ---
 title: alisql的编译安装
 date: 2016-11-04 16:18:28
-categories: ["技术文章"]
-tags: ["mysql","alisql"]
+categories: ["技术文章","数据库"]
+tags: ["SQL","mysql","alisql"]
 draft: false
 ---
 
