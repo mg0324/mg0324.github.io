@@ -81,7 +81,7 @@ summaryLength = 100
     serverURL = "https://valine-m1uexx7dk-mg0324.vercel.app" #换成你的serverURL mg.meiflower.top
     ## serverURL = "https://valine-mg0324.vercel.app/" #github
 
-[params.waline]
+[params.valine]
     enable = true
     appId = "lKKYPhJgpChREgVBkvRfeWhC-gzGzoHsz"
     appKey = "55uq8Bc1tgBNi2OYpKoHCaka"
