@@ -76,10 +76,15 @@ summaryLength = 100
 ##  img = "https://img.alicdn.com/tfs/TB1hblJl7Y2gK0jSZFgXXc5OFXa-750-400.jpg"
 
 [params.waline]
-    enable = true
+    enable = false
     placeholder = "说点什么吧..."
     serverURL = "https://valine-m1uexx7dk-mg0324.vercel.app" #换成你的serverURL mg.meiflower.top
     ## serverURL = "https://valine-mg0324.vercel.app/" #github
+
+[params.waline]
+    enable = true
+    appId = "lKKYPhJgpChREgVBkvRfeWhC-gzGzoHsz"
+    appKey = "55uq8Bc1tgBNi2OYpKoHCaka"
 
 
 ## 配置 utteranc评论,教程参考 https://utteranc.es/

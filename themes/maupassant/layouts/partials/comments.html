@@ -25,4 +25,16 @@
         });
     </script>
     {{ end }}
+    <!--valine-->
+    {{ if .Site.Params.valine.enable }}
+    <div id="vcomments"></div>
+    <script src='//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+    <script>
+       new Valine({
+            el: '#vcomments',
+            appId: '{{ .Site.Params.valine.appId }}',
+            appKey: '{{ .Site.Params.valine.appKey }}'
+        })
+    </script>
+    {{ end }}
 {{- end }}
