@@ -27,7 +27,7 @@ summaryLength = 100
   googleAd = ""  #ca-pub-xxxxxxxxxxxxxx
   localSearch = true # 启用本地搜索
   beian = "粤ICP备17082965号"
-  fancybox = true
+  fancybox = false
   cdnJsSite = "cdn.bootcdn.net"
 
   # 这里我存放在了主题的static文件夹里，根目录的似乎也可以

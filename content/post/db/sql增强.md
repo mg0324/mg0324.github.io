@@ -50,3 +50,6 @@ select a.* from a where a.id in ('1','3')
 ![]( /mb/images/sql/exist.drawio.svg)
 
 是否存在数据查询
+``` sql
+select * from a where exist (select 1 from b on a.id=b.a_id and b.grade>100)
+```
