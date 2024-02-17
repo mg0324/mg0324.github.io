@@ -7,5 +7,3 @@ rm -rf public/img
 rm -rf /data/mb/mb/*
 cp -r public/* /data/mb/mb
 echo ‘目录更新成功’
-rm -rf public
-rm -rf mb
