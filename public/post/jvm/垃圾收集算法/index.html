@@ -1,0 +1,107 @@
+<!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><title>垃圾收集算法 | 程序猫大刚</title>
+<meta property="og:title" content="垃圾收集算法 - 程序猫大刚"><meta property="og:type" content="article"><meta property="article:published_time" content="2022-08-20T10:22:08+08:00"><meta property="article:modified_time" content="2022-08-20T10:22:08+08:00"><meta name=Keywords content="mango,mango mei,梦来梦网,芒果笔记,程序猫,猫大刚"><meta name=description content="垃圾收集算法"><meta name=author content="程序猫大刚"><meta property="og:url" content="/mb/post/jvm/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95/"><link rel="shortcut icon" href=/mb/favicon.ico type=image/x-icon><link rel=stylesheet href=/mb/css/normalize.css><link rel=stylesheet href=/mb/css/style.css><script type=text/javascript src=//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js></script><link rel=stylesheet href=/css/douban.css><link rel=stylesheet href=/css/other.css><script>var _hmt=_hmt||[];(function(){var e,t,s=window.location.href,n="da7002a3263e13123d3c44e6afe80dc8";s.indexOf("mg0324.github.io")!=-1&&(n="87868e1c195a2ea2a4058f1fd978ffe2"),e=document.createElement("script"),e.src="https://hm.baidu.com/hm.js?"+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script></head><body><header id=header class=clearfix><div class=container><div class=col-group><div class=site-name><a id=logo href=/mb>程序猫大刚</a><p class=description>记录点滴，回头思过往！</p><p class=description>不积跬步无以至千里，加油吧大刚！！！</p></div><div><nav id=nav-menu class=clearfix><a class=current href=/mb>首页</a>
+<a href=/mb/sp/ title=学习路线>学习路线</a>
+<a href=/mb/archives/ title=归档>归档</a>
+<a href=/mb/pr/ title=发布日记>发布日记</a>
+<a href=http://mg.meiflower.top title=关于>关于</a></nav></div></div></div></header><div id=body><div class=container><div class=col-group><div class=col-8 id=main><div class=res-cons><style type=text/css>.post-toc{position:fixed;width:200px;margin-left:-210px;padding:5px 10px;font-family:Athelas,STHeiti,Microsoft Yahei,serif;font-size:12px;border:1px solid rgba(0,0,0,7%);border-radius:5px;background-color:rgba(255,255,255,.98);background-clip:padding-box;-webkit-box-shadow:1px 1px 2px rgba(0,0,0,.125);box-shadow:1px 1px 2px rgba(0,0,0,.125);word-wrap:break-word;white-space:nowrap;-webkit-box-sizing:border-box;box-sizing:border-box;z-index:999;cursor:pointer;max-height:70%;overflow-y:auto;overflow-x:hidden}.post-toc .post-toc-title{width:100%;margin:0 auto;font-size:20px;font-weight:400;text-transform:uppercase;text-align:center}.post-toc .post-toc-content{font-size:15px}.post-toc .post-toc-content>nav>ul{margin:10px 0}.post-toc .post-toc-content ul{padding-left:20px;list-style:square;margin:.5em;line-height:1.8em}.post-toc .post-toc-content ul ul{padding-left:15px;display:none}@media print,screen and (max-width:1057px){.post-toc{display:none}}</style><div class=post-toc style=position:absolute;top:188px><h2 class=post-toc-title>文章目录</h2><div class=post-toc-content><nav id=TableOfContents><ul><li><a href=#分代收集理论>分代收集理论</a><ul><li><a href=#3个假说>3个假说</a></li><li><a href=#分代实现>分代实现</a></li><li><a href=#定义一些关于gc的名词>定义一些关于GC的名词</a></li></ul></li><li><a href=#垃圾收集算法>垃圾收集算法</a><ul><li><a href=#标记-清除>标记-清除</a></li><li><a href=#复制新生代>复制（新生代）</a></li><li><a href=#标记-整理老年代>标记-整理（老年代）</a></li></ul></li><li><a href=#参考资料>参考资料</a></li></ul></nav></div></div><script type=text/javascript>$(document).ready(function(){if(e=$(".post-toc"),e.length){t=$("#main").offset().left,t<220&&e.css({width:t-10,"margin-left":0-t});var e,t,n=e.offset().top-20,s={start:{position:"absolute",top:n},process:{position:"fixed",top:20}};$(window).scroll(function(){var t=$(window).scrollTop();t<n?e.css(s.start):e.css(s.process)})}$("#TableOfContents").children().length<1&&$(".post-toc").remove()})</script><article class=post><header><h1 class=post-title>垃圾收集算法</h1></header><date class="post-meta meta-date">2022年8月20日</date><div class=post-meta><span>|</span>
+<span class=meta-category><a href=/mb/categories/JVM>JVM</a></span></div><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
+阅读</span></span></div><div class=post-content><h2 id=分代收集理论>分代收集理论</h2><h3 id=3个假说>3个假说</h3><ul><li>弱分代假说：绝大多数对象都是朝生夕灭的。（设计了年轻代）</li><li>强分代假说：熬过越多次垃圾收集过程的对象就越难以消亡。（设计了老年代）</li><li>跨代引用假说：跨代引用相对于同代引用仅占极少数。（实际Java应用中，可能会存在年轻代的对象跨代引用了老年代的对象）（设计了<code>记忆集</code>，在新生代上建立全局的记忆集，把老年代划分为若干个小块，标识出老年代的哪一块内存会存在跨代引用，此后在Minor GC时，只有包含了跨代引用的小块内存里的对象才会被加入到GC Roots进行扫描）</li></ul><h3 id=分代实现>分代实现</h3><p><img class=mx-auto alt src=/mb/images/jvm2/gc-alg/01.png>
+HotSpot虚拟机中，根据对象存活周期的不同，将内存划分为几块。一般是将Java堆分为新生代和老年代，比例为<code>2:1</code>；新生代又细分为<code>Eden</code>区、<code>From Survivor</code>区和<code>To Survivor</code>区，比例为<code>8:1:1</code>。不同的代采用不同的回收算法：</p><ul><li>新生代：复制算法</li><li>老年代：标记-清除算法，或者标记-整理算法</li></ul><h3 id=定义一些关于gc的名词>定义一些关于GC的名词</h3><ol><li>部分收集（Partial GC）: 不是完整收集Java堆的收集。<ul><li>新生代收集（Minor GC/Young GC）：只是新生代的收集。</li><li>老年代收集（Major GC/Old GC）：只是老年代的收集。目前只有CMS收集器会有单独收集老年代的行为。</li><li>混合收集（Mixed GC）：收集整个新生代以及部分老年代的垃圾收集。目前只有G1收集器会有这种行为。</li></ul></li><li>整堆收集（Full GC）：收集整个Java堆和方法区的垃圾收集。</li></ol><h2 id=垃圾收集算法>垃圾收集算法</h2><p>知道了如何判定<strong>无用的对象</strong>、<strong>废弃常量</strong>和<strong>无用的类</strong>后，接下来就是将这些无用的对象给回收掉。
+如下是常用的3种垃圾收集算法。</p><h3 id=标记-清除>标记-清除</h3><p><img class=mx-auto alt src=/mb/images/jvm2/gc-alg/02.png>
+该算法分为标记和清除两个阶段。</p><ul><li>标记：遍历所有的 GC Roots，然后将所有 GC Roots 可达的对象标记为存活的对象。</li><li>清除：遍历堆中所有的对象，将没有标记的对象清除掉。同时清除对象上的标记，以便下一次垃圾回收。</li></ul><p>这种方法有2个不足：</p><ol><li>效率问题：标记和清除2个过程效率都不高</li><li>空间问题：回收后内存会有大量碎片；碎片太多可能导致以后需要分配大对象时，无法找到足够连续的内存不得不提前触发另一次垃圾回收动作。</li></ol><h3 id=复制新生代>复制（新生代）</h3><p><img class=mx-auto alt src=/mb/images/jvm2/gc-alg/03.png>
+为了解决效率问题，复制算法出现了。它将可用内存按容量划分为大小相同的两块，每次只使用其中的一块。当这一块内存用完，需要进行垃圾收集时，就将存活的对象复制到另一块上，然后清除掉这一块内存。
+这种算法有优有劣：</p><ul><li>优势：不会产生碎片。</li><li>劣势：内存缩小为原来的一般，浪费空间。</li></ul><p><strong>为了解决空间利用率问题</strong>，可以将内存分为3块：Eden、From Survivor、To Survivor，比例是8:1:1，每次使用Eden和其中一块Survivor。回收时，将Eden和Survivor中存活的对象一次性复制到另一块Survivor空间上，最后清理掉Eden和刚才使用的Survivor空间。这样只有10%的内存被浪费。</p><p>但是无法保证每次回收都只有不多于10%的对象存活，当Survivor空间不足时，需要依赖其他内存（老年代）进行<strong>分配担保</strong>。</p><p><strong>分配担保</strong>是指如果另一块Survivor空间没有足够空间存放上一次新生代收集下来的存活对象时（超过10%），这些对象将直接通过分配担保机制进入老年代。</p><h3 id=标记-整理老年代>标记-整理（老年代）</h3><p><img class=mx-auto alt src=/mb/images/jvm2/gc-alg/04.png>
+该算法分为标记和整理两个阶段。</p><ul><li>标记：遍历所有的 GC Roots，然后将所有 GC Roots 可达的对象标记为存活的对象。（和标记-清除的标记阶段一样）</li><li>整理：移动所有存活的对象，按着内存地址次序依次排列，然后将末端地址以后的全部内存回收。</li></ul><p>这是一种老年代的收集算法，老年代的对象存活时间比较长。</p><h2 id=参考资料>参考资料</h2><ul><li>周志明 * 《深入理解Java虚拟机》</li><li>Java虚拟机底层原理知识总结 * <a href=https://doocs.github.io/jvm/>https://doocs.github.io/jvm/</a></li></ul></div><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=/mb/post/jvm/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/>虚拟机相关工具</a></li><li><a href=/mb/post/jvm/%E5%9B%9E%E6%94%B6%E5%A0%86%E5%92%8C%E6%96%B9%E6%B3%95%E5%8C%BA%E4%B8%AD%E5%AF%B9%E8%B1%A1/>回收堆和方法区中对象</a></li><li><a href=/mb/post/jvm/Java%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2/>Java发展历史</a></li><li><a href=/mb/post/jvm/%E5%9E%83%E5%9C%BE%E5%88%A4%E5%AE%9A%E7%AE%97%E6%B3%95%E4%B8%8E4%E5%A4%A7%E5%BC%95%E7%94%A8/>垃圾判定算法与4大引用</a></li><li><a href=/mb/post/jvm/%E5%A6%82%E4%BD%95%E8%AE%A1%E7%AE%97Java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%A7%E5%B0%8F/>如何计算Java对象的大小</a></li></ul></div><div class="post-meta meta-tags"><ul class=clearfix><li><a href=/mb/tags/java>java</a></li><li><a href=/mb/tags/jvm>jvm</a></li></ul></div></article><div id=vcomments></div><script src=//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js></script><script>new Valine({el:"#vcomments",appId:"lKKYPhJgpChREgVBkvRfeWhC-gzGzoHsz",appKey:"55uq8Bc1tgBNi2OYpKoHCaka"})</script></div><footer id=footer><div>&copy; 2024 <a href=/mb>程序猫大刚 By 程序猫大刚</a>
+| <a rel=nofollow target=_blank href=http://beian.miit.gov.cn/>粤ICP备17082965号</a></div><div style=padding:8px><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script><span id=busuanzi_container_site_pv>本站总访问量<span id=busuanzi_value_site_pv></span>次</span>
+<span id=busuanzi_container_site_uv>本站总访客数<span id=busuanzi_value_site_uv></span>人</span></div><div><div class=github-badge><a href=https://gohugo.io/ target=_black rel=nofollow><span class=badge-subject>Powered by</span><span class="badge-value bg-blue">Hugo</span></a></div><div class=github-badge><a href=https://www.flysnow.org/ target=_black><span class=badge-subject>Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a></div><div class=github-badge><a href=https://github.com/flysnow-org/maupassant-hugo target=_black><span class=badge-subject>Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a></div></div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[["$","$"]],processEscapes:!0}}</script><script src='//cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script><a id=rocket href=#top></a><script type=text/javascript src='/mb/js/totop.js?v=0.0.0' async></script><script src=/js/douban.js></script></div><div id=secondary><section class=widget><form id=search action=/mb/search method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
+<input type=hidden name=sitesearch value=/mb>
+<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=/mb/post/linux/%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/ title=frp穿透你的远程桌面>frp穿透你的远程桌面</a></li><li><a href=/mb/post/tool/frp%E7%A9%BF%E9%80%8F%E4%BD%A0%E7%9A%84%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/ title=frp穿透你的远程桌面>frp穿透你的远程桌面</a></li><li><a href=/mb/post/java/java8%E6%96%B0%E7%89%B9%E6%80%A7%E4%BD%BF%E7%94%A8/ title=java8新特性使用>java8新特性使用</a></li><li><a href=/mb/post/db/sql%E5%A2%9E%E5%BC%BA/ title=SQL增强>SQL增强</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/ title=熟悉JVM内存区域>熟悉JVM内存区域</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%B9%B6%E5%8F%91%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90/ title=HotSpot垃圾算法实现之并发的可达性分析>HotSpot垃圾算法实现之并发的可达性分析</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%AE%B0%E5%BF%86%E9%9B%86%E4%B8%8E%E5%8D%A1%E8%A1%A8%E5%92%8C%E5%86%99%E5%B1%8F%E9%9A%9C/ title=HotSpot垃圾算法实现之记忆集与卡表和写屏障>HotSpot垃圾算法实现之记忆集与卡表和写屏障</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E6%9E%9A%E4%B8%BE%E6%A0%B9%E8%8A%82%E7%82%B9%E5%92%8C%E5%AE%89%E5%85%A8%E7%82%B9%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F/ title=HotSpot垃圾算法实现之枚举根节点和安全点安全区域>HotSpot垃圾算法实现之枚举根节点和安全点安全区域</a></li><li><a href=/mb/post/jvm/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/ title=类加载器>类加载器</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89Java%E7%B1%BB%E6%96%87%E4%BB%B6class%E7%BB%93%E6%9E%84/ title=熟悉Java类文件class结构>熟悉Java类文件class结构</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/categories/>分类</a></h3><ul class=widget-list><li><a href=/mb/categories/JVM/>JVM (17)</a></li><li><a href=/mb/categories/Java/>Java (9)</a></li><li><a href=/mb/categories/Java%E5%B9%B6%E5%8F%91/>Java并发 (22)</a></li><li><a href=/mb/categories/Spring-Cloud/>Spring Cloud (15)</a></li><li><a href=/mb/categories/idea/>idea (3)</a></li><li><a href=/mb/categories/k8s/>k8s (9)</a></li><li><a href=/mb/categories/linux/>linux (1)</a></li><li><a href=/mb/categories/maven%E7%9B%B8%E5%85%B3/>maven相关 (3)</a></li><li><a href=/mb/categories/%E5%B7%A5%E5%85%B7/>工具 (1)</a></li><li><a href=/mb/categories/%E6%80%9D%E6%83%B3%E8%BF%9B%E5%8C%96/>思想进化 (1)</a></li><li><a href=/mb/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/>技术文章 (64)</a></li><li><a href=/mb/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/>数据库 (3)</a></li><li><a href=/mb/categories/%E7%94%9F%E6%B4%BB%E7%9B%B8%E5%85%B3/>生活相关 (3)</a></li><li><a href=/mb/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/>读书笔记 (2)</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/tags/>标签</a></h3><div class=tagcloud><a href=/mb/tags/Linux/>Linux</a>
+<a href=/mb/tags/SQL/>SQL</a>
+<a href=/mb/tags/Spring-Cloud/>Spring Cloud</a>
+<a href=/mb/tags/alisql/>alisql</a>
+<a href=/mb/tags/apache/>apache</a>
+<a href=/mb/tags/commonjs/>commonjs</a>
+<a href=/mb/tags/docker/>docker</a>
+<a href=/mb/tags/docker-machine/>docker-machine</a>
+<a href=/mb/tags/dubbo/>dubbo</a>
+<a href=/mb/tags/es6/>es6</a>
+<a href=/mb/tags/fastdfs/>fastdfs</a>
+<a href=/mb/tags/forkjoin/>forkjoin</a>
+<a href=/mb/tags/frp/>frp</a>
+<a href=/mb/tags/futrue/>futrue</a>
+<a href=/mb/tags/gc/>gc</a>
+<a href=/mb/tags/github/>github</a>
+<a href=/mb/tags/github-pages/>github pages</a>
+<a href=/mb/tags/helm/>helm</a>
+<a href=/mb/tags/httpd/>httpd</a>
+<a href=/mb/tags/idea/>idea</a>
+<a href=/mb/tags/idea-plugin/>idea plugin</a>
+<a href=/mb/tags/java/>java</a>
+<a href=/mb/tags/jdk/>jdk</a>
+<a href=/mb/tags/jdk8/>jdk8</a>
+<a href=/mb/tags/jni/>jni</a>
+<a href=/mb/tags/juc/>juc</a>
+<a href=/mb/tags/jvm/>jvm</a>
+<a href=/mb/tags/k3s/>k3s</a>
+<a href=/mb/tags/k8s/>k8s</a>
+<a href=/mb/tags/k9s/>k9s</a>
+<a href=/mb/tags/kafka/>kafka</a>
+<a href=/mb/tags/kubeadm/>kubeadm</a>
+<a href=/mb/tags/kubectl/>kubectl</a>
+<a href=/mb/tags/logback/>logback</a>
+<a href=/mb/tags/logging/>logging</a>
+<a href=/mb/tags/maven/>maven</a>
+<a href=/mb/tags/md/>md</a>
+<a href=/mb/tags/minikube/>minikube</a>
+<a href=/mb/tags/mq/>mq</a>
+<a href=/mb/tags/multipass/>multipass</a>
+<a href=/mb/tags/mybatis/>mybatis</a>
+<a href=/mb/tags/mycat/>mycat</a>
+<a href=/mb/tags/mysql/>mysql</a>
+<a href=/mb/tags/nginx/>nginx</a>
+<a href=/mb/tags/nio/>nio</a>
+<a href=/mb/tags/python/>python</a>
+<a href=/mb/tags/rancher/>rancher</a>
+<a href=/mb/tags/raspberry/>raspberry</a>
+<a href=/mb/tags/react/>react</a>
+<a href=/mb/tags/redis/>redis</a>
+<a href=/mb/tags/slf4j/>slf4j</a>
+<a href=/mb/tags/solr/>solr</a>
+<a href=/mb/tags/springboot/>springboot</a>
+<a href=/mb/tags/ssh/>ssh</a>
+<a href=/mb/tags/tomcat/>tomcat</a>
+<a href=/mb/tags/webui/>webui</a>
+<a href=/mb/tags/zookeeper/>zookeeper</a>
+<a href=/mb/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/>云原生</a>
+<a href=/mb/tags/%E4%BC%98%E5%8C%96/>优化</a>
+<a href=/mb/tags/%E5%81%A5%E5%BA%B7/>健康</a>
+<a href=/mb/tags/%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95/>免密登录</a>
+<a href=/mb/tags/%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2/>全文检索</a>
+<a href=/mb/tags/%E5%86%85%E7%BD%91/>内网</a>
+<a href=/mb/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/>内网穿透</a>
+<a href=/mb/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8/>分布式存储</a>
+<a href=/mb/tags/%E5%8C%85%E5%86%B2%E7%AA%81/>包冲突</a>
+<a href=/mb/tags/%E5%8D%95%E4%BE%8B/>单例</a>
+<a href=/mb/tags/%E5%9F%9F%E5%90%8D/>域名</a>
+<a href=/mb/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/mb/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/>并发编程</a>
+<a href=/mb/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/>异常处理</a>
+<a href=/mb/tags/%E5%BC%82%E6%AD%A5/>异步</a>
+<a href=/mb/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/>微服务</a>
+<a href=/mb/tags/%E6%80%A7%E8%83%BD/>性能</a>
+<a href=/mb/tags/%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4/>文件删除</a>
+<a href=/mb/tags/%E6%96%B0%E7%89%B9%E6%80%A7/>新特性</a>
+<a href=/mb/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/>方法论</a>
+<a href=/mb/tags/%E6%97%A5%E5%BF%97%E5%A4%84%E7%90%86/>日志处理</a>
+<a href=/mb/tags/%E6%9E%B6%E6%9E%84/>架构</a>
+<a href=/mb/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/>源码编译</a>
+<a href=/mb/tags/%E7%A6%81%E7%A2%98/>禁碘</a>
+<a href=/mb/tags/%E8%85%BE%E8%AE%AF%E4%BA%91/>腾讯云</a>
+<a href=/mb/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/>解决方案</a>
+<a href=/mb/tags/%E8%AF%81%E4%B9%A6/>证书</a>
+<a href=/mb/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/>读写分离</a>
+<a href=/mb/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/>负载均衡</a>
+<a href=/mb/tags/%E8%BF%90%E7%BB%B4/>运维</a>
+<a href=/mb/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/>远程桌面</a>
+<a href=/mb/tags/%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F/>部署方式</a>
+<a href=/mb/tags/%E9%98%85%E8%AF%BB/>阅读</a></div></section><section class=widget><h3 class=widget-title>友情链接</h3><ul class=widget-list><li><a target=_blank href=https://www.flysnow.org/ title=飞雪无情的博客>飞雪无情的博客</a></li><li><a target=_blank href=http://sentsin.com/ title=闲心>闲心</a></li><li><a target=_blank href=https://xuexb.com/ title=前端小武>前端小武</a></li><li><a target=_blank href=http://blog.wayneww.top/ title=大威>大威</a></li></ul></section><section class=widget><h3 class=widget-title>其它</h3><ul class=widget-list><li><a href=/mb/index.xml>文章 RSS</a></li></ul></section></div></div></div></div></body></html>

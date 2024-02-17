@@ -1,0 +1,451 @@
+<!doctype html><html lang=zh-CN><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><title>Spring Cloud熔断器之Hystrix | 程序猫大刚</title>
+<meta property="og:title" content="Spring Cloud熔断器之Hystrix - 程序猫大刚"><meta property="og:type" content="article"><meta property="article:published_time" content="2022-01-21T23:15:24+08:00"><meta property="article:modified_time" content="2022-01-21T23:15:24+08:00"><meta name=Keywords content="mango,mango mei,梦来梦网,芒果笔记,程序猫,猫大刚"><meta name=description content="Spring Cloud熔断器之Hystrix"><meta name=author content="程序猫大刚"><meta property="og:url" content="/mb/post/springcloud/Spring-Cloud%E7%9A%84%E7%86%94%E6%96%AD%E5%99%A8%E4%B9%8BHystrix/"><link rel="shortcut icon" href=/mb/favicon.ico type=image/x-icon><link rel=stylesheet href=/mb/css/normalize.css><link rel=stylesheet href=/mb/css/style.css><script type=text/javascript src=//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js></script><link rel=stylesheet href=/css/douban.css><link rel=stylesheet href=/css/other.css><script>var _hmt=_hmt||[];(function(){var e,t,s=window.location.href,n="da7002a3263e13123d3c44e6afe80dc8";s.indexOf("mg0324.github.io")!=-1&&(n="87868e1c195a2ea2a4058f1fd978ffe2"),e=document.createElement("script"),e.src="https://hm.baidu.com/hm.js?"+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script></head><body><header id=header class=clearfix><div class=container><div class=col-group><div class=site-name><a id=logo href=/mb>程序猫大刚</a><p class=description>记录点滴，回头思过往！</p><p class=description>不积跬步无以至千里，加油吧大刚！！！</p></div><div><nav id=nav-menu class=clearfix><a class=current href=/mb>首页</a>
+<a href=/mb/sp/ title=学习路线>学习路线</a>
+<a href=/mb/archives/ title=归档>归档</a>
+<a href=/mb/pr/ title=发布日记>发布日记</a>
+<a href=http://mg.meiflower.top title=关于>关于</a></nav></div></div></div></header><div id=body><div class=container><div class=col-group><div class=col-8 id=main><div class=res-cons><style type=text/css>.post-toc{position:fixed;width:200px;margin-left:-210px;padding:5px 10px;font-family:Athelas,STHeiti,Microsoft Yahei,serif;font-size:12px;border:1px solid rgba(0,0,0,7%);border-radius:5px;background-color:rgba(255,255,255,.98);background-clip:padding-box;-webkit-box-shadow:1px 1px 2px rgba(0,0,0,.125);box-shadow:1px 1px 2px rgba(0,0,0,.125);word-wrap:break-word;white-space:nowrap;-webkit-box-sizing:border-box;box-sizing:border-box;z-index:999;cursor:pointer;max-height:70%;overflow-y:auto;overflow-x:hidden}.post-toc .post-toc-title{width:100%;margin:0 auto;font-size:20px;font-weight:400;text-transform:uppercase;text-align:center}.post-toc .post-toc-content{font-size:15px}.post-toc .post-toc-content>nav>ul{margin:10px 0}.post-toc .post-toc-content ul{padding-left:20px;list-style:square;margin:.5em;line-height:1.8em}.post-toc .post-toc-content ul ul{padding-left:15px;display:none}@media print,screen and (max-width:1057px){.post-toc{display:none}}</style><div class=post-toc style=position:absolute;top:188px><h2 class=post-toc-title>文章目录</h2><div class=post-toc-content><nav id=TableOfContents><ul><li><a href=#hystrix介绍>Hystrix介绍</a><ul><li><a href=#hystrix特性>Hystrix特性</a></li></ul></li><li><a href=#hystrix-集成>Hystrix 集成</a><ul><li><a href=#添加依赖>添加依赖</a></li><li><a href=#开启断路器>开启断路器</a></li><li><a href=#直接使用hystrixcommand>直接使用<code>@HystrixCommand</code></a></li><li><a href=#结合feign使用>结合Feign使用</a></li></ul></li><li><a href=#配置相关>配置相关</a><ul><li><a href=#全局启用>全局启用</a></li><li><a href=#局部启用>局部启用</a></li></ul></li><li><a href=#局部禁用>局部禁用</a></li><li><a href=#hystrixcommand注解源码>@HystrixCommand注解源码</a></li><li><a href=#参考资料>参考资料</a></li></ul></nav></div></div><script type=text/javascript>$(document).ready(function(){if(e=$(".post-toc"),e.length){t=$("#main").offset().left,t<220&&e.css({width:t-10,"margin-left":0-t});var e,t,n=e.offset().top-20,s={start:{position:"absolute",top:n},process:{position:"fixed",top:20}};$(window).scroll(function(){var t=$(window).scrollTop();t<n?e.css(s.start):e.css(s.process)})}$("#TableOfContents").children().length<1&&$(".post-toc").remove()})</script><article class=post><header><h1 class=post-title>Spring Cloud熔断器之Hystrix</h1></header><date class="post-meta meta-date">2022年1月21日</date><div class=post-meta><span>|</span>
+<span class=meta-category><a href=/mb/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0>技术文章</a></span>
+<span class=meta-category><a href=/mb/categories/Spring-Cloud>Spring Cloud</a></span></div><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
+阅读</span></span></div><div class=post-content><h2 id=hystrix介绍>Hystrix介绍</h2><p>Hystrix是由Netflix开源的一个延迟和容错库，用于隔离访问远程系统、服务或者第三方库，防止级联失败，从而提升系统的可用性与容错性。</p><h3 id=hystrix特性>Hystrix特性</h3><p>Hystrix主要通过以下几点实现延迟和容错。</p><ul><li>包裹请求 - <code>@HystrixCommand</code>注解（命令模式）</li><li>跳闸机制 - 5秒内20次失败，一段时间内会停止访问服务</li><li>资源隔离 - 给每个服务提供小型线程池，线程池满立即拒绝请求</li><li>监控</li><li>回退机制 - 开发人员可提供默认回退逻辑</li><li>自我修复 - 一段时间内，会尝试调用一次服务，请求成功则关闭断路器</li></ul><h2 id=hystrix-集成>Hystrix 集成</h2><h3 id=添加依赖>添加依赖</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:navy>&lt;dependency&gt;</span>
+</span></span><span style=display:flex><span>    <span style=color:navy>&lt;groupId&gt;</span>org.springframework.cloud<span style=color:navy>&lt;/groupId&gt;</span>
+</span></span><span style=display:flex><span>    <span style=color:navy>&lt;artifactId&gt;</span>spring-cloud-starter-netflix-hystrix<span style=color:navy>&lt;/artifactId&gt;</span>
+</span></span><span style=display:flex><span><span style=color:navy>&lt;/dependency&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=开启断路器>开启断路器</h3><p>在启动类上增加<code>@EnableHystrix</code>注解或者<code>@EnableCircuitBreaker</code>注解。</p><h3 id=直接使用hystrixcommand>直接使用<code>@HystrixCommand</code></h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#3c5d5d;font-weight:700>@FeignClient</span>(name<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#d14>&#34;mic-card&#34;</span>,path<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#d14>&#34;/card/admin&#34;</span>)<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>public</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>interface</span> <span style=color:#458;font-weight:700>CardApi</span><span style=color:#bbb> </span>{<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#3c5d5d;font-weight:700>@PostMapping</span>(<span style=color:#d14>&#34;/count/home&#34;</span>)<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#3c5d5d;font-weight:700>@HystrixCommand</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>ResultObject<span style=color:#000;font-weight:700>&lt;</span>CountVo<span style=color:#000;font-weight:700>&gt;</span><span style=color:#bbb> </span><span style=color:#900;font-weight:700>getHome</span>();<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span>}<span style=color:#bbb>
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=结合feign使用>结合Feign使用</h3><p>Feign默认是不启用Hystrix的，添加如下配置启用。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=display:flex><span><span style=color:navy>feign</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>  </span><span style=color:navy>hystrix</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:navy>enabled</span>:<span style=color:#bbb> </span><span style=color:#000;font-weight:700>true</span><span style=color:#bbb>
+</span></span></span></code></pre></td></tr></table></div></div><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#998;font-style:italic>/**
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic> * @Description card api服务
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic> * @Date 2021-12-04 10:12
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic> * @Created by mango
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic> */</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#3c5d5d;font-weight:700>@FeignClient</span>(name<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#d14>&#34;mic-card&#34;</span>,path<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#d14>&#34;/card/admin&#34;</span>,<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>configuration<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span>{FeignConfiguration.<span style=color:teal>class</span>},<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>fallback<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span>CardApiFallback.<span style=color:teal>class</span>)<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>public</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>interface</span> <span style=color:#458;font-weight:700>CardApi</span><span style=color:#bbb> </span>{<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#3c5d5d;font-weight:700>@GetMapping</span>(<span style=color:#d14>&#34;/card/rand&#34;</span>)<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>ResultObject<span style=color:#000;font-weight:700>&lt;</span>CardVo<span style=color:#000;font-weight:700>&gt;</span><span style=color:#bbb> </span><span style=color:#900;font-weight:700>getRand</span>();<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#3c5d5d;font-weight:700>@PostMapping</span>(<span style=color:#d14>&#34;/count/home&#34;</span>)<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>ResultObject<span style=color:#000;font-weight:700>&lt;</span>CountVo<span style=color:#000;font-weight:700>&gt;</span><span style=color:#bbb> </span><span style=color:#900;font-weight:700>getHome</span>();<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span>}<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#a61717;background-color:#e3d2d2>##</span><span style=color:#bbb> </span>回退机制<span style=color:#a61717;background-color:#e3d2d2>，</span>自定义实现回退逻辑<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#3c5d5d;font-weight:700>@Component</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#3c5d5d;font-weight:700>@Slf4j</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>CardApiFallback</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>implements</span><span style=color:#bbb> </span>CardApi<span style=color:#bbb> </span>{<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#3c5d5d;font-weight:700>@Autowired</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>private</span><span style=color:#bbb> </span>ResultUtil<span style=color:#bbb> </span>resultUtil;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#3c5d5d;font-weight:700>@Override</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>public</span><span style=color:#bbb> </span>ResultObject<span style=color:#000;font-weight:700>&lt;</span>CardVo<span style=color:#000;font-weight:700>&gt;</span><span style=color:#bbb> </span><span style=color:#900;font-weight:700>getRand</span>()<span style=color:#bbb> </span>{<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>log.<span style=color:teal>info</span>(<span style=color:#d14>&#34;enter card api fallback&#34;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>CardVo<span style=color:#bbb> </span>cardVo<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>new</span><span style=color:#bbb> </span>CardVo();<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>cardVo.<span style=color:teal>setName</span>(<span style=color:#d14>&#34;enter fallback&#34;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>cardVo.<span style=color:teal>setIsOpen</span>(<span style=color:#d14>&#34;1&#34;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>cardVo.<span style=color:teal>setCreateTime</span>(DateUtil.<span style=color:teal>now</span>());<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>return</span><span style=color:#bbb> </span>resultUtil.<span style=color:teal>success2obj</span>(cardVo,<span style=color:#d14>&#34;success&#34;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>}<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#3c5d5d;font-weight:700>@Override</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#000;font-weight:700>public</span><span style=color:#bbb> </span>ResultObject<span style=color:#000;font-weight:700>&lt;</span>CountVo<span style=color:#000;font-weight:700>&gt;</span><span style=color:#bbb> </span><span style=color:#900;font-weight:700>getHome</span>()<span style=color:#bbb> </span>{<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>log.<span style=color:teal>info</span>(<span style=color:#d14>&#34;enter card api get home fallback&#34;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>CountVo<span style=color:#bbb> </span>countVo<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>new</span><span style=color:#bbb> </span>CountVo();<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>countVo.<span style=color:teal>setCardCount</span>(1);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>countVo.<span style=color:teal>setFileCount</span>(1);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>countVo.<span style=color:teal>setPointCount</span>(1);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#000;font-weight:700>return</span><span style=color:#bbb> </span>resultUtil.<span style=color:teal>success2obj</span>(countVo,<span style=color:#d14>&#34;success&#34;</span>);<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>}<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span>}<span style=color:#bbb>
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=配置相关>配置相关</h2><h3 id=全局启用>全局启用</h3><pre tabindex=0><code>feign.hystrix.enabled: true
+</code></pre><h4 id=全局禁用>全局禁用</h4><pre tabindex=0><code>feign.hystrix.enabled: false
+</code></pre><h3 id=局部启用>局部启用</h3><pre tabindex=0><code>public class FeignEnableHystrixConfiguration {
+    @Bean
+	@Scope(&#34;prototype&#34;)
+	public HystrixFeign.Builder feignBuilder() {
+		return HystrixFeign.builder();
+	}
+}
+</code></pre><pre tabindex=0><code>@FeignClient(name = &#34;mic-card&#34;,path = &#34;/card/admin&#34;,
+        configuration = {FeignEnableHystrixConfiguration.class},
+        fallback = CardApiFallback.class)
+</code></pre><h2 id=局部禁用>局部禁用</h2><pre tabindex=0><code>public class FeignDisableHystrixConfiguration {
+    @Bean
+	@Scope(&#34;prototype&#34;)
+	public Feign.Builder feignBuilder() {
+		return Feign.builder();
+	}
+}
+</code></pre><h2 id=hystrixcommand注解源码>@HystrixCommand注解源码</h2><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">100
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">101
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">102
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">103
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">104
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">105
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">106
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">107
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">108
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#998;font-style:italic>/**
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic> * This annotation used to specify some methods which should be processes as hystrix commands.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic> */</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#3c5d5d;font-weight:700>@Target</span>({ElementType.<span style=color:teal>METHOD</span>})<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#3c5d5d;font-weight:700>@Retention</span>(RetentionPolicy.<span style=color:teal>RUNTIME</span>)<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#3c5d5d;font-weight:700>@Inherited</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#3c5d5d;font-weight:700>@Documented</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>public</span><span style=color:#bbb> </span><span style=color:#3c5d5d;font-weight:700>@interface</span><span style=color:#bbb> </span>HystrixCommand<span style=color:#bbb> </span>{<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>/**
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * The command group key is used for grouping together commands such as for reporting,
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * alerting, dashboards or team/library ownership.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * &lt;p/&gt;
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * default =&gt; the runtime class name of annotated method
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * @return group key
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     */</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>String<span style=color:#bbb> </span><span style=color:#900;font-weight:700>groupKey</span>()<span style=color:#bbb> </span><span style=color:#000;font-weight:700>default</span><span style=color:#bbb> </span><span style=color:#d14>&#34;&#34;</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>/**
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * Hystrix command key.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * &lt;p/&gt;
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * default =&gt; the name of annotated method. for example:
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * &lt;code&gt;
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *     ...
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *     @HystrixCommand
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *     public User getUserById(...)
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *     ...
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *     the command name will be: &#39;getUserById&#39;
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * &lt;/code&gt;
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * @return command key
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     */</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>String<span style=color:#bbb> </span><span style=color:#900;font-weight:700>commandKey</span>()<span style=color:#bbb> </span><span style=color:#000;font-weight:700>default</span><span style=color:#bbb> </span><span style=color:#d14>&#34;&#34;</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>/**
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * The thread-pool key is used to represent a
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * HystrixThreadPool for monitoring, metrics publishing, caching and other such uses.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * @return thread pool key
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     */</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>String<span style=color:#bbb> </span><span style=color:#900;font-weight:700>threadPoolKey</span>()<span style=color:#bbb> </span><span style=color:#000;font-weight:700>default</span><span style=color:#bbb> </span><span style=color:#d14>&#34;&#34;</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>/**
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * Specifies a method to process fallback logic.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * A fallback method should be defined in the same class where is HystrixCommand.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * Also a fallback method should have same signature to a method which was invoked as hystrix command.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * for example:
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * &lt;code&gt;
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *      @HystrixCommand(fallbackMethod = &#34;getByIdFallback&#34;)
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *      public String getById(String id) {...}
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *      private String getByIdFallback(String id) {...}
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * &lt;/code&gt;
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * Also a fallback method can be annotated with {@link HystrixCommand}
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * &lt;p/&gt;
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * default =&gt; see {@link com.netflix.hystrix.contrib.javanica.command.GenericCommand#getFallback()}
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * @return method name
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     */</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>String<span style=color:#bbb> </span><span style=color:#900;font-weight:700>fallbackMethod</span>()<span style=color:#bbb> </span><span style=color:#000;font-weight:700>default</span><span style=color:#bbb> </span><span style=color:#d14>&#34;&#34;</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>/**
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * Specifies command properties.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * @return command properties
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     */</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>HystrixProperty<span style=color:#000;font-weight:700>[]</span><span style=color:#bbb> </span><span style=color:#900;font-weight:700>commandProperties</span>()<span style=color:#bbb> </span><span style=color:#000;font-weight:700>default</span><span style=color:#bbb> </span>{};<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>/**
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * Specifies thread pool properties.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * @return thread pool properties
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     */</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>HystrixProperty<span style=color:#000;font-weight:700>[]</span><span style=color:#bbb> </span><span style=color:#900;font-weight:700>threadPoolProperties</span>()<span style=color:#bbb> </span><span style=color:#000;font-weight:700>default</span><span style=color:#bbb> </span>{};<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>/**
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * Defines exceptions which should be ignored.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * Optionally these can be wrapped in HystrixRuntimeException if raiseHystrixExceptions contains RUNTIME_EXCEPTION.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * @return exceptions to ignore
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     */</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>Class<span style=color:#000;font-weight:700>&lt;?</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>extends</span><span style=color:#bbb> </span>Throwable<span style=color:#000;font-weight:700>&gt;[]</span><span style=color:#bbb> </span><span style=color:#900;font-weight:700>ignoreExceptions</span>()<span style=color:#bbb> </span><span style=color:#000;font-weight:700>default</span><span style=color:#bbb> </span>{};<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>/**
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * Specifies the mode that should be used to execute hystrix observable command.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * For more information see {@link ObservableExecutionMode}.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * @return observable execution mode
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     */</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>ObservableExecutionMode<span style=color:#bbb> </span><span style=color:#900;font-weight:700>observableExecutionMode</span>()<span style=color:#bbb> </span><span style=color:#000;font-weight:700>default</span><span style=color:#bbb> </span>ObservableExecutionMode.<span style=color:teal>EAGER</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>/**
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * When includes RUNTIME_EXCEPTION, any exceptions that are not ignored are wrapped in HystrixRuntimeException.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * @return exceptions to wrap
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     */</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>HystrixException<span style=color:#000;font-weight:700>[]</span><span style=color:#bbb> </span><span style=color:#900;font-weight:700>raiseHystrixExceptions</span>()<span style=color:#bbb> </span><span style=color:#000;font-weight:700>default</span><span style=color:#bbb> </span>{};<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#998;font-style:italic>/**
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * Specifies default fallback method for the command. If both {@link #fallbackMethod} and {@link #defaultFallback}
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * methods are specified then specific one is used.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * note: default fallback method cannot have parameters, return type should be compatible with command return type.
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     *
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     * @return the name of default fallback method
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic>     */</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>String<span style=color:#bbb> </span><span style=color:#900;font-weight:700>defaultFallback</span>()<span style=color:#bbb> </span><span style=color:#000;font-weight:700>default</span><span style=color:#bbb> </span><span style=color:#d14>&#34;&#34;</span>;<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span>}<span style=color:#bbb>
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=参考资料>参考资料</h2><ul><li><a href=https://www.itmuch.com/spring-cloud/finchley-13/>https://www.itmuch.com/spring-cloud/finchley-13/</a></li></ul></div><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=/mb/post/springcloud/Spring-Cloud%E7%9A%84%E7%86%94%E6%96%AD%E5%99%A8/>Spring Cloud的熔断器</a></li><li><a href=/mb/post/springcloud/Spring-Cloud%E7%9A%84%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E4%B9%8BFeign/>Spring Cloud的服务调用之Feign</a></li><li><a href=/mb/post/springcloud/Spring-Cloud%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B9%8BRibbon/>SpringCloud的负载均衡之Ribbon</a></li><li><a href=/mb/post/springcloud/Spring-Cloud%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E4%B9%8BEureka/>Spring Cloud注册中心之Eureka</a></li><li><a href=/mb/post/springcloud/Spring-Cloud%E7%9A%84%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/>Spring Cloud的注册中心</a></li></ul></div><div class="post-meta meta-tags"><ul class=clearfix><li><a href=/mb/tags/Spring-Cloud>Spring Cloud</a></li><li><a href=/mb/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1>微服务</a></li></ul></div></article><div id=vcomments></div><script src=//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js></script><script>new Valine({el:"#vcomments",appId:"lKKYPhJgpChREgVBkvRfeWhC-gzGzoHsz",appKey:"55uq8Bc1tgBNi2OYpKoHCaka"})</script></div><footer id=footer><div>&copy; 2024 <a href=/mb>程序猫大刚 By 程序猫大刚</a>
+| <a rel=nofollow target=_blank href=http://beian.miit.gov.cn/>粤ICP备17082965号</a></div><div style=padding:8px><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script><span id=busuanzi_container_site_pv>本站总访问量<span id=busuanzi_value_site_pv></span>次</span>
+<span id=busuanzi_container_site_uv>本站总访客数<span id=busuanzi_value_site_uv></span>人</span></div><div><div class=github-badge><a href=https://gohugo.io/ target=_black rel=nofollow><span class=badge-subject>Powered by</span><span class="badge-value bg-blue">Hugo</span></a></div><div class=github-badge><a href=https://www.flysnow.org/ target=_black><span class=badge-subject>Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a></div><div class=github-badge><a href=https://github.com/flysnow-org/maupassant-hugo target=_black><span class=badge-subject>Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a></div></div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[["$","$"]],processEscapes:!0}}</script><script src='//cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script><a id=rocket href=#top></a><script type=text/javascript src='/mb/js/totop.js?v=0.0.0' async></script><script src=/js/douban.js></script></div><div id=secondary><section class=widget><form id=search action=/mb/search method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
+<input type=hidden name=sitesearch value=/mb>
+<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=/mb/post/linux/%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/ title=frp穿透你的远程桌面>frp穿透你的远程桌面</a></li><li><a href=/mb/post/tool/frp%E7%A9%BF%E9%80%8F%E4%BD%A0%E7%9A%84%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/ title=frp穿透你的远程桌面>frp穿透你的远程桌面</a></li><li><a href=/mb/post/java/java8%E6%96%B0%E7%89%B9%E6%80%A7%E4%BD%BF%E7%94%A8/ title=java8新特性使用>java8新特性使用</a></li><li><a href=/mb/post/db/sql%E5%A2%9E%E5%BC%BA/ title=SQL增强>SQL增强</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/ title=熟悉JVM内存区域>熟悉JVM内存区域</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%B9%B6%E5%8F%91%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90/ title=HotSpot垃圾算法实现之并发的可达性分析>HotSpot垃圾算法实现之并发的可达性分析</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%AE%B0%E5%BF%86%E9%9B%86%E4%B8%8E%E5%8D%A1%E8%A1%A8%E5%92%8C%E5%86%99%E5%B1%8F%E9%9A%9C/ title=HotSpot垃圾算法实现之记忆集与卡表和写屏障>HotSpot垃圾算法实现之记忆集与卡表和写屏障</a></li><li><a href=/mb/post/jvm/HotSpot%E5%9E%83%E5%9C%BE%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%B9%8B%E6%9E%9A%E4%B8%BE%E6%A0%B9%E8%8A%82%E7%82%B9%E5%92%8C%E5%AE%89%E5%85%A8%E7%82%B9%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F/ title=HotSpot垃圾算法实现之枚举根节点和安全点安全区域>HotSpot垃圾算法实现之枚举根节点和安全点安全区域</a></li><li><a href=/mb/post/jvm/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/ title=类加载器>类加载器</a></li><li><a href=/mb/post/jvm/%E7%86%9F%E6%82%89Java%E7%B1%BB%E6%96%87%E4%BB%B6class%E7%BB%93%E6%9E%84/ title=熟悉Java类文件class结构>熟悉Java类文件class结构</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/categories/>分类</a></h3><ul class=widget-list><li><a href=/mb/categories/JVM/>JVM (17)</a></li><li><a href=/mb/categories/Java/>Java (9)</a></li><li><a href=/mb/categories/Java%E5%B9%B6%E5%8F%91/>Java并发 (22)</a></li><li><a href=/mb/categories/Spring-Cloud/>Spring Cloud (15)</a></li><li><a href=/mb/categories/idea/>idea (3)</a></li><li><a href=/mb/categories/k8s/>k8s (9)</a></li><li><a href=/mb/categories/linux/>linux (1)</a></li><li><a href=/mb/categories/maven%E7%9B%B8%E5%85%B3/>maven相关 (3)</a></li><li><a href=/mb/categories/%E5%B7%A5%E5%85%B7/>工具 (1)</a></li><li><a href=/mb/categories/%E6%80%9D%E6%83%B3%E8%BF%9B%E5%8C%96/>思想进化 (1)</a></li><li><a href=/mb/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/>技术文章 (64)</a></li><li><a href=/mb/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/>数据库 (3)</a></li><li><a href=/mb/categories/%E7%94%9F%E6%B4%BB%E7%9B%B8%E5%85%B3/>生活相关 (3)</a></li><li><a href=/mb/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/>读书笔记 (2)</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/mb/tags/>标签</a></h3><div class=tagcloud><a href=/mb/tags/Linux/>Linux</a>
+<a href=/mb/tags/SQL/>SQL</a>
+<a href=/mb/tags/Spring-Cloud/>Spring Cloud</a>
+<a href=/mb/tags/alisql/>alisql</a>
+<a href=/mb/tags/apache/>apache</a>
+<a href=/mb/tags/commonjs/>commonjs</a>
+<a href=/mb/tags/docker/>docker</a>
+<a href=/mb/tags/docker-machine/>docker-machine</a>
+<a href=/mb/tags/dubbo/>dubbo</a>
+<a href=/mb/tags/es6/>es6</a>
+<a href=/mb/tags/fastdfs/>fastdfs</a>
+<a href=/mb/tags/forkjoin/>forkjoin</a>
+<a href=/mb/tags/frp/>frp</a>
+<a href=/mb/tags/futrue/>futrue</a>
+<a href=/mb/tags/gc/>gc</a>
+<a href=/mb/tags/github/>github</a>
+<a href=/mb/tags/github-pages/>github pages</a>
+<a href=/mb/tags/helm/>helm</a>
+<a href=/mb/tags/httpd/>httpd</a>
+<a href=/mb/tags/idea/>idea</a>
+<a href=/mb/tags/idea-plugin/>idea plugin</a>
+<a href=/mb/tags/java/>java</a>
+<a href=/mb/tags/jdk/>jdk</a>
+<a href=/mb/tags/jdk8/>jdk8</a>
+<a href=/mb/tags/jni/>jni</a>
+<a href=/mb/tags/juc/>juc</a>
+<a href=/mb/tags/jvm/>jvm</a>
+<a href=/mb/tags/k3s/>k3s</a>
+<a href=/mb/tags/k8s/>k8s</a>
+<a href=/mb/tags/k9s/>k9s</a>
+<a href=/mb/tags/kafka/>kafka</a>
+<a href=/mb/tags/kubeadm/>kubeadm</a>
+<a href=/mb/tags/kubectl/>kubectl</a>
+<a href=/mb/tags/logback/>logback</a>
+<a href=/mb/tags/logging/>logging</a>
+<a href=/mb/tags/maven/>maven</a>
+<a href=/mb/tags/md/>md</a>
+<a href=/mb/tags/minikube/>minikube</a>
+<a href=/mb/tags/mq/>mq</a>
+<a href=/mb/tags/multipass/>multipass</a>
+<a href=/mb/tags/mybatis/>mybatis</a>
+<a href=/mb/tags/mycat/>mycat</a>
+<a href=/mb/tags/mysql/>mysql</a>
+<a href=/mb/tags/nginx/>nginx</a>
+<a href=/mb/tags/nio/>nio</a>
+<a href=/mb/tags/python/>python</a>
+<a href=/mb/tags/rancher/>rancher</a>
+<a href=/mb/tags/raspberry/>raspberry</a>
+<a href=/mb/tags/react/>react</a>
+<a href=/mb/tags/redis/>redis</a>
+<a href=/mb/tags/slf4j/>slf4j</a>
+<a href=/mb/tags/solr/>solr</a>
+<a href=/mb/tags/springboot/>springboot</a>
+<a href=/mb/tags/ssh/>ssh</a>
+<a href=/mb/tags/tomcat/>tomcat</a>
+<a href=/mb/tags/webui/>webui</a>
+<a href=/mb/tags/zookeeper/>zookeeper</a>
+<a href=/mb/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/>云原生</a>
+<a href=/mb/tags/%E4%BC%98%E5%8C%96/>优化</a>
+<a href=/mb/tags/%E5%81%A5%E5%BA%B7/>健康</a>
+<a href=/mb/tags/%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95/>免密登录</a>
+<a href=/mb/tags/%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2/>全文检索</a>
+<a href=/mb/tags/%E5%86%85%E7%BD%91/>内网</a>
+<a href=/mb/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/>内网穿透</a>
+<a href=/mb/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8/>分布式存储</a>
+<a href=/mb/tags/%E5%8C%85%E5%86%B2%E7%AA%81/>包冲突</a>
+<a href=/mb/tags/%E5%8D%95%E4%BE%8B/>单例</a>
+<a href=/mb/tags/%E5%9F%9F%E5%90%8D/>域名</a>
+<a href=/mb/tags/%E5%B7%A5%E5%85%B7/>工具</a>
+<a href=/mb/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/>并发编程</a>
+<a href=/mb/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/>异常处理</a>
+<a href=/mb/tags/%E5%BC%82%E6%AD%A5/>异步</a>
+<a href=/mb/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/>微服务</a>
+<a href=/mb/tags/%E6%80%A7%E8%83%BD/>性能</a>
+<a href=/mb/tags/%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4/>文件删除</a>
+<a href=/mb/tags/%E6%96%B0%E7%89%B9%E6%80%A7/>新特性</a>
+<a href=/mb/tags/%E6%96%B9%E6%B3%95%E8%AE%BA/>方法论</a>
+<a href=/mb/tags/%E6%97%A5%E5%BF%97%E5%A4%84%E7%90%86/>日志处理</a>
+<a href=/mb/tags/%E6%9E%B6%E6%9E%84/>架构</a>
+<a href=/mb/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/>源码编译</a>
+<a href=/mb/tags/%E7%A6%81%E7%A2%98/>禁碘</a>
+<a href=/mb/tags/%E8%85%BE%E8%AE%AF%E4%BA%91/>腾讯云</a>
+<a href=/mb/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/>解决方案</a>
+<a href=/mb/tags/%E8%AF%81%E4%B9%A6/>证书</a>
+<a href=/mb/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/>读写分离</a>
+<a href=/mb/tags/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/>负载均衡</a>
+<a href=/mb/tags/%E8%BF%90%E7%BB%B4/>运维</a>
+<a href=/mb/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/>远程桌面</a>
+<a href=/mb/tags/%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F/>部署方式</a>
+<a href=/mb/tags/%E9%98%85%E8%AF%BB/>阅读</a></div></section><section class=widget><h3 class=widget-title>友情链接</h3><ul class=widget-list><li><a target=_blank href=https://www.flysnow.org/ title=飞雪无情的博客>飞雪无情的博客</a></li><li><a target=_blank href=http://sentsin.com/ title=闲心>闲心</a></li><li><a target=_blank href=https://xuexb.com/ title=前端小武>前端小武</a></li><li><a target=_blank href=http://blog.wayneww.top/ title=大威>大威</a></li></ul></section><section class=widget><h3 class=widget-title>其它</h3><ul class=widget-list><li><a href=/mb/index.xml>文章 RSS</a></li></ul></section></div></div></div></div></body></html>
